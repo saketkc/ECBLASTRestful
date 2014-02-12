@@ -4,7 +4,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.ExceptionMapper;
-import utility.APIResponse;
+import com.ebi.ecblast.utility.APIResponse;
 
 
 /*

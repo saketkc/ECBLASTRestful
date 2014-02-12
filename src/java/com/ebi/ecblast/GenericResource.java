@@ -5,6 +5,8 @@
  */
 package com.ebi.ecblast;
 
+import com.ebi.ecblast.db.DatabaseConfiguration;
+import com.ebi.ecblast.db.JobsQueryWrapper;
 import java.io.InputStream;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Context;
@@ -16,10 +18,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import utility.APIResponse;
-import utility.SubmitJob;
+import com.ebi.ecblast.utility.APIResponse;
+import com.ebi.ecblast.utility.SubmitJob;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * REST Web Service
@@ -83,19 +88,19 @@ public class GenericResource {
             throw new ErrorInfo(Status.BAD_REQUEST, jobID + " is not a valid jobID", "error");
         }
     }
-    
-    @GET    
+
+    @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Path("/query.*")
-    public APIResponse getQuery(){
-            throw new ErrorInfo(Status.BAD_REQUEST,  " No Params supplied", "error");
+    public APIResponse getQuery() {
+        throw new ErrorInfo(Status.BAD_REQUEST, " No Params supplied", "error");
     }
-    
+
     @POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Path("/query/kegg/{keggID}")
-    public APIResponse keggQuery(@PathParam("keggID") String keggID){
-        
+    public APIResponse keggQuery(@PathParam("keggID") String keggID) {
+
         SubmitJob job = new SubmitJob();
         job.createCommand(keggID);
         String output = job.executeCommand();
@@ -103,15 +108,51 @@ public class GenericResource {
         response.setResponse(job.getResponse());
         response.setMessage(output);
         return response;
-        
+
     }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/add")
+    public APIResponse addJob() {
+        DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+        JobsQueryWrapper addJob = null;
+        APIResponse response = new APIResponse();
+        response.setResponse("error");
+        response.setMessage("error");
         
-   
-    
-    
-    
-    
-    
+        try {
+            addJob = new JobsQueryWrapper(dbconfig.getDriver(),
+                    dbconfig.getConnectionString(),
+                    dbconfig.getDBName(),
+                    dbconfig.getDBUserName(),
+                    dbconfig.getDBPassword());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connect = addJob.connect();
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+            return response;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+            return response;
+        }
+           boolean b = addJob.insertJob("DSADAD", 123);
+           if (b==true){
+        
+        response.setResponse("done");
+        response.setMessage("error");
+           }
+           else{
+        response.setResponse("errir");
+        response.setMessage("eoor");
+               
+           }
+        return response;
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Path("{subResources:.*}")

@@ -7,6 +7,8 @@
             <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/utility/APIResponse.java</file>
             <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/CustomExceptionMapper.java</file>
             <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/ErrorInfo.java</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/CustomException.java</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/utility/SubmitJob.java</file>
             <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/utility/QueryResponse.java</file>
             <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/GenericResource.java</file>
         </group>
