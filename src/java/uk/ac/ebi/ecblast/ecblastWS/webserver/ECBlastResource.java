@@ -19,7 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import uk.ac.ebi.ecblast.ecblastWS.utility.APIResponse;
 import uk.ac.ebi.ecblast.ecblastWS.utility.FileUploadUtility;
-import uk.ac.ebi.ecblast.ecblastWS.utility.SubmitJob;
+import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitJob;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,6 +34,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import uk.ac.ebi.ecblast.ecblastWS.parser.AtomAtomMappingParser;
 
 /**
  * REST Web Service
@@ -59,8 +60,9 @@ public class ECBlastResource {
         response.setStatus(Response.Status.FORBIDDEN);
         response.setReason("test");
         response.setMessage("test");
+        //return response;
+        throw  new ErrorResponse(Status.NOT_FOUND, "URL NOT FOUND", "error");
 
-        throw response;
     }
 
     @PUT
@@ -180,7 +182,21 @@ public class ECBlastResource {
         String filePath = uploadFile.getFileLocation();
         SubmitJob rxnMappingJob = new SubmitJob();
         if (uploadedSucessful) {
-            return response;
+            /* Submit job to farm
+            TODO: Check if rxn file is all balanced!
+            */
+            
+            AtomAtomMappingParser parser = new AtomAtomMappingParser(filePath);
+            String readFile = parser.readFileInString();
+            if (readFile!=null){
+                String[] pars = parser.getAllSections(readFile);
+                response.setMessage("read");
+                response.setResponse("read");
+                return response;
+            }
+            else{
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,"REad emtpy ", "error");
+            }
         }
         else {
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,"Could not upload file", "error");
@@ -188,28 +204,8 @@ public class ECBlastResource {
 
     }
 
-    // save uploaded file to new location
-    private void writeToFile(InputStream uploadedInputStream,
-            String uploadedFileLocation) {
-
-        try {
-            OutputStream out = new FileOutputStream(new File(
-                    uploadedFileLocation));
-            int read = 0;
-            byte[] bytes = new byte[1024];
-
-            out = new FileOutputStream(new File(uploadedFileLocation));
-            while ((read = uploadedInputStream.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-
-    }
+  
+   
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})

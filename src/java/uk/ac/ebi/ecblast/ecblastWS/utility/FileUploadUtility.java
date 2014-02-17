@@ -46,7 +46,7 @@ public class FileUploadUtility {
     */
     public String getFileLocation() {
       
-        return this.uploadDirectory + this.fileName.replaceAll("/", "_").replaceAll("\\", "_").replaceAll(" ", "_");
+        return this.uploadDirectory + this.fileName;
     }
 
     /*This function is the main function

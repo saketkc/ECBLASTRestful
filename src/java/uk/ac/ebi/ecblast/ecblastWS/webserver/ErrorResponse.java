@@ -23,7 +23,7 @@ public class ErrorResponse extends WebApplicationException {
     @XmlAttribute
     private Status status;
     @XmlAttribute
-    private String message;
+    public String message;
 
     @XmlAttribute
     public String getReason() {
@@ -51,9 +51,14 @@ public class ErrorResponse extends WebApplicationException {
     public void setMessage(String message) {
         this.message = message;
     }
+    @Override
+    public String getMessage(){
+        return this.message;
+    }
 
     public ErrorResponse(Status status, String reason, String message) {
         //super(message);
+        this.message = message;
         this.reason = reason;
         this.status = status;
 
