@@ -118,12 +118,12 @@ public class ECBlastResource {
     public APIResponse keggQuery(@PathParam("keggID") String keggID) {
 
         SubmitJob job = new SubmitJob();
-        job.createCommand(keggID);
-        String output = job.executeCommand();
-        APIResponse response = new APIResponse();
-        response.setResponse(job.getResponse());
-        response.setMessage(output);
-        return response;
+        //job.createCommand(keggID);
+        //String output = job.executeCommand();
+        //APIResponse response = new APIResponse();
+        //response.setResponse(job.getResponse());
+        //response.setMessage(output);
+        return null;
 
     }
 
@@ -155,8 +155,13 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
             return response;
         }
-        boolean b = addJob.insertJob("DSADAD", 123);
-        if (b == true) {
+        int b = addJob.insertJob("DSADAD", 123);
+        try {
+            addJob.disconnect();
+        } catch (SQLException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (b >= 1) {
 
             response.setResponse("done");
             response.setMessage("error");
@@ -196,9 +201,49 @@ public class ECBlastResource {
             SubmitAtomAtomMappingJob rxnMappingJob = new SubmitAtomAtomMappingJob();
             String uniqueID = UUID.randomUUID().toString();
             rxnMappingJob.createCommand(uniqueID, filePath);
-            String jobID = rxnMappingJob.executeCommand();
-            response.setMessage(jobID);
-            response.setResponse(jobID);
+            String jobID = rxnMappingJob.executeCommand().replace("\r\n", "").trim();
+
+            if (jobID != null) {
+                DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+                JobsQueryWrapper addJob = null;
+
+                response.setResponse("error");
+                response.setMessage("error");
+
+                try {
+                    addJob = new JobsQueryWrapper(dbconfig.getDriver(),
+                            dbconfig.getConnectionString(),
+                            dbconfig.getDBName(),
+                            dbconfig.getDBUserName(),
+                            dbconfig.getDBPassword());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    Connection connect = addJob.connect();
+                    int b;
+                    System.out.println("here");
+
+                    b = addJob.insertJob(uniqueID, Integer.parseInt(jobID));
+                    try {
+                        addJob.disconnect();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    System.out.println(b);
+                    if (b >= 1) {
+                        response.setMessage(rxnMappingJob.getResponse());
+                        response.setResponse(jobID);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    return response;
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    return response;
+                }
+
+            }
             return response;
             /*
              AtomAtomMappingParser parser = new AtomAtomMappingParser(filePath);
@@ -217,6 +262,40 @@ public class ECBlastResource {
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Could not upload file", "error");
         }
 
+    }
+
+    @POST
+    @Path("/pending_jobs")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public APIResponse getPending() {
+        DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+        JobsQueryWrapper jobWrapper = null;
+        APIResponse response = new APIResponse();
+        response.setResponse("error");
+        response.setMessage("error");
+
+        try {
+            jobWrapper = new JobsQueryWrapper(dbconfig.getDriver(),
+                    dbconfig.getConnectionString(),
+                    dbconfig.getDBName(),
+                    dbconfig.getDBUserName(),
+                    dbconfig.getDBPassword());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connect = jobWrapper.connect();
+        } catch (SQLException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            return response;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            return response;
+        }
+        String pendingJobs = jobWrapper.getPendingJobIDs();
+        response.setMessage("success");
+        response.setResponse(pendingJobs);
+        return response;
     }
 
     @GET

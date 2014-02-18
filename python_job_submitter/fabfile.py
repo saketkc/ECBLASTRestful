@@ -31,7 +31,7 @@ def copy_to_node(uuid, path):
 def submit_bsub(uuid, path):
     filepath = os.path.join(__node_file_path__, uuid, uuid)
 
-    cmd = "bsub -q research-rh6 " + "\"" + java_cmd_line + path + " 1>%s 2>%s"%(filepath + "-stdout.log",  filepath + "-stderr.log") + "\""
+    cmd = "bsub -q research-rh6 -J " + uuid + " \"" + java_cmd_line + path + " 1>%s 2>%s"%(filepath + "-stdout.log",  filepath + "-stderr.log") + "\""
     job_id = run(cmd)
     return job_id
 

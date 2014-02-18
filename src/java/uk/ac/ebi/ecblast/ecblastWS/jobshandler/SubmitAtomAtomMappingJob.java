@@ -17,12 +17,10 @@ public class SubmitAtomAtomMappingJob extends SubmitJob{
    
 public String createCommand(String uuid, String path){
     ConfigParser config = new ConfigParser();
-    HashMap nfsConfig = config.getFarmConfig();
-    
-     
+    HashMap nfsConfig = config.getFarmConfig();   
     if (nfsConfig!=null){
-        this.command = (String) nfsConfig.get("fabCommand"); 
-        this.command = this.command + " --uuid=" + uuid + "--path=" + path;
+        this.command = (String) nfsConfig.get("atomAtomMappingCommand"); 
+        this.command = this.command + " --uuid=" + uuid + " --path=" + path;
         return this.command;
     }
     else{

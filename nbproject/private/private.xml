@@ -3,17 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/db/DatabaseWrapper.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/db/JobsQueryWrapper.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/db/DatabaseConfiguration.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/ApplicationConfig.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/utility/QueryResponse.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/CustomExceptionMapper.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/ErrorInfo.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/utility/SubmitJob.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/utility/APIResponse.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/CustomException.java</file>
-            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/com/ebi/ecblast/ECBlastResource.java</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/databasewrapper/JobsQueryWrapper.java</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/parser/ConfigParser.java</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/parser/config.ini</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/jobshandler/SubmitJob.java</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/webserver/ECBlastResource.java</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/jobshandler/SubmitAtomAtomMappingJob.java</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/utility/FileUploadUtility.java</file>
+            <file>file:/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/parser/AtomAtomMappingParser.java</file>
         </group>
     </open-files>
 </project-private>

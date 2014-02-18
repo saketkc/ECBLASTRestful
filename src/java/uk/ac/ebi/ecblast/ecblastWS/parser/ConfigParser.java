@@ -25,7 +25,7 @@ public class ConfigParser {
     String filePath = null;
 
     public ConfigParser() {
-        this.filePath = "config.ini";
+        this.filePath = "/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/parser/config.ini";
     }
 
     public HashMap getDatabaseConfig() {
@@ -50,6 +50,8 @@ public class ConfigParser {
     }
     
     public HashMap getFarmConfig(){
+                    System.out.println("this is test");
+
         try {
             input = new FileInputStream(this.filePath);
             try {

@@ -47,13 +47,7 @@ public class SubmitJob {
 
     }
 
-    public String createCommand(String args) {
-        String cmd = "cat /home/saket/test.txt";
-        //cmd+=args;
-        this.command = cmd;
-        return this.command;
-                
-    }
+   
 
     public String getCommand() {
         return command;
