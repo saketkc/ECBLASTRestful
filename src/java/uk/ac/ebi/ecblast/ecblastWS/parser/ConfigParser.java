@@ -61,7 +61,8 @@ public class ConfigParser {
             hm.put("javaHome", prop.getProperty("java_home"));
             hm.put("localUploadPath", prop.getProperty("local_upload_path"));
             hm.put("rxnDecoderJar", prop.getProperty("rxn_decoder_location"));
-            hm.put("NFSUploadPath", prop.getProperty("nfs_upload_path"));            
+            hm.put("NFSUploadPath", prop.getProperty("nfs_upload_path"));
+            hm.put("atomAtomMappingCommand", prop.getProperty("atom_atom_mapping_cmd"));
             return hm;
         } catch (FileNotFoundException ex) {
 

@@ -15,19 +15,15 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
  */
 public class SubmitAtomAtomMappingJob extends SubmitJob{
    
-@Override
-public String createCommand(String fileName){
-    this.command = "bsub -q research-rh6  \"" ;
-    String stdoutLog = fileName + "-stdout.log";
-    String stderrLog = fileName + "-stderr.log";
+public String createCommand(String uuid, String path){
     ConfigParser config = new ConfigParser();
     HashMap nfsConfig = config.getFarmConfig();
+    
+     
     if (nfsConfig!=null){
-     this.command = this.command +
-             nfsConfig.get("javaHome") +  " -jar " + nfsConfig.get("rxnDecoderJar") + "  " +
-             nfsConfig.get("NFSUploadPath") + fileName + "1> " + stdoutLog + " 2> " + stderrLog +
-             "\"" ;
-     return this.command;       
+        this.command = (String) nfsConfig.get("fabCommand"); 
+        this.command = this.command + " --uuid=" + uuid + "--path=" + path;
+        return this.command;
     }
     else{
         return null;

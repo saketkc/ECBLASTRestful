@@ -28,12 +28,14 @@ import java.io.OutputStream;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitAtomAtomMappingJob;
 import uk.ac.ebi.ecblast.ecblastWS.parser.AtomAtomMappingParser;
 
 /**
@@ -61,7 +63,7 @@ public class ECBlastResource {
         response.setReason("test");
         response.setMessage("test");
         //return response;
-        throw  new ErrorResponse(Status.NOT_FOUND, "URL NOT FOUND", "error");
+        throw new ErrorResponse(Status.NOT_FOUND, "URL NOT FOUND", "error");
 
     }
 
@@ -172,6 +174,12 @@ public class ECBlastResource {
     public APIResponse uploadFile(
             @FormDataParam("rxn") InputStream uploadedInputStream,
             @FormDataParam("rxn") FormDataContentDisposition fileDetail) {
+        if (fileDetail == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "No reaction File", "error");
+        }
+        if (uploadedInputStream == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Reaction File", "error");
+        }
 
         FileUploadUtility uploadFile = new FileUploadUtility(fileDetail.getFileName());
         APIResponse response = new APIResponse();
@@ -180,32 +188,36 @@ public class ECBlastResource {
         // save it
         boolean uploadedSucessful = uploadFile.writeToFile(uploadedInputStream);
         String filePath = uploadFile.getFileLocation();
-        SubmitJob rxnMappingJob = new SubmitJob();
+
         if (uploadedSucessful) {
             /* Submit job to farm
-            TODO: Check if rxn file is all balanced!
-            */
-            
-            AtomAtomMappingParser parser = new AtomAtomMappingParser(filePath);
-            String readFile = parser.readFileInString();
-            if (readFile!=null){
-                String[] pars = parser.getAllSections(readFile);
-                response.setMessage("read");
-                response.setResponse("read");
-                return response;
-            }
-            else{
-                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,"REad emtpy ", "error");
-            }
-        }
-        else {
-            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,"Could not upload file", "error");
+             TODO: Check if rxn file is all balanced!
+             */
+            SubmitAtomAtomMappingJob rxnMappingJob = new SubmitAtomAtomMappingJob();
+            String uniqueID = UUID.randomUUID().toString();
+            rxnMappingJob.createCommand(uniqueID, filePath);
+            String jobID = rxnMappingJob.executeCommand();
+            response.setMessage(jobID);
+            response.setResponse(jobID);
+            return response;
+            /*
+             AtomAtomMappingParser parser = new AtomAtomMappingParser(filePath);
+             String readFile = parser.readFileInString();
+             if (readFile!=null){
+             String[] pars = parser.getAllSections(readFile);
+             System.out.println(pars[1].toString());
+             response.setMessage("read");
+             response.setResponse("read");
+             return response;
+             }
+             else{
+             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,"REad emtpy ", "error");
+             }*/
+        } else {
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Could not upload file", "error");
         }
 
     }
-
-  
-   
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})

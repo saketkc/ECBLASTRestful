@@ -55,7 +55,11 @@ public class AtomAtomMappingParser {
     }
     
     public String[] getAllSections(String contents){
-        String[] parts = contents.split("//");
+        String[] headerParts = contents.split("\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+");
+        if (headerParts.length<3){
+            return null;
+        }
+        String[] parts = headerParts[2].split("//");
         
         return parts;
         
