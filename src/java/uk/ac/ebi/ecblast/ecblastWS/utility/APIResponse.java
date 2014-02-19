@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ecblast.ecblastWS.utility;
 
 /**
@@ -13,19 +12,19 @@ package uk.ac.ebi.ecblast.ecblastWS.utility;
 import javax.xml.bind.annotation.*;
 
 /**
-*
-* @author saketc
-*/
+ *
+ * @author saketc
+ */
 @XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "ecblastResponse")
-public class APIResponse  {
-    
-    @javax.xml.bind.annotation.XmlElement
-    private String response;
-        @javax.xml.bind.annotation.XmlElement
+public class APIResponse {
 
-    private String message;
+    @javax.xml.bind.annotation.XmlElement
+    public String response;
+    @javax.xml.bind.annotation.XmlElement
+
+    public String message;
 
     public String getResponse() {
         return response;
@@ -42,6 +41,5 @@ public class APIResponse  {
     public void setMessage(String message) {
         this.message = message;
     }
-    
-    
+
 }

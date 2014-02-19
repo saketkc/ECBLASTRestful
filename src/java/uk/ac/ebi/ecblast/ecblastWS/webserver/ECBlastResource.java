@@ -20,11 +20,7 @@ import javax.ws.rs.core.Response.Status;
 import uk.ac.ebi.ecblast.ecblastWS.utility.APIResponse;
 import uk.ac.ebi.ecblast.ecblastWS.utility.FileUploadUtility;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitJob;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -37,6 +33,8 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitAtomAtomMappingJob;
 import uk.ac.ebi.ecblast.ecblastWS.parser.AtomAtomMappingParser;
+import uk.ac.ebi.ecblast.ecblastWS.utility.AtomAtomMappingResponse;
+import uk.ac.ebi.ecblast.ecblastWS.utility.GenericResponse;
 
 /**
  * REST Web Service
@@ -88,20 +86,85 @@ public class ECBlastResource {
     @Path("/status/{jobID}")
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public APIResponse getJobStatus(@PathParam("jobID") String jobID) throws ErrorResponse {
+    public GenericResponse getJobStatus(@PathParam("jobID") String uniqueID) throws ErrorResponse {
+        DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+        JobsQueryWrapper job = null;
+        GenericResponse response = new GenericResponse();
         try {
-            Integer.parseInt(jobID);
-        } catch (NumberFormatException e) {
-            throw new ErrorResponse(Status.BAD_REQUEST, jobID + " is not a valid jobID", "error");
+            job = new JobsQueryWrapper(dbconfig.getDriver(),
+                    dbconfig.getConnectionString(),
+                    dbconfig.getDBName(),
+                    dbconfig.getDBUserName(),
+                    dbconfig.getDBPassword());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        APIResponse response = new APIResponse();
-        if (!"123".equals(jobID)) {
 
-            response.setResponse("test");
-            response.setMessage("test");
+        try {
+            Connection connect = job.connect();
+        } catch (SQLException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
             return response;
-        } else {
-            throw new ErrorResponse(Status.BAD_REQUEST, jobID + " is not a valid jobID", "error");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            return response;
+        }
+        String status = job.getJobStatus(uniqueID);
+        if (status == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, uniqueID + " not found", "error");
+        }
+        if ("pending".equals(status)) {
+            response.setMessage("pending");
+        }
+
+        if ("done".equals(status)) {
+            /*Pull from the folder*/
+            response.setMessage("done");
+            String filepath = "/home/saket/INCOMINGUPLOADS/" + uniqueID + "/" + uniqueID + "-stdout.log";
+            AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
+            String contents = parser.readFileInString();
+            response.setResponse(contents + filepath);
+        }
+
+        if ("failed".equals(status)) {
+            response.setMessage("pending");
+        }
+
+        return response;
+
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/updateJobStatus/{uniqueID}/{status}")
+    public void updateStatus(@PathParam("uniqueID") String uniqueID, @PathParam("status") String status) {
+        DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+        JobsQueryWrapper job = null;
+        GenericResponse response = new GenericResponse();
+        try {
+            job = new JobsQueryWrapper(dbconfig.getDriver(),
+                    dbconfig.getConnectionString(),
+                    dbconfig.getDBName(),
+                    dbconfig.getDBUserName(),
+                    dbconfig.getDBPassword());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            Connection connect = job.connect();
+        } catch (SQLException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        boolean b = job.updateJob(uniqueID, status);
+        try {
+            job.disconnect();
+        } catch (SQLException ex) {
+            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -125,52 +188,6 @@ public class ECBlastResource {
         //response.setMessage(output);
         return null;
 
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Path("/add")
-    public APIResponse addJob() {
-        DatabaseConfiguration dbconfig = new DatabaseConfiguration();
-        JobsQueryWrapper addJob = null;
-        APIResponse response = new APIResponse();
-        response.setResponse("error");
-        response.setMessage("error");
-
-        try {
-            addJob = new JobsQueryWrapper(dbconfig.getDriver(),
-                    dbconfig.getConnectionString(),
-                    dbconfig.getDBName(),
-                    dbconfig.getDBUserName(),
-                    dbconfig.getDBPassword());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            Connection connect = addJob.connect();
-        } catch (SQLException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-            return response;
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-            return response;
-        }
-        int b = addJob.insertJob("DSADAD", 123);
-        try {
-            addJob.disconnect();
-        } catch (SQLException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (b >= 1) {
-
-            response.setResponse("done");
-            response.setMessage("error");
-        } else {
-            response.setResponse("errir");
-            response.setMessage("eoor");
-
-        }
-        return response;
     }
 
     @POST
@@ -201,6 +218,7 @@ public class ECBlastResource {
             SubmitAtomAtomMappingJob rxnMappingJob = new SubmitAtomAtomMappingJob();
             String uniqueID = UUID.randomUUID().toString();
             rxnMappingJob.createCommand(uniqueID, filePath);
+            System.out.println(rxnMappingJob.getCommand());
             String jobID = rxnMappingJob.executeCommand().replace("\r\n", "").trim();
 
             if (jobID != null) {
@@ -222,18 +240,12 @@ public class ECBlastResource {
                 try {
                     Connection connect = addJob.connect();
                     int b;
-                    System.out.println("here");
+                    b = addJob.insertJob(uniqueID, Integer.parseInt(jobID), fileDetail.getFileName());
 
-                    b = addJob.insertJob(uniqueID, Integer.parseInt(jobID));
-                    try {
-                        addJob.disconnect();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-                    }
                     System.out.println(b);
                     if (b >= 1) {
                         response.setMessage(rxnMappingJob.getResponse());
-                        response.setResponse(jobID);
+                        response.setResponse(uniqueID);
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -244,6 +256,7 @@ public class ECBlastResource {
                 }
 
             }
+
             return response;
             /*
              AtomAtomMappingParser parser = new AtomAtomMappingParser(filePath);

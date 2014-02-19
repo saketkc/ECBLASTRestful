@@ -27,9 +27,9 @@ public class JobsQueryWrapper extends DatabaseWrapper {
         super(driver, connectionString, dbName, userName, password);
     }
 
-    public int insertJob(String uniqueID, Integer jobID) {
+    public int insertJob(String uniqueID, Integer jobID, String fileName) {
         int execute = 0;
-        String query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status) VALUES(?,?,?,?,?)";
+        String query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName) VALUES(?,?,?,?,?,?)";
         Date date = new Date();
 
         SimpleDateFormat dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -72,11 +72,18 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             return execute;
 
         }
+        try {
+            stmt.setString(6, fileName);
+        } catch (SQLException ex) {
+            Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+            return execute;
+
+        }
 
         try {
             execute = stmt.executeUpdate();
             stmt.closeOnCompletion();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             return execute;
@@ -87,7 +94,7 @@ public class JobsQueryWrapper extends DatabaseWrapper {
 
     public boolean updateJob(String uuid, String status) {
         String updateStatusQuery = "UPDATE jobs SET Status=? WHERE uniqueID=?";
-        String updateTimeQuery= "UPDATE jobs SET lastcheckedAT=? WHERE uniqueID=?";
+        String updateTimeQuery = "UPDATE jobs SET lastcheckedAT=? WHERE uniqueID=?";
         PreparedStatement stmStatus;
         PreparedStatement stmTime;
         Date date = new Date();
@@ -97,7 +104,7 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             stmStatus = (PreparedStatement) connection.prepareStatement(updateStatusQuery);
             stmTime = (PreparedStatement) connection.prepareStatement(updateTimeQuery);
         } catch (SQLException ex) {
-           // Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+            // Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         try {
@@ -108,8 +115,8 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            stmStatus.setString(2,  uuid);
-            stmTime.setString(2,  uuid);
+            stmStatus.setString(2, uuid);
+            stmTime.setString(2, uuid);
         } catch (SQLException ex) {
             return false;
             //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
@@ -119,25 +126,22 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             stmTime.execute();
         } catch (SQLException ex) {
             return false;
-             //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         return true;
     }
-    
-    
-    public String getPendingJobIDs(){
+
+    public String getPendingJobIDs() {
         try {
             String query = "SELECT uniqueID FROM jobs WHERE status=?";
             PreparedStatement stm = (PreparedStatement) connection.prepareStatement(query);
             stm.setString(1, "pending");
             ResultSet rs = stm.executeQuery();
             String returnMessage = "";
-    
+
             while (rs.next()) {
-                returnMessage =  returnMessage  + rs.getString(1)+ ";";
-               
+                returnMessage = returnMessage + rs.getString(1) + ";";
 
             }
             return returnMessage;
@@ -145,6 +149,26 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             return null;
             //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+    }
+
+    public String getJobStatus(String uniqueID) {
+        try {
+            String query = "SELECT status FROM jobs where uniqueID=?";
+            PreparedStatement stm = (PreparedStatement) connection.prepareStatement(query);
+            stm.setString(1, uniqueID);
+            ResultSet rs = stm.executeQuery();
+            String returnMessage = null;
+
+            while (rs.next()) {
+                returnMessage = rs.getString(1);
+    // ...
+            }
+            return returnMessage;
+        } catch (SQLException ex) {
+            return null;
+            //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }
