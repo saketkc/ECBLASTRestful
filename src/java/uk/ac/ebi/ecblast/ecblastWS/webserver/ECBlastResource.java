@@ -277,9 +277,9 @@ public class ECBlastResource {
 
     }
 
-    @POST
+    @GET
     @Path("/pending_jobs")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON})
     public APIResponse getPending() {
         DatabaseConfiguration dbconfig = new DatabaseConfiguration();
         JobsQueryWrapper jobWrapper = null;

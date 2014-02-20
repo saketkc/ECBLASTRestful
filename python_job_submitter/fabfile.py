@@ -23,8 +23,8 @@ def copy_to_node(uuid, path):
     filename = path.split("/")[-1]
     cd_path = "cd " + user_directory
     renamed_filepath = os.path.join(user_directory, filename)
-    cmd = cd_path +  " && "+java_cmd_line + renamed_filepath + " 1>%s 2>%s"%(filepath + "-stdout.log",  filepath + "-stderr.log")\
-        + " ; " + update_job_status_cmd_line + " --uuid=" + uuid
+    cmd = cd_path +  " && "+java_cmd_line + renamed_filepath + " 1>%s 2>%s"%(filepath + "-stdout.log",  filepath + "-stderr.log")
+        #+ " ; " + update_job_status_cmd_line + " --uuid=" + uuid
     configfile = os.path.abspath(path +"/..") + "/" + uuid + ".sh"
     with open(os.path.abspath(path +"/..") + "/" + uuid + ".sh", 'w') as f:
         f.write(cmd)
