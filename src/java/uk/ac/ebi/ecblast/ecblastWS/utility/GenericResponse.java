@@ -21,6 +21,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "ecblastResponse")
 public class GenericResponse extends AtomAtomMappingResponse {
 
+    public String status;
+  
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
     public GenericResponse() {
     }
     

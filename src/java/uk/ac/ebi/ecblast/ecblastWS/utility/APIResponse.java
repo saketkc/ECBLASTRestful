@@ -10,6 +10,7 @@ package uk.ac.ebi.ecblast.ecblastWS.utility;
  * @author saket
  */
 import javax.xml.bind.annotation.*;
+import org.codehaus.jackson.map.annotate.JsonRootName;
 
 /**
  *
@@ -17,14 +18,25 @@ import javax.xml.bind.annotation.*;
  */
 @XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "ecblastResponse")
+@XmlRootElement(name = "ecblastError")
+@JsonRootName(value = "ecblastError")
 public class APIResponse {
 
-    @javax.xml.bind.annotation.XmlElement
+    @XmlElement
     public String response;
-    @javax.xml.bind.annotation.XmlElement
-
+    @XmlElement
     public String message;
+
+    @XmlElement
+    public String jobID;
+
+    public String getJobID() {
+        return jobID;
+    }
+
+    public void setJobID(String jobID) {
+        this.jobID = jobID;
+    }
 
     public String getResponse() {
         return response;

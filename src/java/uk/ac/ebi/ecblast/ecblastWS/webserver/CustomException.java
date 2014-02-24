@@ -4,13 +4,18 @@
  * and open the template in the editor.
  */
 
-package uk.eac.bi.ecbla.ecblastWS.webserverst;
+package uk.ac.ebi.ecblast.ecblastWS.webserver;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.map.annotate.JsonRootName;
 
 /**
  *
  * @author saket
  */
+@XmlRootElement(name = "ecblastError")
+@JsonRootName(value = "ecblastError")
+
 public class CustomException extends Exception {
     
     private int errorID;

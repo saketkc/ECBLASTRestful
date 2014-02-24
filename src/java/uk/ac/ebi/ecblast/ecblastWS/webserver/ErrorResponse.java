@@ -7,59 +7,63 @@ package uk.ac.ebi.ecblast.ecblastWS.webserver;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.map.annotate.JsonRootName;
 
 /**
  *
  * @author saket
  */
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+//@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "ecblastError")
+@JsonRootName(value = "ecblastError")
+
 public class ErrorResponse extends WebApplicationException {
 
-    @XmlAttribute
-    private String reason;
-    @XmlAttribute
+   @XmlElement
+
     private Status status;
-    @XmlAttribute
+   @XmlElement
+
+
     public String message;
+@XmlElement
 
-    @XmlAttribute
-    public String getReason() {
-        return reason;
-    }
-
-    @XmlAttribute
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    @XmlAttribute
     public Status getStatus() {
         return status;
     }
+@XmlElement
 
-    @XmlAttribute
     public void setStatus(Status status) {
         this.status = status;
     }
 
     public ErrorResponse() {
     }
+@XmlElement
 
     public void setMessage(String message) {
         this.message = message;
     }
+@XmlElement
+
     @Override
-    public String getMessage(){
+    public String getMessage() {
         return this.message;
     }
 
-    public ErrorResponse(Status status, String reason, String message) {
+    public ErrorResponse(Status status, String message) {
         //super(message);
         this.message = message;
-        this.reason = reason;
+
         this.status = status;
 
     }

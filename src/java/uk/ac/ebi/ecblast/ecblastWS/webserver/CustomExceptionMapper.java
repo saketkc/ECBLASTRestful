@@ -16,16 +16,16 @@ import uk.ac.ebi.ecblast.ecblastWS.utility.APIResponse;
  *
  * @author saket
  */
+
 @Provider
 public class CustomExceptionMapper implements ExceptionMapper<ErrorResponse> {
 
     @Override
     public Response toResponse(ErrorResponse e) {
 
-                 //ErrorInfo a= new ErrorResponse(e.getMessage(), e.getReason(), e.getStatus(), e.getErrorCode());
+        //ErrorInfo a= new ErrorResponse(e.getMessage(), e.getReason(), e.getStatus(), e.getErrorCode());
         APIResponse response = new APIResponse();
         response.setMessage(e.getMessage());
-        response.setResponse(e.getReason());
         ResponseBuilder rb = Response.status(e.getStatus()).entity(
                 response);
 

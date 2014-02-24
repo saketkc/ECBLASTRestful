@@ -15,12 +15,12 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
  */
 public class SubmitAtomAtomMappingJob extends SubmitJob{
    
-public String createCommand(String uuid, String path){
+public String createCommand(String uuid, String userDirectory, String userFilePath, String fileType){
     ConfigParser config = new ConfigParser();
     HashMap nfsConfig = config.getFarmConfig();   
     if (nfsConfig!=null){
         this.command = (String) nfsConfig.get("atomAtomMappingCommand"); 
-        this.command = this.command + " --uuid=" + uuid + " --path=" + path;
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory +" --file="+userFilePath + " --filetype=="+fileType;
         return this.command;
     }
     else{

@@ -40,7 +40,7 @@ public class ConfigParser {
             hm.put("dbName", prop.getProperty("db_name"));
             hm.put("dbUser", prop.getProperty("db_user"));
             hm.put("dbHost", prop.getProperty("dbHost"));
-            hm.put("dbPort", prop.getProperty("dbPort"));            
+            hm.put("dbPort", prop.getProperty("dbPort"));
             return hm;
         } catch (FileNotFoundException ex) {
 
@@ -48,9 +48,9 @@ public class ConfigParser {
         }
 
     }
-    
-    public HashMap getFarmConfig(){
-                    System.out.println("this is test");
+
+    public HashMap getFarmConfig() {
+        System.out.println("this is test");
 
         try {
             input = new FileInputStream(this.filePath);
@@ -70,5 +70,21 @@ public class ConfigParser {
 
             return null;
         }
+    }
+
+    public Properties getConfig() {
+        try {
+            input = new FileInputStream(this.filePath);
+            try {
+                prop.load(input);
+            } catch (IOException ex) {
+                Logger.getLogger(ConfigParser.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } catch (FileNotFoundException ex) {
+            return null;
+
+        }
+        return prop;
     }
 }

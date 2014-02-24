@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
+import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 
 /**
  *
@@ -26,12 +28,15 @@ public class DatabaseConfiguration {
     private final String dbpassword;
 
     public DatabaseConfiguration() {
-        driver = "com.mysql.jdbc.Driver";
-        dbName = "ecblast_restful";
-        connectionString = "jdbc:mysql://localhost:3306";
+        ConfigParser parser = new ConfigParser();
+        Properties prop = parser.getConfig();
+        
+        driver = prop.getProperty("driver") ;
+        dbName = prop.getProperty("db_name");
+        connectionString = prop.getProperty("connection_string");
 // connectionString = "jdbc:mysql://mysql-reaction.ebi.ac.uk:4083";
-        dbuserName = "root";
-        dbpassword = "fedora13";
+        dbuserName = prop.getProperty("db_username");
+        dbpassword = prop.getProperty("db_password");
     }
 
     /**

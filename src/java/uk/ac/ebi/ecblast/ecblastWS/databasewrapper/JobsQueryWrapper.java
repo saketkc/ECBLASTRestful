@@ -27,9 +27,14 @@ public class JobsQueryWrapper extends DatabaseWrapper {
         super(driver, connectionString, dbName, userName, password);
     }
 
-    public int insertJob(String uniqueID, Integer jobID, String fileName) {
+    public int insertJob(String uniqueID, Integer jobID, String fileName, String emailID) {
         int execute = 0;
-        String query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName) VALUES(?,?,?,?,?,?)";
+        String query;
+        if (emailID == null) {
+            query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName, email) VALUES(?,?,?,?,?,?,?)";
+        } else {
+            query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName, email) VALUES(?,?,?,?,?,?,?)";
+        }
         Date date = new Date();
 
         SimpleDateFormat dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -78,6 +83,21 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             return execute;
 
+        }
+        
+        if(emailID!=null){
+            try {
+                stmt.setString(7, emailID);
+            } catch (SQLException ex) {
+                Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else{
+            try {
+                stmt.setString(7, null);
+            } catch (SQLException ex) {
+                Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         try {
@@ -134,9 +154,11 @@ public class JobsQueryWrapper extends DatabaseWrapper {
 
     public String getPendingJobIDs() {
         try {
-            String query = "SELECT uniqueID FROM jobs WHERE status=?";
+            String query = "SELECT uniqueID FROM jobs WHERE status=? or status=?";
             PreparedStatement stm = (PreparedStatement) connection.prepareStatement(query);
             stm.setString(1, "pending");
+            stm.setString(2, "running");
+            
             ResultSet rs = stm.executeQuery();
             String returnMessage = "";
 
@@ -162,7 +184,7 @@ public class JobsQueryWrapper extends DatabaseWrapper {
 
             while (rs.next()) {
                 returnMessage = rs.getString(1);
-    // ...
+                // ...
             }
             return returnMessage;
         } catch (SQLException ex) {
@@ -170,5 +192,26 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    
+    public String getEmailFromUUID(String uniqueID){
+        try {
+            String query = "SELECT email FROM jobs where uniqueID=?";
+            PreparedStatement stm = (PreparedStatement) connection.prepareStatement(query);
+            stm.setString(1, uniqueID);
+            ResultSet rs = stm.executeQuery();
+            String returnMessage = null;
+            System.out.println(stm.toString());
+            System.out.println(query);
+            System.out.println(uniqueID);
+            while (rs.next()) {
+                returnMessage = rs.getString(1);              
+            }
+            return returnMessage;
+        } catch (SQLException ex) {
+            return null;
+            //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

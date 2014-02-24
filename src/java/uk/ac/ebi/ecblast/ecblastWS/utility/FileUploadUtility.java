@@ -11,8 +11,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 
 /**
  * FileUploadUtility enables user uploads to the EBI server These uploads are
@@ -22,16 +24,32 @@ import java.util.logging.Logger;
  */
 public class FileUploadUtility {
 
-    public final String uploadDirectory = "/home/saket/UPLOADS/";
+    ConfigParser parser = new ConfigParser();
+    Properties prop = parser.getConfig();
+    public final String uploadDirectory = prop.getProperty("raw_upload_directory");
+    public String userDirectory;
     public String fileName;
 
     /* Constructors, Getters and Setters Begin*/
-    public FileUploadUtility(String fileName) {
-        this.fileName = fileName;
+    public FileUploadUtility(String fileName, String uniqueID) {
+        
+        /*create user direcotry of does not exist*/
+        this.userDirectory = uploadDirectory + "/" + uniqueID;
+        File userFolder = new File(this.userDirectory);
+        userFolder.mkdirs();
+        this.fileName = this.userDirectory + "__" + fileName;
     }
 
     public String getFileName() {
         return fileName;
+    }
+
+    public String getUserDirectory() {
+        return userDirectory;
+    }
+
+    public void setUserDirectory(String userDirectory) {
+        this.userDirectory = userDirectory;
     }
 
     public void setFileName(String fileName) {
@@ -46,7 +64,7 @@ public class FileUploadUtility {
      */
     public String getFileLocation() {
 
-        return this.uploadDirectory + this.fileName;
+        return this.fileName;
     }
 
     /*This function is the main function
