@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ecblast.ecblastWS.utility;
 
 import javax.xml.bind.annotation.XmlAccessOrder;
@@ -21,8 +20,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "ecblastResponse")
 public class GenericResponse extends AtomAtomMappingResponse {
 
+    @javax.xml.bind.annotation.XmlElement
+
     public String status;
-  
+
     public String getStatus() {
         return status;
     }
@@ -30,9 +31,8 @@ public class GenericResponse extends AtomAtomMappingResponse {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
     public GenericResponse() {
     }
-    
-    
+
 }

@@ -23,8 +23,8 @@ def main(argv):
     with settings(hide('running', 'stdout', 'stderr'),
                   host_string="saketc@172.21.22.5",
                   password="uzfmTjX7"):
-        rxn_filepath = run_atom_atom_mapping(uuid, directory, file, filetype)
-        stdout = submit_bsub(uuid, rxn_filepath)
+        run_atom_atom_mapping(uuid, directory, file, filetype)
+        stdout = submit_bsub(uuid)
         if __job_submitted_re__.search(stdout):
             print stdout.split("<")[1].split(">")[0]
         else:

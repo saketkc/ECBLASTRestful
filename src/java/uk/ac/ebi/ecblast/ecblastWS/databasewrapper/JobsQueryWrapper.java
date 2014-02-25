@@ -27,13 +27,13 @@ public class JobsQueryWrapper extends DatabaseWrapper {
         super(driver, connectionString, dbName, userName, password);
     }
 
-    public int insertJob(String uniqueID, Integer jobID, String fileName, String emailID) {
+    public int insertJob(String uniqueID, Integer jobID, String fileName, String emailID, String jobType) {
         int execute = 0;
         String query;
         if (emailID == null) {
-            query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName, email) VALUES(?,?,?,?,?,?,?)";
+            query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName, email, jobType) VALUES(?,?,?,?,?,?,?,?)";
         } else {
-            query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName, email) VALUES(?,?,?,?,?,?,?)";
+            query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName, email, jobType) VALUES(?,?,?,?,?,?,?,?)";
         }
         Date date = new Date();
 
@@ -42,6 +42,7 @@ public class JobsQueryWrapper extends DatabaseWrapper {
         PreparedStatement stmt = null;
         try {
             stmt = (PreparedStatement) connection.prepareStatement(query);
+             System.out.println("***************"+stmt.toString());
         } catch (SQLException ex) {
             Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             return execute;
@@ -99,8 +100,14 @@ public class JobsQueryWrapper extends DatabaseWrapper {
                 Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+           try {
+                stmt.setString(8, jobType);
+            } catch (SQLException ex) {
+                Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         try {
+            System.out.println("***************"+stmt.toString());
             execute = stmt.executeUpdate();
             stmt.closeOnCompletion();
 
@@ -108,6 +115,8 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             return execute;
         }
+        
+       
 
         return execute;
     }
@@ -194,6 +203,25 @@ public class JobsQueryWrapper extends DatabaseWrapper {
 
     }
     
+     public String getJobType(String uniqueID) {
+        try {
+            String query = "SELECT jobType FROM jobs where uniqueID=?";
+            PreparedStatement stm = (PreparedStatement) connection.prepareStatement(query);
+            stm.setString(1, uniqueID);
+            ResultSet rs = stm.executeQuery();
+            String returnMessage = null;
+
+            while (rs.next()) {
+                returnMessage = rs.getString(1);
+                // ...
+            }
+            return returnMessage;
+        } catch (SQLException ex) {
+            return null;
+            //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
     
     public String getEmailFromUUID(String uniqueID){
         try {

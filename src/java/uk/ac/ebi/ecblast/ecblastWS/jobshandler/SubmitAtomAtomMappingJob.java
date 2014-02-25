@@ -20,7 +20,7 @@ public String createCommand(String uuid, String userDirectory, String userFilePa
     HashMap nfsConfig = config.getFarmConfig();   
     if (nfsConfig!=null){
         this.command = (String) nfsConfig.get("atomAtomMappingCommand"); 
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory +" --file="+userFilePath + " --filetype=="+fileType;
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory +" --file="+userFilePath + " --filetype="+fileType;
         return this.command;
     }
     else{

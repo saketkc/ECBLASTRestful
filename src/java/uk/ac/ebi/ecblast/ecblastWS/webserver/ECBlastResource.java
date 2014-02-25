@@ -38,6 +38,8 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitAtomAtomMappingJob;
+import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitCompareReactionsJob;
+import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitGenericMatchingJob;
 import uk.ac.ebi.ecblast.ecblastWS.parser.AtomAtomMappingParser;
 import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 import uk.ac.ebi.ecblast.ecblastWS.utility.AtomAtomMappingResponse;
@@ -181,7 +183,7 @@ public class ECBlastResource {
         GenericResponse response = new GenericResponse();
         ConfigParser configparser = new ConfigParser();
         Properties prop = configparser.getConfig();
-        String filepath = prop.getProperty("results_upload_directory") + uniqueID + "/" + uniqueID+ "-stdout.log";
+        String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + uniqueID + "__stdout.log";
         AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
         String contents = parser.readFileInString();
         response.setAtomatomMappingResultText(contents);
@@ -193,7 +195,9 @@ public class ECBlastResource {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public GenericResponse getResultXml(@PathParam("jobID") String uniqueID) throws ErrorResponse {
         GenericResponse response = new GenericResponse();
-        String filepath = "/home/saket/INCOMINGUPLOADS/" + uniqueID + "/" + uniqueID+ "-stdout.log";
+        ConfigParser configparser = new ConfigParser();
+        Properties prop = configparser.getConfig();
+        String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + uniqueID + "-stdout.log";
         AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
         String contents = parser.readFileInString();
         String[] contentsSplit = parser.getAllSections(contents);
@@ -298,26 +302,23 @@ public class ECBlastResource {
 
     @POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Path("/atom_atom_mapping")
+    @Path("/aam/rxn")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public GenericResponse atomAtomMapping(
+    public GenericResponse atomAtomMappingRXN(
             @FormDataParam("q") InputStream uploadedInputStream,
-            @FormDataParam("q") FormDataContentDisposition fileDetail, @FormDataParam("email") String emailID, @FormDataParam("Q") String fileFormat) {
+            @FormDataParam("q") FormDataContentDisposition fileDetail, @FormDataParam("email") String emailID) {
         if (fileDetail == null) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "No reaction File");
         }
         if (uploadedInputStream == null) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Reaction File");
         }
-        if (!"SMI".equals(fileFormat) && !"RXN".equals(fileFormat)){
-            throw new ErrorResponse(Response.Status.BAD_REQUEST, "Only RXN, SMI are allowed");
-        }
-        
-        
-        
+
+        String fileFormat = "RXN";
+
         String uniqueID = UUID.randomUUID().toString();
         FileUploadUtility uploadFile = new FileUploadUtility(fileDetail.getFileName(), uniqueID);
-        GenericResponse response = new GenericResponse();        
+        GenericResponse response = new GenericResponse();
         response.setJobID(null);
         boolean uploadedSucessful = uploadFile.writeToFile(uploadedInputStream);
         String userDirectory = uploadFile.getUserDirectory();
@@ -327,11 +328,26 @@ public class ECBlastResource {
              TODO: Check if rxn file is all balanced!
              */
             SubmitAtomAtomMappingJob rxnMappingJob = new SubmitAtomAtomMappingJob();
-           
-            rxnMappingJob.createCommand(uniqueID, userDirectory, userFilePath, fileFormat);
-            String jobID = rxnMappingJob.executeCommand().replace("\r\n", "").trim();
 
-            if (jobID != null) {
+            rxnMappingJob.createCommand(uniqueID, userDirectory, userFilePath, fileFormat);
+            String jID = rxnMappingJob.executeCommand();
+            jID = jID.trim();
+            jID = jID.replace("\"\'", "");
+            if (jID == null || jID == "") {
+
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error sub,itting job to node");
+
+            }
+            int jobID;
+
+            try {
+                jobID = Integer.parseInt(jID);
+            } catch (NumberFormatException ex) { // handle your exception
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error sub,itting job to node");
+
+            }
+
+            if (jobID > 0) {
                 DatabaseConfiguration dbconfig = new DatabaseConfiguration();
                 JobsQueryWrapper addJob = null;
 
@@ -347,7 +363,7 @@ public class ECBlastResource {
                 try {
                     Connection connect = addJob.connect();
                     int b;
-                    b = addJob.insertJob(uniqueID, Integer.parseInt(jobID), fileDetail.getFileName(), emailID);;
+                    b = addJob.insertJob(uniqueID, jobID, fileDetail.getFileName(), emailID, "atom_atom_mapping");
                     if (b >= 1) {
                         response.setMessage(rxnMappingJob.getResponse());
                         response.setJobID(uniqueID);
@@ -372,6 +388,389 @@ public class ECBlastResource {
 
     }
 
+    @POST
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/aam/smi")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public GenericResponse atomAtomMappingSMI(
+            @FormDataParam("q") InputStream uploadedInputStream,
+            @FormDataParam("q") FormDataContentDisposition fileDetail, @FormDataParam("email") String emailID) {
+        if (fileDetail == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "No reaction File");
+        }
+        if (uploadedInputStream == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Reaction File");
+        }
+
+        String fileFormat = "SMI";
+
+        String uniqueID = UUID.randomUUID().toString();
+        FileUploadUtility uploadFile = new FileUploadUtility(fileDetail.getFileName(), uniqueID);
+        GenericResponse response = new GenericResponse();
+        response.setJobID(null);
+        boolean uploadedSucessful = uploadFile.writeToFile(uploadedInputStream);
+        String userDirectory = uploadFile.getUserDirectory();
+        String userFilePath = uploadFile.getFileLocation();
+        if (uploadedSucessful) {
+            /* Submit job to farm
+             TODO: Check if rxn file is all balanced!
+             */
+            SubmitAtomAtomMappingJob rxnMappingJob = new SubmitAtomAtomMappingJob();
+
+            rxnMappingJob.createCommand(uniqueID, userDirectory, userFilePath, fileFormat);
+            String jID = rxnMappingJob.executeCommand();
+            jID = jID.trim();
+            jID = jID.replace("\"\'", "");
+            System.out.println("***************" + rxnMappingJob.getCommand());
+            if (jID == null || jID == "") {
+
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error sub,itting job to node");
+
+            }
+            int jobID;
+
+            try {
+                jobID = Integer.parseInt(jID);
+            } catch (NumberFormatException ex) { // handle your exception
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error sub,itting job to node");
+
+            }
+
+            if (jobID > 0) {
+                DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+                JobsQueryWrapper addJob = null;
+
+                try {
+                    addJob = new JobsQueryWrapper(dbconfig.getDriver(),
+                            dbconfig.getConnectionString(),
+                            dbconfig.getDBName(),
+                            dbconfig.getDBUserName(),
+                            dbconfig.getDBPassword());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    Connection connect = addJob.connect();
+                    int b;
+                    b = addJob.insertJob(uniqueID, jobID, fileDetail.getFileName(), emailID, "atom_atom_mapping");
+                    if (b >= 1) {
+                        response.setMessage(rxnMappingJob.getResponse());
+                        response.setJobID(uniqueID);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setMessage("Error in submitting job");
+                    return response;
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setMessage("Error in submitting job");
+                    return response;
+                }
+
+            }
+
+            return response;
+
+        } else {
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Could not upload file");
+        }
+
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/compare/reactions")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public GenericResponse atomAtomMappingRXN(
+            @FormDataParam("q") InputStream uploadedInputStreamQuery,
+            @FormDataParam("q") FormDataContentDisposition fileDetailQuery,
+            @FormDataParam("Q") String queryFormat,
+            @FormDataParam("T") String targetFormat,
+            @FormDataParam("t") InputStream uploadedInputStreamTarget,
+            @FormDataParam("t") FormDataContentDisposition fileDetailTarget,
+            @FormDataParam("email") String emailID
+    ) {
+        if (fileDetailQuery == null || fileDetailTarget == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "No reaction File");
+        }
+        if (uploadedInputStreamQuery == null || uploadedInputStreamTarget == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Reaction File");
+        }
+
+        String fileFormat = "RXN";
+        GenericResponse response = new GenericResponse();
+        response.setJobID(null);
+        String uniqueID = UUID.randomUUID().toString();
+        FileUploadUtility uploadFileQuery = new FileUploadUtility(fileDetailQuery.getFileName(), uniqueID);
+
+        boolean uploadedSucessfulQuery = uploadFileQuery.writeToFile(uploadedInputStreamQuery);
+        String userDirectory = uploadFileQuery.getUserDirectory();
+        String userFilePathQuery = uploadFileQuery.getFileLocation();
+        FileUploadUtility uploadFileTarget = new FileUploadUtility(fileDetailTarget.getFileName(), uniqueID);
+
+        boolean uploadedSucessfulTarget = uploadFileQuery.writeToFile(uploadedInputStreamTarget);
+
+        String userFilePathTarget = uploadFileTarget.getFileLocation();
+        if (uploadedSucessfulQuery && uploadedSucessfulTarget) {
+            /* Submit job to farm
+             TODO: Check if rxn file is all balanced!
+             */
+            SubmitCompareReactionsJob compareJob = new SubmitCompareReactionsJob();
+
+            compareJob.createCommand(uniqueID, userDirectory, queryFormat, userFilePathQuery, targetFormat, userFilePathTarget);
+            String jID = compareJob.executeCommand();
+            jID = jID.trim();
+            jID = jID.replace("\"\'", "");
+            if (jID == null || jID == "") {
+                System.out.println("*****************************" + compareJob.getCommand());
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+
+            }
+            int jobID;
+
+            try {
+                jobID = Integer.parseInt(jID);
+            } catch (NumberFormatException ex) { // handle your exception
+                System.out.println("*****************************" + compareJob.getCommand());
+
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+
+            }
+
+            if (jobID > 0) {
+                DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+                JobsQueryWrapper addJob = null;
+
+                try {
+                    addJob = new JobsQueryWrapper(dbconfig.getDriver(),
+                            dbconfig.getConnectionString(),
+                            dbconfig.getDBName(),
+                            dbconfig.getDBUserName(),
+                            dbconfig.getDBPassword());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    Connection connect = addJob.connect();
+                    int b;
+                    b = addJob.insertJob(uniqueID, jobID, fileDetailQuery.getFileName(), emailID, "compare_reactions");
+                    if (b >= 1) {
+                        response.setMessage(compareJob.getResponse());
+                        response.setJobID(uniqueID);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setMessage("Error in submitting job");
+                    return response;
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setMessage("Error in submitting job");
+                    return response;
+                }
+
+            }
+
+            return response;
+
+        } else {
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Could not upload file");
+        }
+
+    }
+
+    
+     @POST
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/matching/generic")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public GenericResponse genericMapping(
+            @FormDataParam("q") InputStream uploadedInputStreamQuery,
+            @FormDataParam("q") FormDataContentDisposition fileDetailQuery,
+            @FormDataParam("Q") String queryFormat,
+            
+            @FormDataParam("c") String c,            
+            @FormDataParam("email") String emailID
+    ) {
+        if (fileDetailQuery == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "No reaction File");
+        }
+        if (uploadedInputStreamQuery == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Reaction File");
+        }
+
+        String fileFormat = "RXN";
+        GenericResponse response = new GenericResponse();
+        response.setJobID(null);
+        String uniqueID = UUID.randomUUID().toString();
+        FileUploadUtility uploadFileQuery = new FileUploadUtility(fileDetailQuery.getFileName(), uniqueID);
+
+        boolean uploadedSucessfulQuery = uploadFileQuery.writeToFile(uploadedInputStreamQuery);
+        String userDirectory = uploadFileQuery.getUserDirectory();
+        String userFilePathQuery = uploadFileQuery.getFileLocation();
+        
+        if (uploadedSucessfulQuery) {
+            /* Submit job to farm
+             TODO: Check if rxn file is all balanced!
+             */
+            SubmitGenericMatchingJob matchingJob = new SubmitGenericMatchingJob();
+
+            matchingJob.createCommand(uniqueID, userDirectory, queryFormat, userFilePathQuery, c);
+            String jID = matchingJob.executeCommand();
+            jID = jID.trim();
+            jID = jID.replace("\"\'", "");
+            if (jID == null || jID == "") {
+                System.out.println("*****************************" + matchingJob.getCommand());
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+
+            }
+            int jobID;
+
+            try {
+                jobID = Integer.parseInt(jID);
+            } catch (NumberFormatException ex) { // handle your exception
+                System.out.println("*****************************" + matchingJob.getCommand());
+
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+
+            }
+
+            if (jobID > 0) {
+                DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+                JobsQueryWrapper addJob = null;
+
+                try {
+                    addJob = new JobsQueryWrapper(dbconfig.getDriver(),
+                            dbconfig.getConnectionString(),
+                            dbconfig.getDBName(),
+                            dbconfig.getDBUserName(),
+                            dbconfig.getDBPassword());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    Connection connect = addJob.connect();
+                    int b;
+                    b = addJob.insertJob(uniqueID, jobID, fileDetailQuery.getFileName(), emailID, "generic_matching");
+                    if (b >= 1) {
+                        response.setMessage(matchingJob.getResponse());
+                        response.setJobID(uniqueID);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setMessage("Error in submitting job");
+                    return response;
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setMessage("Error in submitting job");
+                    return response;
+                }
+
+            }
+
+            return response;
+
+        } else {
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Could not upload file");
+        }
+
+    }
+    
+     @POST
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/matching/strict")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public GenericResponse strictMapping(
+            @FormDataParam("q") InputStream uploadedInputStreamQuery,
+            @FormDataParam("q") FormDataContentDisposition fileDetailQuery,
+            @FormDataParam("Q") String queryFormat,
+            
+            @FormDataParam("c") String c,            
+            @FormDataParam("email") String emailID
+    ) {
+        if (fileDetailQuery == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "No reaction File");
+        }
+        if (uploadedInputStreamQuery == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Reaction File");
+        }
+
+        String fileFormat = "RXN";
+        GenericResponse response = new GenericResponse();
+        response.setJobID(null);
+        String uniqueID = UUID.randomUUID().toString();
+        FileUploadUtility uploadFileQuery = new FileUploadUtility(fileDetailQuery.getFileName(), uniqueID);
+
+        boolean uploadedSucessfulQuery = uploadFileQuery.writeToFile(uploadedInputStreamQuery);
+        String userDirectory = uploadFileQuery.getUserDirectory();
+        String userFilePathQuery = uploadFileQuery.getFileLocation();
+        
+        if (uploadedSucessfulQuery) {
+            /* Submit job to farm
+             TODO: Check if rxn file is all balanced!
+             */
+            SubmitGenericMatchingJob matchingJob = new SubmitGenericMatchingJob();
+
+            matchingJob.createCommand(uniqueID, userDirectory, queryFormat, userFilePathQuery, c);
+            String jID = matchingJob.executeCommand();
+            jID = jID.trim();
+            jID = jID.replace("\"\'", "");
+            if (jID == null || jID == "") {
+                System.out.println("*****************************" + matchingJob.getCommand());
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+
+            }
+            int jobID;
+
+            try {
+                jobID = Integer.parseInt(jID);
+            } catch (NumberFormatException ex) { // handle your exception
+                System.out.println("*****************************" + matchingJob.getCommand());
+
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+
+            }
+
+            if (jobID > 0) {
+                DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+                JobsQueryWrapper addJob = null;
+
+                try {
+                    addJob = new JobsQueryWrapper(dbconfig.getDriver(),
+                            dbconfig.getConnectionString(),
+                            dbconfig.getDBName(),
+                            dbconfig.getDBUserName(),
+                            dbconfig.getDBPassword());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    Connection connect = addJob.connect();
+                    int b;
+                    b = addJob.insertJob(uniqueID, jobID, fileDetailQuery.getFileName(), emailID, "strict_matching");
+                    if (b >= 1) {
+                        response.setMessage(matchingJob.getResponse());
+                        response.setJobID(uniqueID);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setMessage("Error in submitting job");
+                    return response;
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setMessage("Error in submitting job");
+                    return response;
+                }
+
+            }
+
+            return response;
+
+        } else {
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Could not upload file");
+        }
+
+    }
+    
     @GET
     @Path("/pending_jobs")
     @Produces({MediaType.APPLICATION_JSON})
@@ -424,9 +823,16 @@ public class ECBlastResource {
     public APIResponse getStuff() {
         throw new ErrorResponse(Status.NOT_FOUND, "URL NOT FOUND");
     }
-    
-    public String jobStatus(String uniqueID){
-         DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("{subResources:.*}")
+    public APIResponse postStuff() {
+        throw new ErrorResponse(Status.NOT_FOUND, "URL NOT FOUND");
+    }
+
+    public String jobStatus(String uniqueID) {
+        DatabaseConfiguration dbconfig = new DatabaseConfiguration();
         JobsQueryWrapper job = null;
         GenericResponse response = new GenericResponse();
         try {

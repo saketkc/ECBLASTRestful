@@ -15,14 +15,16 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
  */
 public class SubmitCompareReactionsJob extends SubmitJob {
 
-    public String createCommand(String uuid, String queryFileType, String queryFilePath, String targetFileType, String targetFilePath) {
+    public String createCommand(String uuid, String userDirectory, String queryFileType, String queryFilePath, String targetFileType, String targetFilePath) {
         ConfigParser config = new ConfigParser();
         Properties prop = config.getConfig();
 
         this.command = (String) prop.getProperty("compare_reactions_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --Q="+ queryFileType + " --q=" + queryFilePath + " --T=" + targetFileType + " --t="+targetFilePath;
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory + " --Q="+ queryFileType + " --q=" + queryFilePath + " --T=" + targetFileType + " --t="+targetFilePath;
         return this.command;
 
     }
+
+    
 
 }

@@ -35,9 +35,10 @@ public class FileUploadUtility {
         
         /*create user direcotry of does not exist*/
         this.userDirectory = uploadDirectory + "/" + uniqueID;
+        System.out.println("TEST DIR"+ this.userDirectory);
         File userFolder = new File(this.userDirectory);
         userFolder.mkdirs();
-        this.fileName = this.userDirectory + "__" + fileName;
+        this.fileName = this.userDirectory + "/" + uniqueID + "__" + fileName;
     }
 
     public String getFileName() {
@@ -79,8 +80,8 @@ public class FileUploadUtility {
         try {
 
             OutputStream out;
-
-            out = new FileOutputStream(new File(getFileLocation()));
+               System.out.println("GET file size location"+ this.getFileLocation());
+            out = new FileOutputStream(new File(this.getFileLocation()));
             int read =0;
             byte[] bytes = new byte[1024];
             try {

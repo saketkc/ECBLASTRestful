@@ -34,7 +34,7 @@ public class AtomAtomMappingParser {
     }
 
     public String readFileInString() {
-        String fileAsString = null;
+        String fileAsString = "";
         BufferedReader br;
         String currentLine;
         try {
