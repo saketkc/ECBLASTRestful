@@ -5,7 +5,6 @@
  */
 package uk.ac.ebi.ecblast.ecblastWS.jobshandler;
 
-import java.util.HashMap;
 import java.util.Properties;
 import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 
