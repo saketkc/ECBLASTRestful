@@ -6,9 +6,9 @@ import os
 import ntpath
 
 __farm_upload_directory__ = '/nfs/nobackup2/research/thornton/ecblast/webservices/UPLOADS'
-__atom_atom_mapping_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j AAM"
-__compare_reactions_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j compare"
-__generic_matching_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j transform"
+__atom_atom_mapping_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G  -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j AAM"
+__compare_reactions_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j compare"
+__generic_matching_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j transform"
 __update_job_status_cmd_line__ = "python /homes/saketc/python_job_checker/bsub_status.py "
 __tomcat_jobs_log_directory__ = "/home/saket/LOGS/"
 
@@ -18,11 +18,11 @@ def get_base_filename(path):
     return tail or ntpath.basename(head)
 
 
-def run_atom_atom_mapping(
+def run_atom_atom_mapping_rxn(
         uuid,
         user_upload_directory,
         user_uploaded_file,
-        file_format):
+        file_format="RXN"):
     """Copy the whole file/folder as passed in path
     to the farm node
 
@@ -43,16 +43,12 @@ def run_atom_atom_mapping(
     logging.info("User uploaded filename " + filename)
     logging.info("Job bash file local location " + job_bash_file)
     renamed_filepath = os.path.join(job_directory_on_farm, filename)
-    if file_format=="SMI":
-        with open(user_uploaded_file, "rb") as f:
-            file_contents = "\"" + f.read().strip().replace("\n","") + "\""
-    elif file_format=="RXN":
-        file_contents = renamed_filepath
+    file_contents = renamed_filepath
     logging.info("User renamed filename as on farm" + renamed_filepath)
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     cd_path = "cd " + job_directory_on_farm
     cmd = cd_path + " && " + __atom_atom_mapping_cmd_line__ + " -Q " + file_format + " -q " + \
-        "\"" + file_contents + "\"" + \
+         file_contents + \
         " 1>%s 2>%s" % (
             job_prefix + "__stdout.log",
             job_prefix + "__stderr.log")
@@ -87,6 +83,65 @@ def run_atom_atom_mapping(
         sys.exit("ERROR")
 
 
+def run_atom_atom_mapping_smi(
+        uuid,
+        user_upload_directory,
+        smile_query,
+        file_format="SMI"):
+    """Copy the whole file/folder as passed in path
+    to the farm node
+
+    Params:
+        path: path location to
+    """
+    __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
+    logging.basicConfig(filename=__logfile__, level=logging.INFO)
+    logging.info(
+        "Called run_atom_atom_mapping function, Beginning logs for JobId:" +
+        uuid)
+    job_directory_on_farm = os.path.join(__farm_upload_directory__, uuid)
+    job_bash_file = os.path.join(
+        user_upload_directory,
+        uuid +
+        "__run_atom_atom_mapping.sh")
+    logging.info("Job bash file local location " + job_bash_file)
+    job_prefix = os.path.join(job_directory_on_farm, uuid)
+    cd_path = "cd " + job_directory_on_farm
+    cmd = cd_path + " && " + __atom_atom_mapping_cmd_line__ + " -Q " + file_format + " -q " + \
+         smile_query + \
+        " 1>%s 2>%s" % (
+            job_prefix + "__stdout.log",
+            job_prefix + "__stderr.log")
+    try:
+        logging.info("Attempting to write to bash file locally")
+        with open(job_bash_file, 'w') as f:
+            f.write("#!/bin/bash \n")
+            f.write(cmd)
+        logging.info("Successfully created bash file at " + job_bash_file)
+        logging.info("Command line written on bash file : " + cmd)
+    except Exception as e:
+        logging.error("UNABLE TO CREATE BASH FILE!" + str(e))
+
+    try:
+        logging.info(
+            "Attempting to create job_direcotry on farm at location :" +
+            job_directory_on_farm)
+        run("mkdir -p " + job_directory_on_farm)
+        logging.debug(
+            "Created directory " +
+            job_directory_on_farm +
+            " Successfully")
+    except Exception as e:
+        logging.error("Error creating directory on farm" + str(e))
+
+    try:
+        logging.info("Attempting to transfer contents to the farm")
+        put(user_upload_directory, __farm_upload_directory__)
+        logging.debug("Transfer to farm completed successfully")
+    except:
+        logging.error("FAILED TO TRANSFER FILE TO SERVER")
+        sys.exit("ERROR")
+
 def run_compare_reactions(
         uuid,
         user_upload_directory,
@@ -100,6 +155,9 @@ def run_compare_reactions(
     Params:
         path: path location to
     """
+    user_uploaded_target_file = user_uploaded_target_file.replace("\"","")
+    user_uploaded_query_file = user_uploaded_query_file.replace("\"","")
+
     __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
     logging.basicConfig(filename=__logfile__, level=logging.INFO)
     logging.info(
@@ -270,7 +328,7 @@ def submit_bsub(uuid):
         user_directory,
         uuid +
         "__run_atom_atom_mapping.sh")
-    cmd = "bsub -q production-rh6 -J " + \
+    cmd = "bsub -M 20000 -R \"rusage[mem=20000]\" -q production-rh6 -J " + \
         uuid + " \" bash " + bash_file + " \""
     logging.info(
         "Attempting to submit the follwoing bsub command on the farm" +

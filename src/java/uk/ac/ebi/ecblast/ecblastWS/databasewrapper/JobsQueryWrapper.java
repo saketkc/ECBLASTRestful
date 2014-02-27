@@ -27,14 +27,13 @@ public class JobsQueryWrapper extends DatabaseWrapper {
         super(driver, connectionString, dbName, userName, password);
     }
 
-    public int insertJob(String uniqueID, Integer jobID, String fileName, String emailID, String jobType) {
+    public int insertJob(String uniqueID, Integer jobID, String queryFileName, String targetFileName, String emailID, String jobType) {
         int execute = 0;
         String query;
-        if (emailID == null) {
-            query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName, email, jobType) VALUES(?,?,?,?,?,?,?,?)";
-        } else {
-            query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, fileName, email, jobType) VALUES(?,?,?,?,?,?,?,?)";
-        }
+       
+            query = "INSERT INTO jobs(uniqueID, farmjobID, submittedAT, lastcheckedAT, status, queryFileName, targetFileName,"
+                    + " email, jobType) VALUES(?,?,?,?,?,?,?,?,?)";
+      
         Date date = new Date();
 
         SimpleDateFormat dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -79,29 +78,35 @@ public class JobsQueryWrapper extends DatabaseWrapper {
 
         }
         try {
-            stmt.setString(6, fileName);
+            stmt.setString(6, queryFileName);
         } catch (SQLException ex) {
             Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             return execute;
 
         }
-        
+        try {
+            stmt.setString(7, targetFileName);
+        } catch (SQLException ex) {
+            Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+            return execute;
+
+        }
         if(emailID!=null){
             try {
-                stmt.setString(7, emailID);
+                stmt.setString(8, emailID);
             } catch (SQLException ex) {
                 Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else{
             try {
-                stmt.setString(7, null);
+                stmt.setString(8, null);
             } catch (SQLException ex) {
                 Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
            try {
-                stmt.setString(8, jobType);
+                stmt.setString(9, jobType);
             } catch (SQLException ex) {
                 Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -222,6 +227,48 @@ public class JobsQueryWrapper extends DatabaseWrapper {
         }
 
     }
+     
+     public String getQueryFileName(String uniqueID) {
+        try {
+            String query = "SELECT queryFileName FROM jobs where uniqueID=?";
+            PreparedStatement stm = (PreparedStatement) connection.prepareStatement(query);
+            stm.setString(1, uniqueID);
+            ResultSet rs = stm.executeQuery();
+            String returnMessage = null;
+
+            while (rs.next()) {
+                returnMessage = rs.getString(1);
+                // ...
+            }
+            return returnMessage;
+        } catch (SQLException ex) {
+            return null;
+            //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+     
+     public String getTargetFileName(String uniqueID) {
+        try {
+            String query = "SELECT queryFileName FROM jobs where uniqueID=?";
+            PreparedStatement stm = (PreparedStatement) connection.prepareStatement(query);
+            stm.setString(1, uniqueID);
+            ResultSet rs = stm.executeQuery();
+            String returnMessage = null;
+
+            while (rs.next()) {
+                returnMessage = rs.getString(1);
+                // ...
+            }
+            return returnMessage;
+        } catch (SQLException ex) {
+            return null;
+            //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+     
+     
     
     public String getEmailFromUUID(String uniqueID){
         try {

@@ -32,15 +32,20 @@ public class FileUploadUtility {
 
     /* Constructors, Getters and Setters Begin*/
     public FileUploadUtility(String fileName, String uniqueID) {
-        
+
         /*create user direcotry of does not exist*/
         this.userDirectory = uploadDirectory + "/" + uniqueID;
-        System.out.println("TEST DIR"+ this.userDirectory);
+        System.out.println("TEST DIR" + this.userDirectory);
         File userFolder = new File(this.userDirectory);
         userFolder.mkdirs();
         this.fileName = this.userDirectory + "/" + uniqueID + "__" + fileName;
     }
-
+    public FileUploadUtility(String uniqueID){
+        this.userDirectory = uploadDirectory + "/" + uniqueID;
+        System.out.println("TEST DIR" + this.userDirectory);
+        File userFolder = new File(this.userDirectory);
+        userFolder.mkdirs();
+    }
     public String getFileName() {
         return fileName;
     }
@@ -80,15 +85,15 @@ public class FileUploadUtility {
         try {
 
             OutputStream out;
-               System.out.println("GET file size location"+ this.getFileLocation());
+
             out = new FileOutputStream(new File(this.getFileLocation()));
-            int read =0;
+            int read = 0;
             byte[] bytes = new byte[1024];
             try {
                 if (uploadedInputStream.equals(null)) {
                     return false;
                 }
-                
+
                 while ((read = uploadedInputStream.read(bytes)) != -1) {
                     out.write(bytes, 0, read);
                 }

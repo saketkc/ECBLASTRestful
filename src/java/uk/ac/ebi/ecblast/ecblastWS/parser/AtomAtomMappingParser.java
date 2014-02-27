@@ -41,7 +41,18 @@ public class AtomAtomMappingParser {
             br = new BufferedReader(new FileReader(filePath));
             try {
                 while ((currentLine = br.readLine()) != null) {
+                    if (currentLine.startsWith("Mapped RXN")){
+                        continue;
+                    }    
+                    if (currentLine.startsWith("Mapped PNG")){
+                        continue;
+                    }
+                    if (currentLine.startsWith("Annotated RXN")){
+                        continue;
+                    }
+                    
                     fileAsString = fileAsString + currentLine;
+                    
                 }
             } catch (IOException ex) {
                 return null;

@@ -3,31 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ecblast.ecblastWS.jobshandler;
 
 import java.util.HashMap;
+import java.util.Properties;
 import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 
 /**
  *
  * @author saket
  */
-public class SubmitAtomAtomMappingJob extends SubmitJob{
-   
-public String createCommand(String uuid, String userDirectory, String userFilePath, String fileType){
-    ConfigParser config = new ConfigParser();
-    HashMap nfsConfig = config.getFarmConfig();   
-    if (nfsConfig!=null){
-        this.command = (String) nfsConfig.get("atomAtomMappingCommand"); 
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory +" --file="+userFilePath + " --filetype="+fileType;
+public class SubmitAtomAtomMappingJob extends SubmitJob {
+
+    public String createCommandRXN(String uuid, String userDirectory, String userFilePath) {
+        ConfigParser config = new ConfigParser();
+        Properties prop = config.getConfig();
+        this.command = (String) prop.getProperty("rxn_atom_atom_mapping_cmd");
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory + " --file=" + userFilePath ;
+        return this.command;
+
+    }
+
+    public String createCommandSMI(String uuid, String userDirectory, String smileQuery) {
+
+        ConfigParser config = new ConfigParser();
+        Properties prop = config.getConfig();
+        this.command = (String) prop.getProperty("smi_atom_atom_mapping_cmd");
+
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory + " --query=" + "\"" + smileQuery +"\"";
         return this.command;
     }
-    else{
-        return null;
-    }
-    }
-    
 
-    
 }
