@@ -14,13 +14,5 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
  * @author saket
  */
 public class SubmitStrictMatchingJob extends SubmitJob{
-       public String createCommand(String uuid, String directory, String queryFileType, String queryFilePath, String c) {
-        ConfigParser config = new ConfigParser();
-        Properties prop = config.getConfig();
-
-        this.command = (String) prop.getProperty("strict_matching_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory + " --Q="+ queryFileType + " --q="+queryFilePath + " --c=" + c;
-        return this.command;
-
-    }
+       
 }

@@ -14,14 +14,16 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
  * @author saket
  */
 public class SubmitSearchJob extends SubmitJob {
-        public String createCommandRXN(String uuid, String directory,  String searchType) {
+        public String createCommand(String uuid, String directory, String fileFormat, String query,  String searchType, String c) {
         ConfigParser config = new ConfigParser();
         Properties prop = config.getConfig();
 
         this.command = (String) prop.getProperty("search_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory +  " --s=" + searchType;
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory +  " --Q=" + fileFormat + " --s=" + searchType + " --q=" +query + " --c="+c;
         return this.command;
 
     }
+
+   
     
 }

@@ -19,7 +19,7 @@ public class SubmitCompareReactionsJob extends SubmitJob {
         Properties prop = config.getConfig();
 
         this.command = (String) prop.getProperty("compare_reactions_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory + " --Q="+ queryFileType + " --q='" + queryFilePath + "' --T=" + targetFileType + " --t='"+targetFilePath +"'";
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory + " --Q="+ queryFileType + " --q=\"" + queryFilePath + "\" --T=" + targetFileType + " --t=\""+targetFilePath +"\"";
         return this.command;
 
     }

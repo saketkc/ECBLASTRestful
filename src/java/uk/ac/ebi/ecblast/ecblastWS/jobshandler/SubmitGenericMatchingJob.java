@@ -14,12 +14,21 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
  * @author saket
  */
 public class SubmitGenericMatchingJob extends SubmitJob {
-        public String createCommand(String uuid, String directory, String queryFileType, String queryFilePath, String c) {
+        public String createCommand(String uuid, String directory, String queryFileType, String query, String c, String transformType) {
         ConfigParser config = new ConfigParser();
         Properties prop = config.getConfig();
 
-        this.command = (String) prop.getProperty("generic_matching_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory + " --Q="+ queryFileType + " --q="+queryFilePath + " --c=" + c;
+        this.command = (String) prop.getProperty("transform_cmd");
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory + " --Q="+ queryFileType + " --q="+query + " --c=" + c +" --type="+ transformType;
+        return this.command;
+
+    }
+         public String createCommandStrict(String uuid, String directory, String queryFileType, String query, String c, String transformType) {
+        ConfigParser config = new ConfigParser();
+        Properties prop = config.getConfig();
+
+        this.command = (String) prop.getProperty("transform_strict_cmd");
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory + " --Q="+ queryFileType + " --q="+query + " --c=" + c +" --type="+ transformType;
         return this.command;
 
     }

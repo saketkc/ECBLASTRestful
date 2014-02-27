@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "ecblastResponse")
-public class GenericResponse extends AtomAtomMappingResponse {
+public class GenericResponse extends ResponseModel {
 
     @javax.xml.bind.annotation.XmlElement
 

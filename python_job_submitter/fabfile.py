@@ -9,6 +9,7 @@ __farm_upload_directory__ = '/nfs/nobackup2/research/thornton/ecblast/webservice
 __atom_atom_mapping_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G  -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j AAM"
 __compare_reactions_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j compare"
 __generic_matching_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j transform"
+__search_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j search"
 __update_job_status_cmd_line__ = "python /homes/saketc/python_job_checker/bsub_status.py "
 __tomcat_jobs_log_directory__ = "/home/saket/LOGS/"
 
@@ -142,6 +143,73 @@ def run_atom_atom_mapping_smi(
         logging.error("FAILED TO TRANSFER FILE TO SERVER")
         sys.exit("ERROR")
 
+
+def run_search(
+        uuid,
+        user_upload_directory,
+        file_type,
+        smile_query_or_path,
+        search_type, hits):
+    """Copy the whole file/folder as passed in path
+    to the farm node
+
+    Params:
+        path: path location to
+    """
+    __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
+    logging.basicConfig(filename=__logfile__, level=logging.INFO)
+    logging.info(
+        "Called run_atom_atom_mapping function, Beginning logs for JobId:" +
+        uuid)
+    job_directory_on_farm = os.path.join(__farm_upload_directory__, uuid)
+    job_bash_file = os.path.join(
+        user_upload_directory,
+        uuid +
+        "__run_atom_atom_mapping.sh")
+    logging.info("Job bash file local location " + job_bash_file)
+    job_prefix = os.path.join(job_directory_on_farm, uuid)
+    cd_path = "cd " + job_directory_on_farm
+    smile_query = ""
+    if file_type=="SMI":
+        with open(smile_query_or_path, "rb") as f:
+            smile_query+="\""+f.read().strip()+"\""
+    else:
+        smile_query = smile_query_or_path
+    cmd = cd_path + " && " + __search_cmd_line__ + " -Q " + file_format + " -q " + \
+         smile_query + " -s" + search_type +" -c" + hits \
+        " 1>%s 2>%s" % (
+            job_prefix + "__stdout.log",
+            job_prefix + "__stderr.log")
+    try:
+        logging.info("Attempting to write to bash file locally")
+        with open(job_bash_file, 'w') as f:
+            f.write("#!/bin/bash \n")
+            f.write(cmd)
+        logging.info("Successfully created bash file at " + job_bash_file)
+        logging.info("Command line written on bash file : " + cmd)
+    except Exception as e:
+        logging.error("UNABLE TO CREATE BASH FILE!" + str(e))
+
+    try:
+        logging.info(
+            "Attempting to create job_direcotry on farm at location :" +
+            job_directory_on_farm)
+        run("mkdir -p " + job_directory_on_farm)
+        logging.debug(
+            "Created directory " +
+            job_directory_on_farm +
+            " Successfully")
+    except Exception as e:
+        logging.error("Error creating directory on farm" + str(e))
+
+    try:
+        logging.info("Attempting to transfer contents to the farm")
+        put(user_upload_directory, __farm_upload_directory__)
+        logging.debug("Transfer to farm completed successfully")
+    except:
+        logging.error("FAILED TO TRANSFER FILE TO SERVER")
+        sys.exit("ERROR")
+
 def run_compare_reactions(
         uuid,
         user_upload_directory,
@@ -187,14 +255,12 @@ def run_compare_reactions(
     logging.info("User renamed filename as on farm" + query_renamed_filepath)
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     if user_uploaded_query_format == "SMI":
-        with open(user_uploaded_query_file, "rb") as f:
-            query_file_contents = "\"" + f.read() + "\""
+        query_file_contents =  "\"" + user_uploaded_query_file +"\""
     elif user_uploaded_query_format == "RXN":
         query_file_contents = query_renamed_filepath
 
     if user_uploaded_target_format == "SMI":
-        with open(user_uploaded_target_file, "rb") as f:
-            target_file_contents = "\"" + f.read() + "\""
+        target_file_contents =  "\"" + user_uploaded_target_file + "\""
     elif user_uploaded_target_format == "RXN":
         target_file_contents = target_renamed_filepath
 
@@ -236,7 +302,7 @@ def run_compare_reactions(
         sys.exit("ERROR")
 
 
-def run_generic_matching(
+def run_matching(
         uuid,
         user_upload_directory,
         file_format,

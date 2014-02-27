@@ -41,6 +41,8 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitAtomAtomMappingJob;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitCompareReactionsJob;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitGenericMatchingJob;
+import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitSearchJob;
+import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitStrictMatchingJob;
 import uk.ac.ebi.ecblast.ecblastWS.parser.AtomAtomMappingParser;
 import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 import uk.ac.ebi.ecblast.ecblastWS.utility.EmailResults;
@@ -230,17 +232,49 @@ public class ECBlastResource {
         String contents;
         if ("atom_atom_mapping_rxn".equals(jobType) || "compare_rxn".equals(jobType)) {
             String fileName = job.getQueryFileName(uniqueID);
-            filepath = prop.getProperty("results_upload_directory") + "/" + "ECBLAST" + "_"
-                    + fileName + ".rxn";
+            filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
+                    + fileName + "_Query" + ".rxn";
+            parser = new AtomAtomMappingParser(filepath);
+            contents = parser.readFileInString();
+            response.setAtomatomMappingResultText(contents);
 
         } else if ("atom_atom_mapping_smi".equals(jobType) || "compare_rxn".equals(jobType)) {
             String fileName = job.getQueryFileName(uniqueID);
-            filepath = prop.getProperty("results_upload_directory") + "/" + "ECBLAST" + "_"
-                    + "smiles" + ".rxn";
+            filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
+                    + "smiles" + "_Query" + ".rxn";
+            System.out.println("********" + filepath);
+            parser = new AtomAtomMappingParser(filepath);
+            contents = parser.readFileInString();
+            response.setAtomatomMappingResultText(contents);
+        } else if ("compare_reactions".equals(jobType)) {
+            String fileNameQuery = job.getQueryFileName(uniqueID);
+            String fileNameTarget = job.getTargetFileName(uniqueID);
+            /* If null was returned there was no file submitted
+             and most probably ythe format was smiles
+             */
+            if (fileNameQuery == null) {
+                fileNameQuery = "smiles";
+            }
+
+            if (fileNameTarget == null) {
+                fileNameTarget = "smiles";
+            }
+            String filepathQuery = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
+                    + "smiles" + "_Query" + ".rxn";
+            parser = new AtomAtomMappingParser(filepathQuery);
+            String queryContents = parser.readFileInString();
+            
+            String filepathTarget = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
+                    + "smiles" + "_Target" + ".rxn";
+            parser = new AtomAtomMappingParser(filepathTarget);
+            String targetContents = parser.readFileInString();
+            System.out.println("***********TARGET"+targetContents);
+            System.out.println("***********TARGET"+queryContents);
+            
+            response.setQueryMappedText(queryContents);
+            response.setTargetMappedText(targetContents);
         }
-        parser = new AtomAtomMappingParser(filepath);
-        contents = parser.readFileInString();
-        response.setAtomatomMappingResultText(contents);
+
         return response;
     }
 
@@ -549,7 +583,7 @@ public class ECBlastResource {
             try {
                 Connection connect = addJob.connect();
                 int b;
-                b = addJob.insertJob(uniqueID, jobID, fileDetailQuery.getFileName(), "dummy target.txt",
+                b = addJob.insertJob(uniqueID, jobID, fileDetailQuery.getFileName(), null,
                         emailID, "compare_reactions");
                 if (b >= 1) {
                     response.setMessage(compareJob.getResponse());
@@ -575,6 +609,127 @@ public class ECBlastResource {
         return response;
 
     }
+    
+    @POST
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/search")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public GenericResponse search( @FormDataParam("q") InputStream uploadedInputStreamRXN,
+            @FormDataParam("q") FormDataContentDisposition fileDetailRXN,
+            @FormDataParam("q") String smileQuery,
+            @FormDataParam("Q") String fileFormat,
+            @FormDataParam("job") String searchType,
+            @DefaultValue("10") @FormDataParam("c") String c,
+            @FormDataParam("email") String emailID) {
+
+        if (fileDetailRXN == null && uploadedInputStreamRXN == null && smileQuery == null) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Inputs");
+        }
+        if (!"RXN".equals(fileFormat) && !"SMI".equals(fileFormat)) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "File Format Not Supported" + fileFormat);
+        }
+        if (!"bond".equals(searchType) && !"centre".equals(searchType) && !("structure").equals(searchType)) {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "File Format Not Supported" + fileFormat);
+        }
+        
+
+        GenericResponse response = new GenericResponse();
+        response.setJobID(null);
+        String uniqueID = UUID.randomUUID().toString();
+        SubmitSearchJob searchJob = new SubmitSearchJob();
+        String jID;
+        String userDirectory=null;
+        String query= null;
+
+        if ("RXN".equals(fileFormat)) {
+            FileUploadUtility uploadFile = new FileUploadUtility(fileDetailRXN.getFileName(), uniqueID);
+            boolean uploadedSucessful = uploadFile.writeToFile(uploadedInputStreamRXN);
+            userDirectory = uploadFile.getUserDirectory();
+            String userFilePath = uploadFile.getFileLocation();
+            if (!uploadedSucessful) {
+                throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error uploading file");
+            }
+
+            query = userFilePath;
+
+        }
+        
+       
+       if (("SMI").equals(fileFormat)){
+           FileUploadUtility uploadFile = new FileUploadUtility(uniqueID);
+            
+            
+           query = smileQuery;
+       }
+
+        /* Submit job to farm
+         TODO: Check if rxn file is all balanced!
+         */
+        searchJob.createCommand(uniqueID, userDirectory, fileFormat, query, searchType, c );
+            
+        
+
+        jID = searchJob.executeCommand();
+        jID = jID.trim();
+        jID = jID.replace("\"\'", "");
+        if (jID == null || "".equals(jID)) {
+            System.out.println(searchJob.getCommand());
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+
+        }
+        int jobID = 0;
+
+        try {
+            jobID = Integer.parseInt(jID);
+        } catch (NumberFormatException ex) { // handle your exception
+            System.out.println(searchJob.getCommand());
+
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+        }
+
+        if (jobID > 0) {
+            DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+            JobsQueryWrapper addJob = null;
+
+            try {
+                addJob = new JobsQueryWrapper(dbconfig.getDriver(),
+                        dbconfig.getConnectionString(),
+                        dbconfig.getDBName(),
+                        dbconfig.getDBUserName(),
+                        dbconfig.getDBPassword());
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                Connection connect = addJob.connect();
+                int b;
+                String targetFileName = null;
+                String jobType = "search";
+                
+                b = addJob.insertJob(uniqueID, jobID, fileDetailRXN.getFileName(), targetFileName, emailID, jobType);
+                if (b >= 1) {
+                    response.setMessage(searchJob.getResponse());
+                    response.setJobID(uniqueID);
+                } else {
+                    response.setMessage("error");
+                    response.setResponse("erro submitting to database");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setMessage("Error in submitting job");
+                return response;
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setMessage("Error in submitting job");
+                return response;
+            }
+
+        }
+
+        return response;
+
+    }
+    
 
     @POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -595,7 +750,9 @@ public class ECBlastResource {
         if (!"RXN".equals(queryFormat) && !"SMI".equals(queryFormat)) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "Only RXN,SMI are allowed");
         }
-
+        if (c == null || c == "") {
+            throw new ErrorResponse(Response.Status.BAD_REQUEST, "c required");
+        }
         Integer hits;
         try {
             hits = Integer.parseInt(c);
@@ -606,28 +763,34 @@ public class ECBlastResource {
         GenericResponse response = new GenericResponse();
         response.setJobID(null);
         String uniqueID = UUID.randomUUID().toString();
+        String query = null;
         FileUploadUtility uploadFileQuery = new FileUploadUtility(uniqueID);
         if ("RNX".equals(queryFormat)) {
             uploadFileQuery = new FileUploadUtility(fileDetailQuery.getFileName(), uniqueID);
-
+            query = uploadFileQuery.getFileLocation();
             boolean uploadedSucessfulQuery = uploadFileQuery.writeToFile(uploadedInputStreamQuery);
             if (!uploadedSucessfulQuery) {
                 throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error uploading file");
             }
         }
-        String query = null;
-        if ("RXN".equals(queryFormat)) {
-            query = uploadFileQuery.getFileLocation();
-        } else if ("SMI".equals(queryFormat)) {
+
+        if ("SMI".equals(queryFormat)) {
             query = smileQuery;
         }
 
         String userDirectory = uploadFileQuery.getUserDirectory();
-
+        String jID = null;
         SubmitGenericMatchingJob matchingJob = new SubmitGenericMatchingJob();
 
-        matchingJob.createCommand(uniqueID, userDirectory, queryFormat, query, c);
-        String jID = matchingJob.executeCommand();
+        if (transformType == "strict") {
+
+            matchingJob.createCommandStrict(uniqueID, userDirectory, queryFormat, query, c, queryFormat);
+            jID = matchingJob.executeCommand();
+        } else if (transformType == "generic") {
+
+            matchingJob.createCommandStrict(uniqueID, userDirectory, queryFormat, query, c, queryFormat);
+            jID = matchingJob.executeCommand();
+        }
         jID = jID.trim();
         jID = jID.replace("\"\'", "");
         if (jID == null || jID == "") {
@@ -639,7 +802,7 @@ public class ECBlastResource {
         try {
             jobID = Integer.parseInt(jID);
         } catch (NumberFormatException ex) { // handle your exception
-            System.out.println("*****************************" + matchingJob.getCommand());
+            System.out.println("*****************************");
 
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
 
@@ -664,7 +827,7 @@ public class ECBlastResource {
                 Connection connect = addJob.connect();
                 int b;
                 String transform = "transform" + "_" + transformType;
-                b = addJob.insertJob(uniqueID, jobID, fileDetailQuery.getFileName(), "dummytarget.rxn", emailID, transformType);
+                b = addJob.insertJob(uniqueID, jobID, fileDetailQuery.getFileName(), null, emailID, transformType);
                 if (b >= 1) {
                     response.setMessage(matchingJob.getResponse());
                     response.setJobID(uniqueID);
@@ -689,8 +852,6 @@ public class ECBlastResource {
         return response;
 
     }
-
-   
 
     @GET
     @Path("/pending_jobs")
