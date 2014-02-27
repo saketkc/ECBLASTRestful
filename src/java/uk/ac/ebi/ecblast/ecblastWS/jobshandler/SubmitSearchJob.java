@@ -19,7 +19,7 @@ public class SubmitSearchJob extends SubmitJob {
         Properties prop = config.getConfig();
 
         this.command = (String) prop.getProperty("search_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory +  " --Q=" + fileFormat + " --s=" + searchType + " --q=" +query + " --c="+c;
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory +  " --Q=" + fileFormat + " --s=" + searchType + " --q=\"" +query + "\" --c="+c;
         return this.command;
 
     }

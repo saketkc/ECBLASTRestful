@@ -147,7 +147,7 @@ def run_atom_atom_mapping_smi(
 def run_search(
         uuid,
         user_upload_directory,
-        file_type,
+        file_format,
         smile_query_or_path,
         search_type, hits):
     """Copy the whole file/folder as passed in path
@@ -156,6 +156,7 @@ def run_search(
     Params:
         path: path location to
     """
+    #smile_query_or_path = smile_query_or_path.replace("\"","")
     __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
     logging.basicConfig(filename=__logfile__, level=logging.INFO)
     logging.info(
@@ -170,13 +171,13 @@ def run_search(
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     cd_path = "cd " + job_directory_on_farm
     smile_query = ""
-    if file_type=="SMI":
+    if file_format=="RXN":
         with open(smile_query_or_path, "rb") as f:
             smile_query+="\""+f.read().strip()+"\""
     else:
         smile_query = smile_query_or_path
     cmd = cd_path + " && " + __search_cmd_line__ + " -Q " + file_format + " -q " + \
-         smile_query + " -s" + search_type +" -c" + hits \
+         smile_query + " -s " + search_type +" -c " + hits + \
         " 1>%s 2>%s" % (
             job_prefix + "__stdout.log",
             job_prefix + "__stderr.log")

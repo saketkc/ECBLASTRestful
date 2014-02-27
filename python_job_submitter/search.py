@@ -16,14 +16,14 @@ def main(argv):
     parser.add_argument("--q", type=str, required=True)
     parser.add_argument("--Q", type=str, required=True)
     parser.add_argument("--c", type=str, required=True)
-    parser.add_argument("--type", type=str, required=True)
+    parser.add_argument("--s", type=str, required=True)
 
     args = parser.parse_args(argv)
     queryfile = args.q
     queryformat = args.Q
     uuid = args.uuid
     c = args.c
-    type=args.type
+    type=args.s
     directory = args.directory
     with settings(hide('running', 'stdout', 'stderr'),
                   host_string="saketc@172.21.22.5",

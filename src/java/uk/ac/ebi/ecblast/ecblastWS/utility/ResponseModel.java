@@ -44,6 +44,17 @@ public class ResponseModel extends APIResponse {
     public String targetMappedText;
     @javax.xml.bind.annotation.XmlElement
     public String queryMappedText;
+      @javax.xml.bind.annotation.XmlElement
+    public String searchMappedText;
+
+    public String getSearchMappedText() {
+        return searchMappedText;
+    }
+
+    public void setSearchMappedText(String searchMappedText) {
+        this.searchMappedText = searchMappedText;
+    }
+
 
     public String getTargetMappedText() {
         return targetMappedText;
