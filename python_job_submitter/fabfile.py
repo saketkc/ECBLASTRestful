@@ -47,8 +47,8 @@ def get_base_filename(path):
 def run_atom_atom_mapping_rxn(
         uuid,
         user_upload_directory,
-        query,
-        query_format="RXN"):
+        query_format,
+        query):
     """ Run atom atom mapping reaction
     Params:
     ------
@@ -65,7 +65,7 @@ def run_atom_atom_mapping_rxn(
     -------
         None or "error"
     """
-    assert (query_format == "SMI" or query_format == "RXN")
+    #assert (query_format == "SMI" or query_format == "RXN")
     __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
     logging.basicConfig(filename=__logfile__, level=logging.INFO)
     logging.info(
@@ -81,7 +81,7 @@ def run_atom_atom_mapping_rxn(
     cd_path = "cd " + job_directory_on_farm
     if query_format == "SMI":
         # Read query as quoted string
-        query = "\"" + query + "\""
+        query = "\"" + query.replace("\"","") + "\""
     elif query_format == "RXN":
         filename = get_base_filename(query)
         query = os.path.join(job_directory_on_farm, filename)
@@ -167,13 +167,13 @@ def run_search(
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     cd_path = "cd " + job_directory_on_farm
     if query_format == "SMI":
-        query = "\"" + query + "\""
+        query = "\"" + query.replace("\"","") + "\""
     elif query_format == "RXN":
         filename = get_base_filename(query)
         query = os.path.join(job_directory_on_farm, filename)
     # For text
     common_cmd = __search_cmd_line__ + " -Q " + query_format + \
-        " -q " + query + + " -s " + search_type + " -c " + hits
+        " -q " + query +  " -s " + search_type + " -c " + hits
     cmd = cd_path + " && " + common_cmd + " -f text -m -p " + \
         " 1>>%s 2>>%s" % (
             job_prefix + "__text.log",
@@ -253,12 +253,12 @@ def run_compare_reactions(
         uuid + "__run.sh")
     logging.info("Job bash file local location " + job_bash_file)
     if query_format == "SMI":
-        query = "\"" + query + "\""
+        query = "\"" + query.replace("\"","") + "\""
     elif query_format == "RXN":
         filename = get_base_filename(query)
         query = os.path.join(job_directory_on_farm, filename)
     if target_format == "SMI":
-        target = "\"" + target + "\""
+        target = "\"" + target.replace("\"","") + "\""
     elif query_format == "RXN":
         filename = get_base_filename(target)
         target = os.path.join(job_directory_on_farm, filename)
@@ -337,7 +337,7 @@ def run_matching(
     job_bash_file = os.path.join(
         user_upload_directory,
         uuid +
-        "__run_matching.sh")
+        "__run.sh")
     logging.info("Job bash file local location " + job_bash_file)
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     cd_path = "cd " + job_directory_on_farm
@@ -346,27 +346,27 @@ def run_matching(
         filename = get_base_filename(query)
         query = os.path.join(job_directory_on_farm, filename)
     elif query_format == "SMI":
-        query = "\"" + query + "\""
+        query = "\"" + query.replace("\"","") + "\""
 
     if not is_strict:
         common_cmd = __generic_matching_cmd_line__ + " -Q " + \
             query_format + " -q " + query + " -c " + hits
-        cmd = cd_path + common_cmd + " -f text " + \
+        cmd = cd_path  + " && " + common_cmd + " -f text " + \
             "  1>%s 2>%s" % (
                 job_prefix + "__text.log",
                 job_prefix + "__texterr.log")
-        cmd += " && " + __generic_matching_cmd_line__ + " -f xml " + \
+        cmd += " && " + common_cmd + " -f xml " + \
             "  1>%s 2>%s" % (
                 job_prefix + "__xml.log",
                 job_prefix + "__xmlerr.log")
     else:
         common_cmd = __generic_matching_cmd_line__ + " -Q " + \
             query_format + " -q " + query + " -c " + hits
-        cmd = cd_path + common_cmd + " -f text -s " + \
+        cmd = cd_path + " && " + common_cmd + " -f text -s " + \
             "  1>%s 2>%s" % (
                 job_prefix + "__text.log",
                 job_prefix + "__texterr.log")
-        cmd += " && " + __generic_matching_cmd_line__ + " -f xml -s " + \
+        cmd += " && " + common_cmd + " -f xml -s " + \
             "  1>%s 2>%s" % (
                 job_prefix + "__xml.log",
                 job_prefix + "__xmlerr.log")

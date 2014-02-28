@@ -15,23 +15,13 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
  */
 public class SubmitAtomAtomMappingJob extends SubmitJob {
 
-    public String createCommandRXN(String uuid, String userDirectory, String userFilePath) {
+    public String createCommand(String uuid, String userDirectory, String fileFormat, String userFilePath) {
         ConfigParser config = new ConfigParser();
         Properties prop = config.getConfig();
-        this.command = (String) prop.getProperty("rxn_atom_atom_mapping_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory + " --file=" + userFilePath ;
+        this.command = (String) prop.getProperty("atom_atom_mapping_cmd");
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory + " --Q=" + fileFormat + " --q=\"" + userFilePath + "\"" ;
         return this.command;
 
-    }
-
-    public String createCommandSMI(String uuid, String userDirectory, String smileQuery) {
-
-        ConfigParser config = new ConfigParser();
-        Properties prop = config.getConfig();
-        this.command = (String) prop.getProperty("smi_atom_atom_mapping_cmd");
-
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + userDirectory + " --query=" + "\"" + smileQuery +"\"";
-        return this.command;
-    }
+    }    
 
 }
