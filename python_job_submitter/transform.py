@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# Author: Saket Choudhary <saketkc@gmail.com>
+
 from fabric.context_managers import settings
 from fabric.context_managers import hide
 from fabfile import run_matching
@@ -23,7 +26,7 @@ def main(argv):
     queryformat = args.Q
     uuid = args.uuid
     c = args.c
-    type=args.type
+    type = args.type
     directory = args.directory
     with settings(hide('running', 'stdout', 'stderr'),
                   host_string="saketc@172.21.22.5",

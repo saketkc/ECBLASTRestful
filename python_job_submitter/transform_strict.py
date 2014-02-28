@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# Author: Saket Choudhary <saketkc@gmail.com>
+
 from fabric.context_managers import settings
 from fabric.context_managers import hide
 from fabfile import run_matching
@@ -27,7 +30,8 @@ def main(argv):
     with settings(hide('running', 'stdout', 'stderr'),
                   host_string="saketc@172.21.22.5",
                   password="uzfmTjX7"):
-        run_generic_matching(uuid, directory, queryformat, queryfile, c, type,  is_strict=True)
+        run_matching(uuid, directory, queryformat, queryfile, c, type,
+                     is_strict=True)
         stdout = submit_bsub(uuid)
         if __job_submitted_re__.search(stdout):
             print stdout.split("<")[1].split(">")[0]
