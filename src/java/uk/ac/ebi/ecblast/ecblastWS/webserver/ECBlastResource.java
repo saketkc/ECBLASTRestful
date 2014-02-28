@@ -42,7 +42,6 @@ import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitAtomAtomMappingJob;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitCompareReactionsJob;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitGenericMatchingJob;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitSearchJob;
-import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitStrictMatchingJob;
 import uk.ac.ebi.ecblast.ecblastWS.parser.AtomAtomMappingParser;
 import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 import uk.ac.ebi.ecblast.ecblastWS.utility.EmailResults;
@@ -313,6 +312,62 @@ public class ECBlastResource {
         //response.setAtomatomMappingResultText(contents);
         return response;
     }
+    
+    @Path("/xml")
+    @GET
+    @Produces({MediaType.APPLICATION_XML})
+    
+    public Response getXML(){
+        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><EC_BLAST>\n" +
+"  <ANNOTATION>\n" +
+"    <FINGERPRINTS BC=\"1\">\n" +
+"      <FORMED_CLEAVED>[C%C:5.0, C%O:1.0, C-C:2.0, C-H:5.0, H-O:1.0]</FORMED_CLEAVED>\n" +
+"      <ORDER_CHANGED>[C%C*C=C:3.0, C-C*C=C:1.0]</ORDER_CHANGED>\n" +
+"      <STEREO_CHANGED>[C(R/S):1.0]</STEREO_CHANGED>\n" +
+"    </FINGERPRINTS>\n" +
+"    <FINGERPRINTS RC=\"2\">\n" +
+"      <CENTRE>[[#6]:24.0, [#6]-1-[#6]-[#6]-1:1.0, [#6]-1-[#6]-[#8]-1:1.0, [#6]-1-[#6]-[#8]-1&gt;&gt;[#6]-[#8]:1.0, [#6]-[#6@@H](-[#6])-[#6]:1.0, [#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6]-[#6][C@]1([#6])[#6]:1.0, [#6]-[#6@@H](-[#6])-[#8]:2.0, [#6]-[#6@@H]-1-[#6]-[#8]-1:1.0, [#6]-[#6@@H]-1-[#6]-[#8]-1&gt;&gt;[#6]-[#6@@H](-[#6])-[#8]:1.0, [#6]-[#6@H]1-[#8]C1([#6])[#6]:2.0, [#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6@@H](-[#6])-[#8]:1.0, [#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6](-[#6])C([#6])([#6])[#6@H](-[#6])-[#8]:1.0, [#6]-[#6]:3.0, [#6]-[#6](-[#6])-[#6]:3.0, [#6]-[#6](-[#6])=[#6]:6.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6]-[#6@@H](-[#6])-[#6]:1.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6]-[#6](-[#6])-[#6]:1.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6][C@@]([#6])([#6])[#6]:2.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6][C@@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6][C@@]1([#6])[#6][C@]1([#6])[#6]:1.0, [#6]-[#6](-[#6])C([#6])([#6])[#6@H](-[#6])-[#8]:1.0, [#6]-[#6](-[#6])[C@]1([#6])[#6]-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6]-[#6@@H](-[#6])-[#6](-[#6])-[#6]:1.0, [#6]-[#6]-[#6@H](-[#8])C([#6])([#6])[#6]:1.0, [#6]-[#6]-[#6@H]1-[#8]C1([#6])[#6]:1.0, [#6]-[#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6]-[#6@H](-[#8])C([#6])([#6])[#6]:2.0, [#6]-[#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6]-[#6]1[C@@]2([#6]-[#6]2)[#6]-[#6]-[#6@H](-[#8])C1([#6])[#6]:1.0, [#6]-[#6]-[#6](C([#6])([#6])[#6])[C@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]-[#6]([C@]([#6])([#6])[#6])[C@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]-[#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6]1-[#6]-[#6]-[#6]-[#6@H](-[#8])C1([#6])[#6]:1.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]:4.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]&gt;&gt;[#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6]-[#6][C@]1([#6])[#6]:1.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]&gt;&gt;[#6]-[#6]-[#6](C([#6])([#6])[#6])[C@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]&gt;&gt;[#6]-[#6][C@]1([#6])[#6](-[#6])-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]&gt;&gt;[#6]-[#6][C@]1([#6][C@]1([#6])[#6])[#6](-[#6])-[#6]:1.0, [#6]-[#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]-[#6]&gt;&gt;[#6]-[#6]-[#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6]-[#6][C@]1([#6])[#6]:1.0, [#6]-[#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]-[#6]&gt;&gt;[#6]-[#6]-[#6]1[C@@]2([#6]-[#6]2)[#6]-[#6][C@]2([#6])[#6](-[#6])-[#6]-[#6][C@@]12[#6]:1.0, [#6]-[#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]-[#6]&gt;&gt;[#6]-[#6][C@@]12[#6][C@@]11[#6]-[#6]-[#6]C([#6])([#6])[#6]1-[#6]-[#6]-[#6]2-[#6]:1.0, [#6]-[#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]-[#6]&gt;&gt;[#6][C@]12[#6][C@]11[#6]-[#6][C@]3([#6])[#6]-[#6]-[#6][C@@]3([#6])[#6]1-[#6]-[#6]-[#6]2:1.0, [#6]-[#6]-[#6]\\[#6]=[#6](/[#6])-[#6]-[#6]&gt;&gt;[#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6][C@@]2([#6])[#6](-[#6])-[#6]-[#6]-[#6][C@]12[#6]:1.0, [#6]-[#6]-[#6]\\[#6]=[#6](/[#6])-[#6]-[#6]&gt;&gt;[#6]-[#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6][C@@]([#6])([#6])[C@]1([#6])[#6]-[#6]:1.0, [#6]-[#6]-[#6]\\[#6]=[#6](/[#6])-[#6]-[#6]&gt;&gt;[#6]-[#6][C@]12[#6][C@]11[#6]-[#6]-[#6][C@]([#6])([#6])[#6]1-[#6]-[#6]-[#6]2-[#6]:1.0, [#6]-[#6]-[#6]\\[#6]=[#6](/[#6])-[#6]-[#6]&gt;&gt;[#6][C@@]12[#6][C@@]11[#6]-[#6]-[#6@H](-[#8])C([#6])([#6])[#6]1-[#6]-[#6]-[#6]2:1.0, [#6]-[#6]=[#6]:4.0, [#6]-[#6]=[#6]&gt;&gt;[#6]-[#6](-[#6])-[#6]:2.0, [#6]-[#6]=[#6]&gt;&gt;[#6][C@@]([#6])([#6])[#6]:1.0, [#6]-[#6]=[#6]&gt;&gt;[#6][C@@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]&gt;&gt;[#6]-1-[#6]-[#6]-1:1.0, [#6]-[#6]&gt;&gt;[#6]-[#6]:1.0, [#6]-[#6][C@@]1([#6][C@@]1([#6])[#6])[#6](-[#6])-[#6]:1.0, [#6]-[#6][C@]1([#6])[#6](-[#6])-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6][C@]1([#6][C@]1([#6])[#6])[#6](-[#6])-[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]:4.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6](-[#6])[C@]1([#6])[#6]-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6]-[#6@@H](-[#6])-[#6](-[#6])-[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6]-[#6]([C@]([#6])([#6])[#6])[C@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6][C@@]1([#6][C@@]1([#6])[#6])[#6](-[#6])-[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6][C@]1([#6])[#6](-[#6])-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6][C@]12[#6][C@@]1([#6]-[#6])[#6](-[#6])-[#6]-[#6]-[#6]2-[#6]:1.0, [#6]-[#8]:1.0, [#6]C([#6])([#6])[#6]:1.0, [#6]C1([#6])[#6]-[#8]1:1.0, [#6]C1([#6])[#6]-[#8]1&gt;&gt;[#6]C([#6])([#6])[#6]:1.0, [#6][C@@]([#6])([#6])[#6]:3.0, [#6][C@@]1([#6])[#6]-[#6]1:2.0, [#6][C@@]1([#6])[#6][C@]1([#6])[#6]:1.0, [#8]:2.0]</CENTRE>\n" +
+"    </FINGERPRINTS>\n" +
+"    <MAPPING STATUS=\"SELECTED\">\n" +
+"      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH3:15])[CH2:16][CH2:17][CH:18]=[C:19]([CH2:20][H:37])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:37][O:27][CH:23]1[CH2:22][CH2:21][C:19]23[CH2:20][C:13]43[CH2:12][CH2:11][C:10]5([CH3:15])[CH:6]([CH2:7][CH2:8][C:9]5([CH3:28])[C:14]4([H:54])[CH2:16][CH2:17][CH:18]2[C:24]1([CH3:26])[CH3:25])[C:5]([H:59])([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:31])[CH3:30]</AAM>\n" +
+"    </MAPPING>\n" +
+"    <MAPPING ALGORTIHM=\"Local Minimization Model\">\n" +
+"      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH:15]([H:33])[H:34])[CH2:16][CH2:17][CH:18]=[C:19]([CH3:20])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:54][O:27][CH:23]1[CH2:22][CH2:21][C:5]23[C:9]([H:33])([H:34])[C:10]43[CH2:11][CH2:12][C:13]5([CH3:28])[CH:18]([CH2:8][CH2:7][C:14]5([CH3:29])[CH:6]4[CH2:16][CH2:17][CH:15]2[C:24]1([CH3:26])[CH3:25])[C:19]([H:59])([CH3:20])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31]</AAM>\n" +
+"      <SCORE>37</SCORE>\n" +
+"      <FRAGMENTS>0</FRAGMENTS>\n" +
+"      <CHANGES>37</CHANGES>\n" +
+"      <ENERGY>9,199.00</ENERGY>\n" +
+"      <DELTA>12,600.00</DELTA>\n" +
+"    </MAPPING>\n" +
+"    <MAPPING ALGORTIHM=\"Global Maximization Model\">\n" +
+"      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH:15]([H:33])[H:34])[CH2:16][CH2:17][CH:18]=[C:19]([CH3:20])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:54][O:27][CH:23]1[CH2:22][CH2:21][C:5]23[C:9]([H:33])([H:34])[C:10]43[CH2:11][CH2:12][C:13]5([CH3:28])[CH:18]([CH2:8][CH2:7][C:14]5([CH3:29])[CH:6]4[CH2:16][CH2:17][CH:15]2[C:24]1([CH3:26])[CH3:25])[C:19]([H:59])([CH3:20])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31]</AAM>\n" +
+"      <SCORE>37</SCORE>\n" +
+"      <FRAGMENTS>0</FRAGMENTS>\n" +
+"      <CHANGES>37</CHANGES>\n" +
+"      <ENERGY>9,199.00</ENERGY>\n" +
+"      <DELTA>12,600.00</DELTA>\n" +
+"    </MAPPING>\n" +
+"    <MAPPING ALGORTIHM=\"Max-Mixture Model\">\n" +
+"      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH3:15])[CH2:16][CH2:17][CH:18]=[C:19]([CH2:20][H:37])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:37][O:27][CH:23]1[CH2:22][CH2:21][C:19]23[CH2:20][C:13]43[CH2:12][CH2:11][C:10]5([CH3:15])[CH:6]([CH2:7][CH2:8][C:9]5([CH3:28])[C:14]4([H:54])[CH2:16][CH2:17][CH:18]2[C:24]1([CH3:26])[CH3:25])[C:5]([H:59])([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:31])[CH3:30]</AAM>\n" +
+"      <SCORE>18</SCORE>\n" +
+"      <FRAGMENTS>0</FRAGMENTS>\n" +
+"      <CHANGES>18</CHANGES>\n" +
+"      <ENERGY>2,750.00</ENERGY>\n" +
+"      <DELTA>5,294.00</DELTA>\n" +
+"    </MAPPING>\n" +
+"    <MAPPING ALGORTIHM=\"Ring Conservation Model\">\n" +
+"      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH3:15])[CH2:16][CH2:17][CH:18]=[C:19]([CH2:20][H:37])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:37][O:27][CH:23]1[CH2:22][CH2:21][C:19]23[CH2:20][C:13]43[CH2:12][CH2:11][C:10]5([CH3:15])[CH:6]([CH2:7][CH2:8][C:9]5([CH3:28])[C:14]4([H:54])[CH2:16][CH2:17][CH:18]2[C:24]1([CH3:26])[CH3:25])[C:5]([H:59])([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:31])[CH3:30]</AAM>\n" +
+"      <SCORE>18</SCORE>\n" +
+"      <FRAGMENTS>0</FRAGMENTS>\n" +
+"      <CHANGES>18</CHANGES>\n" +
+"      <ENERGY>2,750.00</ENERGY>\n" +
+"      <DELTA>5,294.00</DELTA>\n" +
+"    </MAPPING>\n" +
+"  </ANNOTATION>\n" +
+"</EC_BLAST>";
+        return  Response.ok(xml).build();
+    }
+    
 
     @Path("/result/{jobID}/image")
     @GET
@@ -350,7 +405,7 @@ public class ECBlastResource {
             filePrefix = job.getQueryFileName(uniqueID);
             imgFileName = userFolder + "ECBLAST" + "_" + filePrefix + "_rxn.png";
         } else if ("atom_atom_mapping_smi".equals(jobType)) {
-            filePrefix = job.getQueryFileName(uniqueID);
+            
             imgFileName = userFolder + "ECBLAST" + "_" + "smiles_Query" + "_rxn.png";
         }
         System.out.println("*********************IMAGE" + imgFileName);
@@ -374,7 +429,7 @@ public class ECBlastResource {
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML})
     @Path("/aam")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public GenericResponse atomAtomMappingRXN(
@@ -481,7 +536,7 @@ public class ECBlastResource {
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML})
     @Path("/compare/reactions")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public GenericResponse compareReactions(
@@ -619,7 +674,7 @@ public class ECBlastResource {
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML})
     @Path("/search")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public GenericResponse search(@FormDataParam("q") InputStream uploadedInputStreamRXN,
@@ -735,7 +790,7 @@ public class ECBlastResource {
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML})
     @Path("/transform")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public GenericResponse genericMapping(
@@ -896,7 +951,7 @@ public class ECBlastResource {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML})
     @Path("/email")
     public APIResponse sendEmail() {
         APIResponse response = new APIResponse();
@@ -908,7 +963,7 @@ public class ECBlastResource {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML})
     @Path("/updateJobStatus/{uniqueID}/{status}")
     public void updateStatus(@PathParam("uniqueID") String uniqueID, @PathParam("status") String status) {
         DatabaseConfiguration dbconfig = new DatabaseConfiguration();
@@ -993,7 +1048,7 @@ public class ECBlastResource {
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML})
     @Path("{subResources:.*}")
     public APIResponse postStuff() {
         throw new ErrorResponse(Status.NOT_FOUND, "URL NOT FOUND");

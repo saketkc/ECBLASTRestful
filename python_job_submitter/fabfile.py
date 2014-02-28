@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# Author: Saket Choudhary <saketkc@gmail.com>
+
 from fabric.api import run
 from fabric.api import put
 import logging
@@ -5,158 +8,151 @@ import sys
 import os
 import ntpath
 
+# Directoru on Farm node where all files get uploaded
+# Each job gets uploaded as a folder with its folder name as it jobID
 __farm_upload_directory__ = '/nfs/nobackup2/research/thornton/ecblast/webservices/UPLOADS'
+# Command Line static to run atom atom mapping
 __atom_atom_mapping_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G  -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j AAM"
+# Command Line to compare two reactions
 __compare_reactions_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j compare"
+# Command line for transformation
 __generic_matching_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j transform"
+# Command line to run search
 __search_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j search"
+# Python command to run once the job is complete
 __update_job_status_cmd_line__ = "python /homes/saketc/python_job_checker/bsub_status.py "
+# Folder location on which tomcat logs are uploaded
 __tomcat_jobs_log_directory__ = "/home/saket/LOGS/"
 
 
 def get_base_filename(path):
+    """ Get filename from an absolute filepath
+
+    Parameters
+    ----------
+    path : String
+        Absolute path to the file/folder
+
+    Returns
+    -------
+    filename : String
+
+    """
     head, tail = ntpath.split(path)
     return tail or ntpath.basename(head)
+
+# Run atom atom mapping reaction
 
 
 def run_atom_atom_mapping_rxn(
         uuid,
         user_upload_directory,
-        user_uploaded_file,
-        file_format="RXN"):
-    """Copy the whole file/folder as passed in path
-    to the farm node
-
+        query,
+        query_format="RXN"):
+    """ Run atom atom mapping reaction
     Params:
-        path: path location to
+    ------
+        uuid: String
+            jobID
+        user_upload_directory:  String
+            Absolute path to directory where user folder is uploaded
+        query: String
+            Filepath OR Smiles Query for running atom atom mapping
+        query_format: String
+            Query format for query [RXN|SMI]
+
+    Result:
+    -------
+        None or "error"
     """
+    assert (query_format == "SMI" or query_format == "RXN")
     __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
     logging.basicConfig(filename=__logfile__, level=logging.INFO)
     logging.info(
-        "Called run_atom_atom_mapping function, Beginning logs for JobId:" +
-        uuid)
-    job_directory_on_farm = os.path.join(__farm_upload_directory__, uuid)
-    filename = get_base_filename(user_uploaded_file)
-    job_bash_file = os.path.join(
-        user_upload_directory,
-        uuid +
-        "__run_atom_atom_mapping.sh")
-    logging.info("User uploaded filename " + filename)
-    logging.info("Job bash file local location " + job_bash_file)
-    renamed_filepath = os.path.join(job_directory_on_farm, filename)
-    file_contents = renamed_filepath
-    logging.info("User renamed filename as on farm" + renamed_filepath)
-    job_prefix = os.path.join(job_directory_on_farm, uuid)
-    cd_path = "cd " + job_directory_on_farm
-    cmd = cd_path + " && " + __atom_atom_mapping_cmd_line__ + " -Q " + file_format + " -q " + \
-         file_contents + \
-        " 1>%s 2>%s" % (
-            job_prefix + "__stdout.log",
-            job_prefix + "__stderr.log")
-    try:
-        logging.info("Attempting to write to bash file locally")
-        with open(job_bash_file, 'w') as f:
-            f.write("#!/bin/bash \n")
-            f.write(cmd)
-        logging.info("Successfully created bash file at " + job_bash_file)
-        logging.info("Command line written on bash file : " + cmd)
-    except Exception as e:
-        logging.error("UNABLE TO CREATE BASH FILE!" + str(e))
-
-    try:
-        logging.info(
-            "Attempting to create job_direcotry on farm at location :" +
-            job_directory_on_farm)
-        run("mkdir -p " + job_directory_on_farm)
-        logging.debug(
-            "Created directory " +
-            job_directory_on_farm +
-            " Successfully")
-    except Exception as e:
-        logging.error("Error creating directory on farm" + str(e))
-
-    try:
-        logging.info("Attempting to transfer contents to the farm")
-        put(user_upload_directory, __farm_upload_directory__)
-        logging.debug("Transfer to farm completed successfully")
-    except:
-        logging.error("FAILED TO TRANSFER FILE TO SERVER")
-        sys.exit("ERROR")
-
-
-def run_atom_atom_mapping_smi(
-        uuid,
-        user_upload_directory,
-        smile_query,
-        file_format="SMI"):
-    """Copy the whole file/folder as passed in path
-    to the farm node
-
-    Params:
-        path: path location to
-    """
-    __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
-    logging.basicConfig(filename=__logfile__, level=logging.INFO)
-    logging.info(
-        "Called run_atom_atom_mapping function, Beginning logs for JobId:" +
+        "Called run_atom_atom_mapping function, Beginning logs for JobId: " +
         uuid)
     job_directory_on_farm = os.path.join(__farm_upload_directory__, uuid)
     job_bash_file = os.path.join(
         user_upload_directory,
         uuid +
-        "__run_atom_atom_mapping.sh")
-    logging.info("Job bash file local location " + job_bash_file)
+        "__run.sh")
+    logging.info("Job bash file local location: " + job_bash_file)
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     cd_path = "cd " + job_directory_on_farm
-    cmd = cd_path + " && " + __atom_atom_mapping_cmd_line__ + " -Q " + file_format + " -q " + \
-         smile_query + \
-        " 1>%s 2>%s" % (
-            job_prefix + "__stdout.log",
-            job_prefix + "__stderr.log")
+    if query_format == "SMI":
+        # Read query as quoted string
+        query = "\"" + query + "\""
+    elif query_format == "RXN":
+        filename = get_base_filename(query)
+        query = os.path.join(job_directory_on_farm, filename)
+
+    # For text
+    common_cmd = __atom_atom_mapping_cmd_line__ + \
+        " -Q " + query_format + " -q " + query
+    cmd = cd_path + " && " + common_cmd + " -f text -m -p " + \
+        " 1>>%s 2>>%s" % (
+            job_prefix + "__text.log",
+            job_prefix + "__texterr.log")
+    # For xml
+    cmd += " && " + common_cmd + " -f xml -m -p " + \
+        " 1>>%s 2>>%s" % (
+            job_prefix + "__xml.log",
+            job_prefix + "__xmlerr.log")
     try:
         logging.info("Attempting to write to bash file locally")
         with open(job_bash_file, 'w') as f:
-            f.write("#!/bin/bash \n")
+            f.write("#!/bin/bash\n")
             f.write(cmd)
-        logging.info("Successfully created bash file at " + job_bash_file)
-        logging.info("Command line written on bash file : " + cmd)
+        logging.info("Successfully created bash file at: " + job_bash_file)
+        logging.info("Command line written on bash file: " + cmd)
     except Exception as e:
-        logging.error("UNABLE TO CREATE BASH FILE!" + str(e))
+        logging.error("UNABLE TO CREATE BASH FILE!: " + str(e))
+        return "Unable to create bash file"
 
     try:
         logging.info(
-            "Attempting to create job_direcotry on farm at location :" +
+            "Attempting to create job_directory on farm at location: " +
             job_directory_on_farm)
         run("mkdir -p " + job_directory_on_farm)
         logging.debug(
             "Created directory " +
             job_directory_on_farm +
-            " Successfully")
+            " Successfully.")
     except Exception as e:
-        logging.error("Error creating directory on farm" + str(e))
+        logging.error("Error creating directory on farm: " + str(e))
 
     try:
         logging.info("Attempting to transfer contents to the farm")
         put(user_upload_directory, __farm_upload_directory__)
         logging.debug("Transfer to farm completed successfully")
-    except:
-        logging.error("FAILED TO TRANSFER FILE TO SERVER")
-        sys.exit("ERROR")
+        return True
+    except Exception as e:
+        logging.error("FAILED TO TRANSFER FILE TO SERVER:" + str(e))
+        return "Unable to upload"
 
 
 def run_search(
         uuid,
         user_upload_directory,
-        file_format,
-        smile_query_or_path,
+        query_format,
+        query,
         search_type, hits):
-    """Copy the whole file/folder as passed in path
-    to the farm node
-
+    """ Run search
     Params:
-        path: path location to
+    ------
+        uuid: String
+            jobID
+        user_upload_directory:  String
+            Absolute path to directory where user folder is uploaded
+        query: String
+            Filepath OR Smiles Query for running atom atom mapping
+        query_format: String
+            Query format for query [RXN|SMI]
+
+    Result:
+    -------
+        None or "error"
     """
-    #smile_query_or_path = smile_query_or_path.replace("\"","")
     __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
     logging.basicConfig(filename=__logfile__, level=logging.INFO)
     logging.info(
@@ -166,21 +162,27 @@ def run_search(
     job_bash_file = os.path.join(
         user_upload_directory,
         uuid +
-        "__run_atom_atom_mapping.sh")
+        "__run.sh")
     logging.info("Job bash file local location " + job_bash_file)
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     cd_path = "cd " + job_directory_on_farm
-    smile_query = ""
-    if file_format=="RXN":
-        with open(smile_query_or_path, "rb") as f:
-            smile_query+="\""+f.read().strip()+"\""
-    else:
-        smile_query = smile_query_or_path
-    cmd = cd_path + " && " + __search_cmd_line__ + " -Q " + file_format + " -q " + \
-         smile_query + " -s " + search_type +" -c " + hits + \
-        " 1>%s 2>%s" % (
-            job_prefix + "__stdout.log",
-            job_prefix + "__stderr.log")
+    if query_format == "SMI":
+        query = "\"" + query + "\""
+    elif query_format == "RXN":
+        filename = get_base_filename(query)
+        query = os.path.join(job_directory_on_farm, filename)
+    # For text
+    common_cmd = __search_cmd_line__ + " -Q " + query_format + \
+        " -q " + query + + " -s " + search_type + " -c " + hits
+    cmd = cd_path + " && " + common_cmd + " -f text -m -p " + \
+        " 1>>%s 2>>%s" % (
+            job_prefix + "__text.log",
+            job_prefix + "__texterr.log")
+    # For xml
+    cmd += " && " + common_cmd + " -f xml -m -p " + \
+        " 1>>%s 2>>%s" % (
+            job_prefix + "__xml.log",
+            job_prefix + "__xmlerr.log")
     try:
         logging.info("Attempting to write to bash file locally")
         with open(job_bash_file, 'w') as f:
@@ -207,77 +209,78 @@ def run_search(
         logging.info("Attempting to transfer contents to the farm")
         put(user_upload_directory, __farm_upload_directory__)
         logging.debug("Transfer to farm completed successfully")
+        return True
     except:
         logging.error("FAILED TO TRANSFER FILE TO SERVER")
-        sys.exit("ERROR")
+        return "Unable to upload"
+
 
 def run_compare_reactions(
         uuid,
         user_upload_directory,
-        user_uploaded_query_format,
-        user_uploaded_query_file,
-        user_uploaded_target_format,
-        user_uploaded_target_file):
-    """Copy the whole file/folder as passed in path
-    to the farm node
-
+        query_format,
+        query,
+        target_format,
+        target):
+    """ Run compare reactions
     Params:
-        path: path location to
-    """
-    user_uploaded_target_file = user_uploaded_target_file.replace("\"","")
-    user_uploaded_query_file = user_uploaded_query_file.replace("\"","")
+    ------
+        uuid: String
+            jobID
+        user_upload_directory:  String
+            Absolute path to directory where user folder is uploaded
+        query: String
+            Filepath OR Smiles Query for running atom atom mapping
+        query_format: String
+            Query format for query [RXN|SMI]
+        target: String
+            Filepath OR Smiles Target Query for running atom atom mapping
+        target_format: String
+            Query format for query [RXN|SMI]
 
+    Result:
+    -------
+        None or "error"
+    """
     __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
     logging.basicConfig(filename=__logfile__, level=logging.INFO)
     logging.info(
-        "Called run_atom_atom_mapping function, Beginning logs for JobId:" +
+        "Called run_compare_reactions function, Beginning logs for JobId:" +
         uuid)
     job_directory_on_farm = os.path.join(__farm_upload_directory__, uuid)
-    query_filename = get_base_filename(user_uploaded_query_file)
-    target_filename = get_base_filename(user_uploaded_target_file)
     job_bash_file = os.path.join(
         user_upload_directory,
-        uuid +
-        "__run_atom_atom_mapping.sh")
-    logging.info(
-        "User uploaded filename " +
-        query_filename +
-        " ; " +
-        target_filename)
-    query_file_contents = ""
-    target_file_contents =  ""
+        uuid + "__run.sh")
     logging.info("Job bash file local location " + job_bash_file)
-    query_renamed_filepath = os.path.join(
-        job_directory_on_farm,
-        query_filename)
-    target_renamed_filepath = os.path.join(
-        job_directory_on_farm,
-        target_filename)
-    logging.info("User renamed filename as on farm" + query_renamed_filepath)
+    if query_format == "SMI":
+        query = "\"" + query + "\""
+    elif query_format == "RXN":
+        filename = get_base_filename(query)
+        query = os.path.join(job_directory_on_farm, filename)
+    if target_format == "SMI":
+        target = "\"" + target + "\""
+    elif query_format == "RXN":
+        filename = get_base_filename(target)
+        target = os.path.join(job_directory_on_farm, filename)
     job_prefix = os.path.join(job_directory_on_farm, uuid)
-    if user_uploaded_query_format == "SMI":
-        query_file_contents =  "\"" + user_uploaded_query_file +"\""
-    elif user_uploaded_query_format == "RXN":
-        query_file_contents = query_renamed_filepath
-
-    if user_uploaded_target_format == "SMI":
-        target_file_contents =  "\"" + user_uploaded_target_file + "\""
-    elif user_uploaded_target_format == "RXN":
-        target_file_contents = target_renamed_filepath
-
     cd_path = "cd " + job_directory_on_farm
-    cmd = cd_path + " && " + __compare_reactions_cmd_line__ + " -Q " + user_uploaded_query_format + " -q " + \
-        query_file_contents + " -T " + user_uploaded_target_format + " -t " + \
-        target_file_contents + \
-        " 1>%s 2>%s" % (
-            job_prefix + "__stdout.log",
-            job_prefix + "__stderr.log")
+    common_cmd = __compare_reactions_cmd_line__ + " -Q " + query_format + \
+        " -q " + query + " -T " + target_format + " -t " + target
+    cmd = cd_path + " && " + common_cmd + " -f text " + \
+        "  1>>%s 2>>%s" % (
+            job_prefix + "__text.log",
+            job_prefix + "__texterr.log")
+    cmd += " && " + common_cmd + " -f xml " + \
+        "  1>>%s 2>>%s" % (
+            job_prefix + "__xml.log",
+            job_prefix + "__xmlerr.log")
+
     try:
         logging.info("Attempting to write to bash file locally")
         with open(job_bash_file, 'w') as f:
             f.write("#!/bin/bash \n")
             f.write(cmd)
-            logging.info("Successfully created bash file at: " + job_bash_file)
+        logging.info("Successfully created bash file at: " + job_bash_file)
         logging.info("Command line written on bash file: " + cmd)
     except Exception as e:
         logging.error("UNABLE TO CREATE BASH FILE! " + str(e))
@@ -306,51 +309,67 @@ def run_compare_reactions(
 def run_matching(
         uuid,
         user_upload_directory,
-        file_format,
-        user_uploaded_file,
+        query_format,
+        query,
         hits, is_strict=False):
-    """Copy the whole file/folder as passed in path
-    to the farm node
-
+    """ Run matching
     Params:
-        path: path location to
+    ------
+        uuid: String
+            jobID
+        user_upload_directory:  String
+            Absolute path to directory where user folder is uploaded
+        query: String
+            Filepath OR Smiles Query for running atom atom mapping
+        query_format: String
+            Query format for query [RXN|SMI]
+
+    Result:
+    -------
+        None or "error"
     """
     __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
     logging.basicConfig(filename=__logfile__, level=logging.INFO)
     logging.info(
-        "Called run_atom_atom_mapping function, Beginning logs for JobId:" +
+        "Called matching function, Beginning logs for JobId:" +
         uuid)
     job_directory_on_farm = os.path.join(__farm_upload_directory__, uuid)
-    filename = get_base_filename(user_uploaded_file)
     job_bash_file = os.path.join(
         user_upload_directory,
         uuid +
-        "__run_atom_atom_mapping.sh")
-    logging.info("User uploaded filename " + filename)
+        "__run_matching.sh")
     logging.info("Job bash file local location " + job_bash_file)
-    renamed_filepath = os.path.join(job_directory_on_farm, filename)
-    logging.info("User renamed filename as on farm" + renamed_filepath)
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     cd_path = "cd " + job_directory_on_farm
 
-    if file_format == "RXN":
-        file_contents =  renamed_filepath
-    elif file_format == "SMI":
-        with open(user_uploaded_file, "rb") as f:
-            file_contents = "\""+ f.read().strip().replace("\n","") + "\""
+    if query_format == "RXN":
+        filename = get_base_filename(query)
+        query = os.path.join(job_directory_on_farm, filename)
+    elif query_format == "SMI":
+        query = "\"" + query + "\""
 
     if not is_strict:
-        cmd = cd_path + " && " + __generic_matching_cmd_line__ + " -Q " + file_format + " -q " + \
-            file_contents + " -c " + hits + \
+        common_cmd = __generic_matching_cmd_line__ + " -Q " + \
+            query_format + " -q " + query + " -c " + hits
+        cmd = cd_path + common_cmd + " -f text " + \
             "  1>%s 2>%s" % (
-                job_prefix + "__stdout.log",
-                job_prefix + "__stderr.log")
+                job_prefix + "__text.log",
+                job_prefix + "__texterr.log")
+        cmd += " && " + __generic_matching_cmd_line__ + " -f xml " + \
+            "  1>%s 2>%s" % (
+                job_prefix + "__xml.log",
+                job_prefix + "__xmlerr.log")
     else:
-        cmd = cd_path + " && " + __generic_matching_cmd_line__ + " -Q " + file_format + " -q " + \
-            file_contents + " -c " + hits + " -s " + \
+        common_cmd = __generic_matching_cmd_line__ + " -Q " + \
+            query_format + " -q " + query + " -c " + hits
+        cmd = cd_path + common_cmd + " -f text -s " + \
             "  1>%s 2>%s" % (
-                job_prefix + "__stdout.log",
-                job_prefix + "__stderr.log")
+                job_prefix + "__text.log",
+                job_prefix + "__texterr.log")
+        cmd += " && " + __generic_matching_cmd_line__ + " -f xml -s " + \
+            "  1>%s 2>%s" % (
+                job_prefix + "__xml.log",
+                job_prefix + "__xmlerr.log")
 
     try:
         logging.info("Attempting to write to bash file locally")
@@ -386,15 +405,11 @@ def run_matching(
 def submit_bsub(uuid):
     __logfile__ = os.path.join(__tomcat_jobs_log_directory__, uuid + ".log")
     logging.basicConfig(filename=__logfile__, level=logging.DEBUG)
-    bash_file = os.path.join(
-        __farm_upload_directory__,
-        uuid +
-        "__run_atom_atom_mapping.sh")
     user_directory = os.path.join(__farm_upload_directory__, uuid)
     bash_file = os.path.join(
         user_directory,
         uuid +
-        "__run_atom_atom_mapping.sh")
+        "__run.sh")
     cmd = "bsub -M 20000 -R \"rusage[mem=20000]\" -q production-rh6 -J " + \
         uuid + " \" bash " + bash_file + " \""
     logging.info(

@@ -17,11 +17,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "ecblastResponse")
+@XmlRootElement(name = "EC_BLAST")
 public class GenericResponse extends ResponseModel {
 
     @javax.xml.bind.annotation.XmlElement
-
     public String status;
 
     public String getStatus() {

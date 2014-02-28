@@ -18,8 +18,8 @@ import org.codehaus.jackson.map.annotate.JsonRootName;
  */
 @XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "ecblastError")
-@JsonRootName(value = "ecblastError")
+@XmlRootElement(name = "EC_BLAST")
+@JsonRootName(value = "EC_BLAST")
 public class APIResponse {
 
     @XmlElement
