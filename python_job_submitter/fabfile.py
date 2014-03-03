@@ -12,11 +12,11 @@ import ntpath
 # Each job gets uploaded as a folder with its folder name as it jobID
 __farm_upload_directory__ = '/nfs/nobackup2/research/thornton/ecblast/webservices/UPLOADS'
 # Command Line static to run atom atom mapping
-__atom_atom_mapping_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G  -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j AAM"
+__atom_atom_mapping_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G  -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j AAM -f BOTH"
 # Command Line to compare two reactions
-__compare_reactions_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j compare"
+__compare_reactions_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j compare -f BOTH"
 # Command line for transformation
-__generic_matching_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j transform"
+__generic_matching_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j transform -f BOTH"
 # Command line to run search
 __search_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j search"
 # Python command to run once the job is complete
@@ -88,7 +88,13 @@ def run_atom_atom_mapping_rxn(
 
     # For text
     common_cmd = __atom_atom_mapping_cmd_line__ + \
-        " -Q " + query_format + " -q " + query
+        " -Q " + query_format + " -q " + query + \
+        " 1>>%s 2>>%s" % (
+            job_prefix + "__stdout.log",
+            job_prefix + "__stderr.log")
+
+    cmd = cd_path + " && " + common_cmd
+    """
     cmd = cd_path + " && " + common_cmd + " -f text -m -p " + \
         " 1>>%s 2>>%s" % (
             job_prefix + "__text.log",
@@ -98,6 +104,7 @@ def run_atom_atom_mapping_rxn(
         " 1>>%s 2>>%s" % (
             job_prefix + "__xml.log",
             job_prefix + "__xmlerr.log")
+    """
     try:
         logging.info("Attempting to write to bash file locally")
         with open(job_bash_file, 'w') as f:
@@ -174,15 +181,17 @@ def run_search(
     # For text
     common_cmd = __search_cmd_line__ + " -Q " + query_format + \
         " -q " + query +  " -s " + search_type + " -c " + hits
-    cmd = cd_path + " && " + common_cmd + " -f text -m -p " + \
+    cmd = cd_path + " && " + common_cmd + " -m -p " + \
         " 1>>%s 2>>%s" % (
-            job_prefix + "__text.log",
-            job_prefix + "__texterr.log")
+            job_prefix + "__stdout.log",
+            job_prefix + "__stderr.log")
     # For xml
+    """
     cmd += " && " + common_cmd + " -f xml -m -p " + \
         " 1>>%s 2>>%s" % (
             job_prefix + "__xml.log",
             job_prefix + "__xmlerr.log")
+    """
     try:
         logging.info("Attempting to write to bash file locally")
         with open(job_bash_file, 'w') as f:
@@ -266,15 +275,16 @@ def run_compare_reactions(
     cd_path = "cd " + job_directory_on_farm
     common_cmd = __compare_reactions_cmd_line__ + " -Q " + query_format + \
         " -q " + query + " -T " + target_format + " -t " + target
-    cmd = cd_path + " && " + common_cmd + " -f text " + \
+    cmd = cd_path + " && " + common_cmd +  \
         "  1>>%s 2>>%s" % (
-            job_prefix + "__text.log",
-            job_prefix + "__texterr.log")
+            job_prefix + "__stdout.log",
+            job_prefix + "__stderr.log")
+    """
     cmd += " && " + common_cmd + " -f xml " + \
         "  1>>%s 2>>%s" % (
             job_prefix + "__xml.log",
             job_prefix + "__xmlerr.log")
-
+    """
     try:
         logging.info("Attempting to write to bash file locally")
         with open(job_bash_file, 'w') as f:
@@ -351,25 +361,29 @@ def run_matching(
     if not is_strict:
         common_cmd = __generic_matching_cmd_line__ + " -Q " + \
             query_format + " -q " + query + " -c " + hits
-        cmd = cd_path  + " && " + common_cmd + " -f text " + \
+        cmd = cd_path  + " && " + common_cmd + \
             "  1>%s 2>%s" % (
-                job_prefix + "__text.log",
-                job_prefix + "__texterr.log")
+                job_prefix + "__stdout.log",
+                job_prefix + "__stderr.log")
+        """
         cmd += " && " + common_cmd + " -f xml " + \
             "  1>%s 2>%s" % (
                 job_prefix + "__xml.log",
                 job_prefix + "__xmlerr.log")
+        """
     else:
         common_cmd = __generic_matching_cmd_line__ + " -Q " + \
             query_format + " -q " + query + " -c " + hits
-        cmd = cd_path + " && " + common_cmd + " -f text -s " + \
+        cmd = cd_path + " && " + common_cmd + " -s " + \
             "  1>%s 2>%s" % (
-                job_prefix + "__text.log",
-                job_prefix + "__texterr.log")
+                job_prefix + "__stdout.log",
+                job_prefix + "__stderr.log")
+        """
         cmd += " && " + common_cmd + " -f xml -s " + \
             "  1>%s 2>%s" % (
                 job_prefix + "__xml.log",
                 job_prefix + "__xmlerr.log")
+        """
 
     try:
         logging.info("Attempting to write to bash file locally")

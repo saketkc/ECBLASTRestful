@@ -35,12 +35,14 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitAtomAtomMappingJob;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitCompareReactionsJob;
-import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitGenericMatchingJob;
+import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitTransformationJob;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitSearchJob;
 import uk.ac.ebi.ecblast.ecblastWS.parser.AtomAtomMappingParser;
 import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
@@ -54,6 +56,7 @@ import uk.ac.ebi.ecblast.ecblastWS.utility.GenericResponse;
  * @author saket
  */
 @Path("/")
+@Consumes("multipart/related")
 public class ECBlastResource {
 
     @Context
@@ -85,21 +88,23 @@ public class ECBlastResource {
 
     @POST
     @Produces({MediaType.APPLICATION_XML})
-    @Path("/aam")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/aam")	 	
+    //@Consumes("application/x-www-form-urlencoded")
+    @Consumes({"application/x-www-form-urlencoded", MediaType.TEXT_HTML, MediaType.TEXT_PLAIN, MediaType.TEXT_XML, MediaType.APPLICATION_FORM_URLENCODED,MediaType.MULTIPART_FORM_DATA})
     public GenericResponse atomAtomMappingRXN(
-            @FormDataParam("q") InputStream uploadedInputStreamRXN,
-            @FormDataParam("q") FormDataContentDisposition fileDetailRXN,
-            @FormDataParam("q") String smileQuery,
-            @FormDataParam("Q") String fileFormat,
+            @DefaultValue("") @FormDataParam("q") InputStream uploadedInputStreamRXN,
+            @DefaultValue("") @FormDataParam("q") FormDataContentDisposition fileDetailRXN,
+            @DefaultValue("") @FormDataParam("q") String smileQuery,
+            @DefaultValue("") @FormDataParam("Q") String fileFormat,
             @FormDataParam("email") String emailID) {
 
-        if (fileDetailRXN == null && uploadedInputStreamRXN == null && smileQuery == null) {
+        if (fileDetailRXN == null && uploadedInputStreamRXN == null && smileQuery == "") {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Inputs");
         }
         if (!"RXN".equals(fileFormat) && !"SMI".equals(fileFormat)) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "File Format Not Supported" + fileFormat);
         }
+        
 
         GenericResponse response = new GenericResponse();
         response.setJobID(null);
@@ -109,7 +114,8 @@ public class ECBlastResource {
         String userDirectory;
 
         if ("RXN".equals(fileFormat)) {
-            FileUploadUtility uploadFile = new FileUploadUtility(fileDetailRXN.getFileName(), uniqueID);
+           
+            FileUploadUtility uploadFile = new FileUploadUtility( fileDetailRXN.getFileName() , uniqueID);
             boolean uploadedSucessful = uploadFile.writeToFile(uploadedInputStreamRXN);
             userDirectory = uploadFile.getUserDirectory();
             String userFilePath = uploadFile.getFileLocation();
@@ -192,7 +198,7 @@ public class ECBlastResource {
 
     @POST
     @Produces({MediaType.APPLICATION_XML})
-    @Path("/compare/reactions")
+    @Path("/compare")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public GenericResponse compareReactions(
             @FormDataParam("q") InputStream uploadedInputStreamQuery,
@@ -374,7 +380,7 @@ public class ECBlastResource {
 
         String userDirectory = uploadFileQuery.getUserDirectory();
         String jID = null;
-        SubmitGenericMatchingJob matchingJob = new SubmitGenericMatchingJob();
+        SubmitTransformationJob matchingJob = new SubmitTransformationJob();
         if(transformType==null || "".equals(transformType)){
             transformType = "strict";
         }
@@ -575,7 +581,7 @@ public class ECBlastResource {
      */
     @Path("/status/{jobID}")
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public GenericResponse getJobStatus(@PathParam("jobID") String uniqueID) throws ErrorResponse {
         DatabaseConfiguration dbconfig = new DatabaseConfiguration();
         JobsQueryWrapper job = null;
@@ -673,7 +679,8 @@ public class ECBlastResource {
         GenericResponse response = new GenericResponse();
         ConfigParser configparser = new ConfigParser();
         Properties prop = configparser.getConfig();
-        String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + uniqueID + "__text.log";
+        String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.txt";
+        //String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + uniqueID + "__text.log";
         AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
         String contents = parser.readFileInString();
         response.setAtomatomMappingResultText(contents);
@@ -783,7 +790,8 @@ public class ECBlastResource {
         GenericResponse response = new GenericResponse();
         ConfigParser configparser = new ConfigParser();
         Properties prop = configparser.getConfig();
-        String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + uniqueID + "__xml.log";
+        String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.xml";
+                //+ "/" + uniqueID + "__xml.log";
         AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
         String contents = parser.readFileInString();
         

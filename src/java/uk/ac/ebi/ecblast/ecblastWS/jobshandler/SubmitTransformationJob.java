@@ -13,7 +13,7 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
  *
  * @author saket
  */
-public class SubmitGenericMatchingJob extends SubmitJob {
+public class SubmitTransformationJob extends SubmitJob {
         public String createCommand(String uuid, String directory, String queryFileType, String query, String c, String transformType) {
         ConfigParser config = new ConfigParser();
         Properties prop = config.getConfig();

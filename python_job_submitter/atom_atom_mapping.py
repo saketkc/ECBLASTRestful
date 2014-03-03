@@ -21,7 +21,7 @@ def main(argv):
     args = parser.parse_args(argv)
     directory = args.directory
     uuid = args.uuid
-    query = args.q
+    query = args.q.replace("\"", "")
     query_format = args.Q
     with settings(hide('running', 'stdout', 'stderr'),
                   host_string="saketc@172.21.22.5",
