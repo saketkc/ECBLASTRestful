@@ -88,9 +88,8 @@ public class ECBlastResource {
 
     @POST
     @Produces({MediaType.APPLICATION_XML})
-    @Path("/aam")	 	
-    //@Consumes("application/x-www-form-urlencoded")
-    @Consumes({"application/x-www-form-urlencoded", MediaType.TEXT_HTML, MediaType.TEXT_PLAIN, MediaType.TEXT_XML, MediaType.APPLICATION_FORM_URLENCODED,MediaType.MULTIPART_FORM_DATA})
+    @Path("/aam")	 	   
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
     public GenericResponse atomAtomMappingRXN(
             @DefaultValue("") @FormDataParam("q") InputStream uploadedInputStreamRXN,
             @DefaultValue("") @FormDataParam("q") FormDataContentDisposition fileDetailRXN,
@@ -213,7 +212,7 @@ public class ECBlastResource {
     ) {
 
         if ((uploadedInputStreamQuery == null && smileQuery == null && fileDetailQuery == null) || (uploadedInputStreamTarget == null && smileTarget == null
-                && fileDetailTarget == null)) {
+                && fileDetailTarget == null  && smileTarget == null)) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Reaction File");
         }
 
@@ -231,8 +230,10 @@ public class ECBlastResource {
         String userDirectory = fileUpload.getUserDirectory();
         String userFilePathQuery = null;
         String userFilePathTarget = null;
+        FileUploadUtility uploadFileTarget = null;
+        FileUploadUtility uploadFileQuery = null;
         if ("RXN".equals(queryFormat)) {
-            FileUploadUtility uploadFileQuery = new FileUploadUtility(fileDetailQuery.getFileName(), uniqueID);
+            uploadFileQuery = new FileUploadUtility(fileDetailQuery.getFileName(), uniqueID);
             boolean uploadedSucessfulQuery = uploadFileQuery.writeToFile(uploadedInputStreamQuery);
             userFilePathQuery = uploadFileQuery.getFileLocation();
             if (!uploadedSucessfulQuery) {
@@ -243,7 +244,7 @@ public class ECBlastResource {
 
         if ("RXN".equals(targetFormat)) {
 
-            FileUploadUtility uploadFileTarget = new FileUploadUtility(fileDetailTarget.getFileName(), uniqueID);
+            uploadFileTarget = new FileUploadUtility(fileDetailTarget.getFileName(), uniqueID);
             boolean uploadedSucessfulTarget = uploadFileTarget.writeToFile(uploadedInputStreamTarget);
             userFilePathTarget = uploadFileTarget.getFileLocation();
             if (!uploadedSucessfulTarget) {
@@ -254,14 +255,14 @@ public class ECBlastResource {
         String query = null;
         String target = null;
         if ("RXN".equals(queryFormat)) {
-            query = fileDetailQuery.getFileName();
+            query = uploadFileQuery.getFileLocation();
         } else if ("SMI".equals(queryFormat)) {
             query = smileQuery;
         }
         if ("RXN".equals(targetFormat)) {
-            target = fileDetailTarget.getFileName();
+            target = uploadFileTarget.getFileLocation();
         } else if ("SMI".equals(targetFormat)) {
-            target = smileQuery;
+            target = smileTarget;
         }
 
         /* Submit job to farm
@@ -406,8 +407,7 @@ public class ECBlastResource {
         try {
             jobID = Integer.parseInt(jID);
         } catch (NumberFormatException ex) { // handle your exception
-            System.out.println("*****************************");
-
+          
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
 
         }
@@ -892,7 +892,14 @@ public class ECBlastResource {
 
             imgFileName = userFolder + "ECBLAST" + "_" + "smiles_Query" + "_rxn.png";
         }
-        System.out.println("*********************IMAGE" + imgFileName);
+        
+        else if("compare_reactions".equals(jobType)){
+            
+            imgFileName = userFolder + "Target_Query_combined.png";
+            
+            
+        }
+       
         try {
             BufferedImage img = null;
 

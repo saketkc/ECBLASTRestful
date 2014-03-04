@@ -261,6 +261,8 @@ def run_compare_reactions(
         user_upload_directory,
         uuid + "__run.sh")
     logging.info("Job bash file local location " + job_bash_file)
+    query = query.replace("\"","")
+    target = target.replace("\"","")
     if query_format == "SMI":
         query = "\"" + query.replace("\"","") + "\""
     elif query_format == "RXN":

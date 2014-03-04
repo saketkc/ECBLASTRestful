@@ -168,7 +168,7 @@ public class JobsQueryWrapper extends DatabaseWrapper {
 
     public String getPendingJobIDs() {
         try {
-            String query = "SELECT uniqueID FROM jobs WHERE status=? or status=?";
+            String query = "SELECT uniqueID, jobType FROM jobs WHERE status=? or status=?";
             PreparedStatement stm = (PreparedStatement) connection.prepareStatement(query);
             stm.setString(1, "pending");
             stm.setString(2, "running");
@@ -177,8 +177,8 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             String returnMessage = "";
 
             while (rs.next()) {
-                returnMessage = returnMessage + rs.getString(1) + ";";
-
+                returnMessage = returnMessage + rs.getString(1) + "::" + rs.getString(2) + ";" ;
+ 
             }
             return returnMessage;
         } catch (SQLException ex) {
