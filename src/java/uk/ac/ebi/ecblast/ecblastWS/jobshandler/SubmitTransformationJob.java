@@ -19,7 +19,7 @@ public class SubmitTransformationJob extends SubmitJob {
         Properties prop = config.getConfig();
 
         this.command = (String) prop.getProperty("transform_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory + " --Q="+ queryFileType + " --q=\""+query + "\" --c=" + c;
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory + " --Q="+ queryFileType + " --q=\""+query + "\" --c=" + c + " --type=" + transformType;
         return this.command;
 
     }
@@ -28,7 +28,7 @@ public class SubmitTransformationJob extends SubmitJob {
         Properties prop = config.getConfig();
 
         this.command = (String) prop.getProperty("transform_strict_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory + " --Q="+ queryFileType + " --q=\""+query + "\" --c=" + c;
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory + " --Q="+ queryFileType + " --q=\""+query + "\" --c=" + c + " --type=" + transformType;
         return this.command;
 
     }

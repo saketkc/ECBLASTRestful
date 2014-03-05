@@ -18,7 +18,7 @@ __compare_reactions_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/b
 # Command line for transformation
 __generic_matching_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j transform -f BOTH"
 # Command line to run search
-__search_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j search"
+__search_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar  -j search"
 # Python command to run once the job is complete
 __update_job_status_cmd_line__ = "python /homes/saketc/python_job_checker/bsub_status.py "
 # Folder location on which tomcat logs are uploaded
@@ -173,6 +173,7 @@ def run_search(
     logging.info("Job bash file local location " + job_bash_file)
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     cd_path = "cd " + job_directory_on_farm
+    query = query.replace("\"","")
     if query_format == "SMI":
         query = "\"" + query.replace("\"","") + "\""
     elif query_format == "RXN":
@@ -181,7 +182,7 @@ def run_search(
     # For text
     common_cmd = __search_cmd_line__ + " -Q " + query_format + \
         " -q " + query +  " -s " + search_type + " -c " + hits
-    cmd = cd_path + " && " + common_cmd + " -m -p " + \
+    cmd = cd_path + " && " + common_cmd +  \
         " 1>>%s 2>>%s" % (
             job_prefix + "__stdout.log",
             job_prefix + "__stderr.log")
@@ -353,7 +354,7 @@ def run_matching(
     logging.info("Job bash file local location " + job_bash_file)
     job_prefix = os.path.join(job_directory_on_farm, uuid)
     cd_path = "cd " + job_directory_on_farm
-
+    query = query.replace("\"","")
     if query_format == "RXN":
         filename = get_base_filename(query)
         query = os.path.join(job_directory_on_farm, filename)
@@ -376,7 +377,7 @@ def run_matching(
     else:
         common_cmd = __generic_matching_cmd_line__ + " -Q " + \
             query_format + " -q " + query + " -c " + hits
-        cmd = cd_path + " && " + common_cmd + " -s " + \
+        cmd = cd_path + " && " + common_cmd + " -r " + \
             "  1>%s 2>%s" % (
                 job_prefix + "__stdout.log",
                 job_prefix + "__stderr.log")

@@ -23,24 +23,24 @@ import org.codehaus.jackson.map.annotate.JsonRootName;
 //@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "ecblastError")
-@JsonRootName(value = "ecblastError")
+@XmlRootElement(name = "EC_BLAST_ERROR")
 
 public class ErrorResponse extends WebApplicationException {
 
-   @XmlElement
+    @XmlElement
 
     private Status status;
-   @XmlElement
-
+    @XmlElement
 
     public String message;
-@XmlElement
+
+    @XmlElement
 
     public Status getStatus() {
         return status;
     }
-@XmlElement
+
+    @XmlElement
 
     public void setStatus(Status status) {
         this.status = status;
@@ -48,12 +48,14 @@ public class ErrorResponse extends WebApplicationException {
 
     public ErrorResponse() {
     }
-@XmlElement
+
+    @XmlElement
 
     public void setMessage(String message) {
         this.message = message;
     }
-@XmlElement
+
+    @XmlElement
 
     @Override
     public String getMessage() {

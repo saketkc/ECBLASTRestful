@@ -35,8 +35,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -53,42 +51,52 @@ import uk.ac.ebi.ecblast.ecblastWS.utility.GenericResponse;
 /**
  * REST Web Service
  *
- * @author saket
+ * @author Saket Choudhary <saketkc@gmail.com>
  */
+/* This path defines the relative location where the webservice will run
+ * For.eg. Changing the @Path("/") to @Path("/test") will cause
+ * all URLs to be called with respect to /test say /test/aam instead of /aam
+*/
 @Path("/")
-@Consumes("multipart/related")
+
 public class ECBlastResource {
 
-    @Context
-    private UriInfo context;
-
+    /*
+    No Functiopn to call here, hence returne forbidden
+    */
     @GET
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public ErrorResponse getHtml() {
-        //TODO return proper representation object
         throw new ErrorResponse(Status.FORBIDDEN, "Forbidden");
     }
-
+    
+    /*
+    No Functiopn to call here, hence returne forbidden
+    */
     @PUT
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public APIResponse putHtml() {
-        //TODO return proper representation object
         throw new ErrorResponse(Status.FORBIDDEN, "Forbidden");
     }
-
+    
+    /*
+    No Functiopn to call here, hence returne forbidden
+    */
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public APIResponse postHtml() {
-        //TODO return proper representation object
+    public APIResponse postHtml() {      
         throw new ErrorResponse(Status.FORBIDDEN, "Forbidden");
     }
 
+    /*
+    No Functiopn to call here, hence returne forbidden
+    */
     @POST
     @Produces({MediaType.APPLICATION_XML})
-    @Path("/aam")	 	   
+    @Path("/aam")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public GenericResponse atomAtomMappingRXN(
             @DefaultValue("") @FormDataParam("q") InputStream uploadedInputStreamRXN,
@@ -97,24 +105,35 @@ public class ECBlastResource {
             @DefaultValue("") @FormDataParam("Q") String fileFormat,
             @FormDataParam("email") String emailID) {
 
-        if (fileDetailRXN == null && uploadedInputStreamRXN == null && smileQuery == "") {
-            throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Inputs");
+        if ("RXN".equals(fileFormat)) {
+            if (fileDetailRXN == null || uploadedInputStreamRXN == null) {
+            }
         }
-        if (!"RXN".equals(fileFormat) && !"SMI".equals(fileFormat)) {
+        if ("SMI".equals(fileFormat)) {
+            if (smileQuery == null || smileQuery == "") {
+                throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Inputs");
+            }
+
+        }
+
+        if (!"RXN".equals(fileFormat)
+                && !"SMI".equals(fileFormat)) {
+
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "File Format Not Supported" + fileFormat);
         }
-        
 
         GenericResponse response = new GenericResponse();
-        response.setJobID(null);
+
+        response.setJobID(
+                null);
         String uniqueID = UUID.randomUUID().toString();
         SubmitAtomAtomMappingJob rxnMappingJob = new SubmitAtomAtomMappingJob();
         String jID;
         String userDirectory;
 
         if ("RXN".equals(fileFormat)) {
-           
-            FileUploadUtility uploadFile = new FileUploadUtility( fileDetailRXN.getFileName() , uniqueID);
+
+            FileUploadUtility uploadFile = new FileUploadUtility(fileDetailRXN.getFileName(), uniqueID);
             boolean uploadedSucessful = uploadFile.writeToFile(uploadedInputStreamRXN);
             userDirectory = uploadFile.getUserDirectory();
             String userFilePath = uploadFile.getFileLocation();
@@ -138,7 +157,8 @@ public class ECBlastResource {
         jID = rxnMappingJob.executeCommand();
         jID = jID.trim();
         jID = jID.replace("\"\'", "");
-        if (jID == null || "".equals(jID)) {
+        if (jID
+                == null || "".equals(jID)) {
             System.out.println(rxnMappingJob.getCommand());
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
 
@@ -153,7 +173,8 @@ public class ECBlastResource {
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
         }
 
-        if (jobID > 0) {
+        if (jobID
+                > 0) {
             DatabaseConfiguration dbconfig = new DatabaseConfiguration();
             JobsQueryWrapper addJob = null;
 
@@ -212,7 +233,7 @@ public class ECBlastResource {
     ) {
 
         if ((uploadedInputStreamQuery == null && smileQuery == null && fileDetailQuery == null) || (uploadedInputStreamTarget == null && smileTarget == null
-                && fileDetailTarget == null  && smileTarget == null)) {
+                && fileDetailTarget == null && smileTarget == null)) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Reaction File");
         }
 
@@ -341,7 +362,8 @@ public class ECBlastResource {
             @FormDataParam("q") FormDataContentDisposition fileDetailQuery,
             @FormDataParam("q") String smileQuery,
             @FormDataParam("Q") String queryFormat,
-            @DefaultValue("strict") @FormDataParam("type") String transformType,
+            @DefaultValue("strict")
+            @FormDataParam("type") String transformType,
             @FormDataParam("c") String c,
             @FormDataParam("email") String emailID
     ) {
@@ -366,7 +388,7 @@ public class ECBlastResource {
         String uniqueID = UUID.randomUUID().toString();
         String query = null;
         FileUploadUtility uploadFileQuery = new FileUploadUtility(uniqueID);
-        if ("RNX".equals(queryFormat)) {
+        if ("RXN".equals(queryFormat)) {
             uploadFileQuery = new FileUploadUtility(fileDetailQuery.getFileName(), uniqueID);
             query = uploadFileQuery.getFileLocation();
             boolean uploadedSucessfulQuery = uploadFileQuery.writeToFile(uploadedInputStreamQuery);
@@ -382,18 +404,18 @@ public class ECBlastResource {
         String userDirectory = uploadFileQuery.getUserDirectory();
         String jID = null;
         SubmitTransformationJob matchingJob = new SubmitTransformationJob();
-        if(transformType==null || "".equals(transformType)){
+        if (transformType == null || "".equals(transformType)) {
             transformType = "strict";
         }
         if ("strict".equals(transformType)) {
 
-            matchingJob.createCommandStrict(uniqueID, userDirectory, queryFormat, query, c, queryFormat);
+            matchingJob.createCommandStrict(uniqueID, userDirectory, queryFormat, query, c, transformType);
 
             jID = matchingJob.executeCommand();
         } else if ("generic".equals(transformType)) {
 
-            matchingJob.createCommand(uniqueID, userDirectory, queryFormat, query, c, queryFormat);
-                        
+            matchingJob.createCommand(uniqueID, userDirectory, queryFormat, query, c, transformType);
+
             jID = matchingJob.executeCommand();
         }
         jID = jID.trim();
@@ -407,8 +429,8 @@ public class ECBlastResource {
         try {
             jobID = Integer.parseInt(jID);
         } catch (NumberFormatException ex) { // handle your exception
-          
-            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node" + matchingJob.getCommand());
 
         }
 
@@ -465,8 +487,9 @@ public class ECBlastResource {
             @FormDataParam("q") FormDataContentDisposition fileDetailRXN,
             @FormDataParam("q") String smileQuery,
             @FormDataParam("Q") String fileFormat,
-            @FormDataParam("type") String searchType,
-            @DefaultValue("10") @FormDataParam("c") String c,
+            @FormDataParam("s") String searchType,
+            @DefaultValue("10")
+            @FormDataParam("c") String c,
             @FormDataParam("email") String emailID) {
 
         if (fileDetailRXN == null && uploadedInputStreamRXN == null && smileQuery == null) {
@@ -540,8 +563,10 @@ public class ECBlastResource {
                         dbconfig.getDBName(),
                         dbconfig.getDBUserName(),
                         dbconfig.getDBPassword());
+
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ECBlastResource.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 Connection connect = addJob.connect();
@@ -556,14 +581,19 @@ public class ECBlastResource {
                 } else {
                     response.setMessage("error");
                     response.setResponse("erro submitting to database");
+
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-                response.setMessage("Error in submitting job");
+                Logger.getLogger(ECBlastResource.class
+                        .getName()).log(Level.SEVERE, null, ex);
+                response.setMessage(
+                        "Error in submitting job");
                 return response;
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-                response.setMessage("Error in submitting job");
+                Logger.getLogger(ECBlastResource.class
+                        .getName()).log(Level.SEVERE, null, ex);
+                response.setMessage(
+                        "Error in submitting job");
                 return response;
             }
 
@@ -592,18 +622,24 @@ public class ECBlastResource {
                     dbconfig.getDBName(),
                     dbconfig.getDBUserName(),
                     dbconfig.getDBPassword());
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error connecting to the databse");
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,
+                    "Error connecting to the databse");
         }
 
         try {
             Connection connect = job.connect();
+
         } catch (SQLException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
             return response;
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
             return response;
         }
         String status = job.getJobStatus(uniqueID);
@@ -632,18 +668,24 @@ public class ECBlastResource {
                     dbconfig.getDBName(),
                     dbconfig.getDBUserName(),
                     dbconfig.getDBPassword());
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error connecting to the databse");
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,
+                    "Error connecting to the databse");
         }
 
         try {
             Connection connect = job.connect();
+
         } catch (SQLException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
             return response;
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
             return response;
         }
         String status = job.getJobStatus(uniqueID);
@@ -679,18 +721,20 @@ public class ECBlastResource {
         GenericResponse response = new GenericResponse();
         ConfigParser configparser = new ConfigParser();
         Properties prop = configparser.getConfig();
+        
         String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.txt";
         //String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + uniqueID + "__text.log";
         AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
         String contents = parser.readFileInString();
-        response.setAtomatomMappingResultText(contents);
+        response.setAtomatomMappingResultText(contents+filepath);
+        
         return response;
     }
 
     @Path("/result/{jobID}/mapped")
     @GET
-    
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+
+    @Produces({MediaType.APPLICATION_XML})
     public GenericResponse getMappedText(@PathParam("jobID") String uniqueID) throws ErrorResponse {
         GenericResponse response = new GenericResponse();
         ConfigParser configparser = new ConfigParser();
@@ -703,25 +747,31 @@ public class ECBlastResource {
                     dbconfig.getDBName(),
                     dbconfig.getDBUserName(),
                     dbconfig.getDBPassword());
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error connecting to the databse");
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,
+                    "Error connecting to the databse");
         }
 
         try {
             Connection connect = job.connect();
+
         } catch (SQLException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
             return response;
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
             return response;
         }
         String jobType = job.getJobType(uniqueID);
         String filepath = null;
         AtomAtomMappingParser parser;
         String contents;
-        if ("atom_atom_mapping_rxn".equals(jobType) || "compare_rxn".equals(jobType)) {
+        if ("atom_atom_mapping_rxn".equals(jobType)) {
             String fileName = job.getQueryFileName(uniqueID);
             filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
                     + fileName + "_Query" + ".rxn";
@@ -729,7 +779,7 @@ public class ECBlastResource {
             contents = parser.readFileInString();
             response.setAtomatomMappingResultText(contents);
 
-        } else if ("atom_atom_mapping_smi".equals(jobType) || "compare_rxn".equals(jobType)) {
+        } else if ("atom_atom_mapping_smi".equals(jobType)) {
             String fileName = job.getQueryFileName(uniqueID);
             filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
                     + "smiles" + "_Query" + ".rxn";
@@ -744,24 +794,27 @@ public class ECBlastResource {
              and most probably ythe format was smiles
              */
             if (fileNameQuery == null) {
-                fileNameQuery = "smiles";
+                fileNameQuery = "ECBLAST" + "_smiles";
+            }
+            else{
+                String[] splitQ = fileNameQuery.split("\\.");              
+                fileNameQuery = "ECBLAST_"+uniqueID + "__" + splitQ[0];
             }
 
             if (fileNameTarget == null) {
-                fileNameTarget = "smiles";
+                fileNameTarget = "ECBLAST" + "_smiles";
             }
-            String filepathQuery = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
-                    + "smiles" + "_Query" + ".rxn";
+            else{
+                String[] splitT = fileNameTarget.split("\\.");
+                fileNameTarget = "ECBLAST_"+uniqueID + "__" + splitT[0];
+            }
+            String filepathQuery = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + fileNameQuery + "_Query" + ".rxn";
             parser = new AtomAtomMappingParser(filepathQuery);
             String queryContents = parser.readFileInString();
 
-            String filepathTarget = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
-                    + "smiles" + "_Target" + ".rxn";
+            String filepathTarget = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/"  + fileNameTarget + "_Target" + ".rxn";
             parser = new AtomAtomMappingParser(filepathTarget);
             String targetContents = parser.readFileInString();
-            System.out.println("***********TARGET" + targetContents);
-            System.out.println("***********TARGET" + queryContents);
-
             response.setQueryMappedText(queryContents);
             response.setTargetMappedText(targetContents);
         } else if ("search".equals(jobType)) {
@@ -791,67 +844,14 @@ public class ECBlastResource {
         ConfigParser configparser = new ConfigParser();
         Properties prop = configparser.getConfig();
         String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.xml";
-                //+ "/" + uniqueID + "__xml.log";
+        //+ "/" + uniqueID + "__xml.log";
         AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
         String contents = parser.readFileInString();
-        
+
         return Response.ok(contents).build();
     }
 
-    @Path("/xml")
-    @GET
-    @Produces({MediaType.APPLICATION_XML})
-
-    public Response getXML() {
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><EC_BLAST>\n"
-                + "  <ANNOTATION>\n"
-                + "    <FINGERPRINTS BC=\"1\">\n"
-                + "      <FORMED_CLEAVED>[C%C:5.0, C%O:1.0, C-C:2.0, C-H:5.0, H-O:1.0]</FORMED_CLEAVED>\n"
-                + "      <ORDER_CHANGED>[C%C*C=C:3.0, C-C*C=C:1.0]</ORDER_CHANGED>\n"
-                + "      <STEREO_CHANGED>[C(R/S):1.0]</STEREO_CHANGED>\n"
-                + "    </FINGERPRINTS>\n"
-                + "    <FINGERPRINTS RC=\"2\">\n"
-                + "      <CENTRE>[[#6]:24.0, [#6]-1-[#6]-[#6]-1:1.0, [#6]-1-[#6]-[#8]-1:1.0, [#6]-1-[#6]-[#8]-1&gt;&gt;[#6]-[#8]:1.0, [#6]-[#6@@H](-[#6])-[#6]:1.0, [#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6]-[#6][C@]1([#6])[#6]:1.0, [#6]-[#6@@H](-[#6])-[#8]:2.0, [#6]-[#6@@H]-1-[#6]-[#8]-1:1.0, [#6]-[#6@@H]-1-[#6]-[#8]-1&gt;&gt;[#6]-[#6@@H](-[#6])-[#8]:1.0, [#6]-[#6@H]1-[#8]C1([#6])[#6]:2.0, [#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6@@H](-[#6])-[#8]:1.0, [#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6](-[#6])C([#6])([#6])[#6@H](-[#6])-[#8]:1.0, [#6]-[#6]:3.0, [#6]-[#6](-[#6])-[#6]:3.0, [#6]-[#6](-[#6])=[#6]:6.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6]-[#6@@H](-[#6])-[#6]:1.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6]-[#6](-[#6])-[#6]:1.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6][C@@]([#6])([#6])[#6]:2.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6][C@@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6](-[#6])=[#6]&gt;&gt;[#6][C@@]1([#6])[#6][C@]1([#6])[#6]:1.0, [#6]-[#6](-[#6])C([#6])([#6])[#6@H](-[#6])-[#8]:1.0, [#6]-[#6](-[#6])[C@]1([#6])[#6]-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6]-[#6@@H](-[#6])-[#6](-[#6])-[#6]:1.0, [#6]-[#6]-[#6@H](-[#8])C([#6])([#6])[#6]:1.0, [#6]-[#6]-[#6@H]1-[#8]C1([#6])[#6]:1.0, [#6]-[#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6]-[#6@H](-[#8])C([#6])([#6])[#6]:2.0, [#6]-[#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6]-[#6]1[C@@]2([#6]-[#6]2)[#6]-[#6]-[#6@H](-[#8])C1([#6])[#6]:1.0, [#6]-[#6]-[#6](C([#6])([#6])[#6])[C@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]-[#6]([C@]([#6])([#6])[#6])[C@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]-[#6]-[#6@H]1-[#8]C1([#6])[#6]&gt;&gt;[#6]-[#6]1-[#6]-[#6]-[#6]-[#6@H](-[#8])C1([#6])[#6]:1.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]:4.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]&gt;&gt;[#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6]-[#6][C@]1([#6])[#6]:1.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]&gt;&gt;[#6]-[#6]-[#6](C([#6])([#6])[#6])[C@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]&gt;&gt;[#6]-[#6][C@]1([#6])[#6](-[#6])-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6]-[#6]=[#6](-[#6])-[#6]&gt;&gt;[#6]-[#6][C@]1([#6][C@]1([#6])[#6])[#6](-[#6])-[#6]:1.0, [#6]-[#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]-[#6]&gt;&gt;[#6]-[#6]-[#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6]-[#6][C@]1([#6])[#6]:1.0, [#6]-[#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]-[#6]&gt;&gt;[#6]-[#6]-[#6]1[C@@]2([#6]-[#6]2)[#6]-[#6][C@]2([#6])[#6](-[#6])-[#6]-[#6][C@@]12[#6]:1.0, [#6]-[#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]-[#6]&gt;&gt;[#6]-[#6][C@@]12[#6][C@@]11[#6]-[#6]-[#6]C([#6])([#6])[#6]1-[#6]-[#6]-[#6]2-[#6]:1.0, [#6]-[#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]-[#6]&gt;&gt;[#6][C@]12[#6][C@]11[#6]-[#6][C@]3([#6])[#6]-[#6]-[#6][C@@]3([#6])[#6]1-[#6]-[#6]-[#6]2:1.0, [#6]-[#6]-[#6]\\[#6]=[#6](/[#6])-[#6]-[#6]&gt;&gt;[#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6][C@@]2([#6])[#6](-[#6])-[#6]-[#6]-[#6][C@]12[#6]:1.0, [#6]-[#6]-[#6]\\[#6]=[#6](/[#6])-[#6]-[#6]&gt;&gt;[#6]-[#6]-[#6@@H](-[#6])-[#6]1-[#6]-[#6][C@@]([#6])([#6])[C@]1([#6])[#6]-[#6]:1.0, [#6]-[#6]-[#6]\\[#6]=[#6](/[#6])-[#6]-[#6]&gt;&gt;[#6]-[#6][C@]12[#6][C@]11[#6]-[#6]-[#6][C@]([#6])([#6])[#6]1-[#6]-[#6]-[#6]2-[#6]:1.0, [#6]-[#6]-[#6]\\[#6]=[#6](/[#6])-[#6]-[#6]&gt;&gt;[#6][C@@]12[#6][C@@]11[#6]-[#6]-[#6@H](-[#8])C([#6])([#6])[#6]1-[#6]-[#6]-[#6]2:1.0, [#6]-[#6]=[#6]:4.0, [#6]-[#6]=[#6]&gt;&gt;[#6]-[#6](-[#6])-[#6]:2.0, [#6]-[#6]=[#6]&gt;&gt;[#6][C@@]([#6])([#6])[#6]:1.0, [#6]-[#6]=[#6]&gt;&gt;[#6][C@@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]&gt;&gt;[#6]-1-[#6]-[#6]-1:1.0, [#6]-[#6]&gt;&gt;[#6]-[#6]:1.0, [#6]-[#6][C@@]1([#6][C@@]1([#6])[#6])[#6](-[#6])-[#6]:1.0, [#6]-[#6][C@]1([#6])[#6](-[#6])-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6][C@]1([#6][C@]1([#6])[#6])[#6](-[#6])-[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]:4.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6](-[#6])[C@]1([#6])[#6]-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6]-[#6@@H](-[#6])-[#6](-[#6])-[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6]-[#6]([C@]([#6])([#6])[#6])[C@]1([#6])[#6]-[#6]1:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6][C@@]1([#6][C@@]1([#6])[#6])[#6](-[#6])-[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6][C@]1([#6])[#6](-[#6])-[#6]-[#6][C@@]1([#6])[#6]:1.0, [#6]-[#6]\\[#6](-[#6])=[#6]\\[#6]&gt;&gt;[#6]-[#6][C@]12[#6][C@@]1([#6]-[#6])[#6](-[#6])-[#6]-[#6]-[#6]2-[#6]:1.0, [#6]-[#8]:1.0, [#6]C([#6])([#6])[#6]:1.0, [#6]C1([#6])[#6]-[#8]1:1.0, [#6]C1([#6])[#6]-[#8]1&gt;&gt;[#6]C([#6])([#6])[#6]:1.0, [#6][C@@]([#6])([#6])[#6]:3.0, [#6][C@@]1([#6])[#6]-[#6]1:2.0, [#6][C@@]1([#6])[#6][C@]1([#6])[#6]:1.0, [#8]:2.0]</CENTRE>\n"
-                + "    </FINGERPRINTS>\n"
-                + "    <MAPPING STATUS=\"SELECTED\">\n"
-                + "      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH3:15])[CH2:16][CH2:17][CH:18]=[C:19]([CH2:20][H:37])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:37][O:27][CH:23]1[CH2:22][CH2:21][C:19]23[CH2:20][C:13]43[CH2:12][CH2:11][C:10]5([CH3:15])[CH:6]([CH2:7][CH2:8][C:9]5([CH3:28])[C:14]4([H:54])[CH2:16][CH2:17][CH:18]2[C:24]1([CH3:26])[CH3:25])[C:5]([H:59])([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:31])[CH3:30]</AAM>\n"
-                + "    </MAPPING>\n"
-                + "    <MAPPING ALGORTIHM=\"Local Minimization Model\">\n"
-                + "      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH:15]([H:33])[H:34])[CH2:16][CH2:17][CH:18]=[C:19]([CH3:20])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:54][O:27][CH:23]1[CH2:22][CH2:21][C:5]23[C:9]([H:33])([H:34])[C:10]43[CH2:11][CH2:12][C:13]5([CH3:28])[CH:18]([CH2:8][CH2:7][C:14]5([CH3:29])[CH:6]4[CH2:16][CH2:17][CH:15]2[C:24]1([CH3:26])[CH3:25])[C:19]([H:59])([CH3:20])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31]</AAM>\n"
-                + "      <SCORE>37</SCORE>\n"
-                + "      <FRAGMENTS>0</FRAGMENTS>\n"
-                + "      <CHANGES>37</CHANGES>\n"
-                + "      <ENERGY>9,199.00</ENERGY>\n"
-                + "      <DELTA>12,600.00</DELTA>\n"
-                + "    </MAPPING>\n"
-                + "    <MAPPING ALGORTIHM=\"Global Maximization Model\">\n"
-                + "      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH:15]([H:33])[H:34])[CH2:16][CH2:17][CH:18]=[C:19]([CH3:20])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:54][O:27][CH:23]1[CH2:22][CH2:21][C:5]23[C:9]([H:33])([H:34])[C:10]43[CH2:11][CH2:12][C:13]5([CH3:28])[CH:18]([CH2:8][CH2:7][C:14]5([CH3:29])[CH:6]4[CH2:16][CH2:17][CH:15]2[C:24]1([CH3:26])[CH3:25])[C:19]([H:59])([CH3:20])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31]</AAM>\n"
-                + "      <SCORE>37</SCORE>\n"
-                + "      <FRAGMENTS>0</FRAGMENTS>\n"
-                + "      <CHANGES>37</CHANGES>\n"
-                + "      <ENERGY>9,199.00</ENERGY>\n"
-                + "      <DELTA>12,600.00</DELTA>\n"
-                + "    </MAPPING>\n"
-                + "    <MAPPING ALGORTIHM=\"Max-Mixture Model\">\n"
-                + "      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH3:15])[CH2:16][CH2:17][CH:18]=[C:19]([CH2:20][H:37])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:37][O:27][CH:23]1[CH2:22][CH2:21][C:19]23[CH2:20][C:13]43[CH2:12][CH2:11][C:10]5([CH3:15])[CH:6]([CH2:7][CH2:8][C:9]5([CH3:28])[C:14]4([H:54])[CH2:16][CH2:17][CH:18]2[C:24]1([CH3:26])[CH3:25])[C:5]([H:59])([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:31])[CH3:30]</AAM>\n"
-                + "      <SCORE>18</SCORE>\n"
-                + "      <FRAGMENTS>0</FRAGMENTS>\n"
-                + "      <CHANGES>18</CHANGES>\n"
-                + "      <ENERGY>2,750.00</ENERGY>\n"
-                + "      <DELTA>5,294.00</DELTA>\n"
-                + "    </MAPPING>\n"
-                + "    <MAPPING ALGORTIHM=\"Ring Conservation Model\">\n"
-                + "      <AAM>[H:59][C:10](=[C:9]([CH3:28])[CH2:8][CH2:7][CH:6]=[C:5]([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:30])[CH3:31])[CH2:11][CH2:12][C:13]([H:54])=[C:14]([CH3:15])[CH2:16][CH2:17][CH:18]=[C:19]([CH2:20][H:37])[CH2:21][CH2:22][CH:23]1[O:27][C:24]1([CH3:25])[CH3:26]&gt;&gt;[H:37][O:27][CH:23]1[CH2:22][CH2:21][C:19]23[CH2:20][C:13]43[CH2:12][CH2:11][C:10]5([CH3:15])[CH:6]([CH2:7][CH2:8][C:9]5([CH3:28])[C:14]4([H:54])[CH2:16][CH2:17][CH:18]2[C:24]1([CH3:26])[CH3:25])[C:5]([H:59])([CH3:29])[CH2:4][CH2:3][CH:2]=[C:1]([CH3:31])[CH3:30]</AAM>\n"
-                + "      <SCORE>18</SCORE>\n"
-                + "      <FRAGMENTS>0</FRAGMENTS>\n"
-                + "      <CHANGES>18</CHANGES>\n"
-                + "      <ENERGY>2,750.00</ENERGY>\n"
-                + "      <DELTA>5,294.00</DELTA>\n"
-                + "    </MAPPING>\n"
-                + "  </ANNOTATION>\n"
-                + "</EC_BLAST>";
-        return Response.ok(xml).build();
-    }
+    
 
     @Path("/result/{jobID}/image")
     @GET
@@ -868,17 +868,22 @@ public class ECBlastResource {
                     dbconfig.getDBName(),
                     dbconfig.getDBUserName(),
                     dbconfig.getDBPassword());
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
             Connection connect = job.connect();
+
         } catch (SQLException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
 
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
 
         }
         String jobType = job.getJobType(uniqueID);
@@ -891,15 +896,12 @@ public class ECBlastResource {
         } else if ("atom_atom_mapping_smi".equals(jobType)) {
 
             imgFileName = userFolder + "ECBLAST" + "_" + "smiles_Query" + "_rxn.png";
-        }
-        
-        else if("compare_reactions".equals(jobType)){
-            
+        } else if ("compare_reactions".equals(jobType)) {
+
             imgFileName = userFolder + "Target_Query_combined.png";
-            
-            
+
         }
-       
+
         try {
             BufferedImage img = null;
 
@@ -914,7 +916,8 @@ public class ECBlastResource {
             return Response.ok(new ByteArrayInputStream(imageData)).build();
 
         } catch (IOException ex) {
-            Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -958,19 +961,6 @@ public class ECBlastResource {
         return response;
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_XML})
-    @Path("/email")
-    public APIResponse sendEmail() {
-        APIResponse response = new APIResponse();
-        EmailResults results = new EmailResults("test", "saketc@ebi.ac.uk", "subject", "message", false);
-        results.sendMail();
-        response.setMessage("test");
-        response.setResponse("test");
-        return response;
-    }
-
-    @GET
     @Produces({MediaType.APPLICATION_XML})
     @Path("/updateJobStatus/{uniqueID}/{status}")
     public void updateStatus(@PathParam("uniqueID") String uniqueID, @PathParam("status") String status) {
@@ -1001,7 +991,7 @@ public class ECBlastResource {
                     .getName()).log(Level.SEVERE, null, ex);
 
         }
-        System.out.println("STATUS   " + status);
+       
         status = status.trim();
         if ("done".equals(status)) {
             /* Send email to user with the file            
