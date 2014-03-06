@@ -963,7 +963,7 @@ public class ECBlastResource {
 
     @Produces({MediaType.APPLICATION_XML})
     @Path("/updateJobStatus/{uniqueID}/{status}")
-    public void updateStatus(@PathParam("uniqueID") String uniqueID, @PathParam("status") String status) {
+    public String updateStatus(@PathParam("uniqueID") String uniqueID, @PathParam("status") String status) {
         DatabaseConfiguration dbconfig = new DatabaseConfiguration();
         JobsQueryWrapper job = null;
         GenericResponse response = new GenericResponse();
@@ -1025,7 +1025,7 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
+        return null;
     }
 
     @GET
