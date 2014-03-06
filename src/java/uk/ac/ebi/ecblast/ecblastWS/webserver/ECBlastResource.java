@@ -721,7 +721,47 @@ public class ECBlastResource {
         GenericResponse response = new GenericResponse();
         ConfigParser configparser = new ConfigParser();
         Properties prop = configparser.getConfig();
+        DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+        JobsQueryWrapper job = null;
+        try {
+            job = new JobsQueryWrapper(dbconfig.getDriver(),
+                    dbconfig.getConnectionString(),
+                    dbconfig.getDBName(),
+                    dbconfig.getDBUserName(),
+                    dbconfig.getDBPassword());
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,
+                    "Error connecting to the databse");
+        }
+
+        try {
+            Connection connect = job.connect();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            return response;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            return response;
+        }
         
+         String jobStatus =  job.getJobStatus(uniqueID).trim().toLowerCase().toString();
+         
+        if ("failed".equals(jobStatus)){
+            
+            throw new ErrorResponse(Status.BAD_REQUEST,"Job Failed!" + jobStatus);
+        }
+        else if("running".equals(jobStatus)){
+            throw new ErrorResponse(Status.BAD_REQUEST,"Job Running!");
+        }
+        else if("pending".equals(jobStatus)){
+            throw new ErrorResponse(Status.BAD_REQUEST,"Job Pending!");
+        }
         String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.txt";
         //String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + uniqueID + "__text.log";
         AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
@@ -766,6 +806,18 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
             return response;
+        }
+        
+         String jobStatus=  job.getJobStatus(uniqueID);
+        if ("failed".equals(jobStatus)){
+            
+            throw new ErrorResponse(Status.BAD_REQUEST,"Job Failed!" + jobStatus);
+        }
+        else if("running".equals(jobStatus)){
+            throw new ErrorResponse(Status.BAD_REQUEST,"Job Running!");
+        }
+        else if("pending".equals(jobStatus)){
+            throw new ErrorResponse(Status.BAD_REQUEST,"Job Pending!");
         }
         String jobType = job.getJobType(uniqueID);
         String filepath = null;
@@ -843,6 +895,45 @@ public class ECBlastResource {
         GenericResponse response = new GenericResponse();
         ConfigParser configparser = new ConfigParser();
         Properties prop = configparser.getConfig();
+         DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+                JobsQueryWrapper job = null;
+ try {
+            job = new JobsQueryWrapper(dbconfig.getDriver(),
+                    dbconfig.getConnectionString(),
+                    dbconfig.getDBName(),
+                    dbconfig.getDBUserName(),
+                    dbconfig.getDBPassword());
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            Connection connect = job.connect();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        }
+        String jobStatus=  job.getJobStatus(uniqueID);
+        if ("failed".equals(jobStatus)){
+            
+            throw new ErrorResponse(Status.BAD_REQUEST,"Job Failed!" + jobStatus);
+        }
+        else if("running".equals(jobStatus)){
+            throw new ErrorResponse(Status.BAD_REQUEST,"Job Running!");
+        }
+        else if("pending".equals(jobStatus)){
+            throw new ErrorResponse(Status.BAD_REQUEST,"Job Pending!");
+        }
+        
+        
         String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.xml";
         //+ "/" + uniqueID + "__xml.log";
         AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
