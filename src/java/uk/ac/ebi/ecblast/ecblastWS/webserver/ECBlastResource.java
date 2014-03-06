@@ -825,7 +825,9 @@ public class ECBlastResource {
         String contents;
         if ("atom_atom_mapping_rxn".equals(jobType)) {
             String fileName = job.getQueryFileName(uniqueID);
-            filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
+            String[] splitT = fileName.split("\\.");
+                fileName = "ECBLAST_"+uniqueID + "__" + splitT[0];
+            filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" 
                     + fileName + "_Query" + ".rxn";
             parser = new AtomAtomMappingParser(filepath);
             contents = parser.readFileInString();
