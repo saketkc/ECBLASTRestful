@@ -10,6 +10,20 @@ __notfound__ = re.compile("Job [^ ]+ is not found")
 
 
 def bjobs_status(job_id=None, stdout=None, stderr=None, run_bjobs=False):
+    """Returns Status of job on Farm
+
+    Parameters:
+    -----------
+    job_id : String
+        job_id as returned from bsub output
+    stdout : String
+        stdout as returned from bsub output
+    stderr : String
+        stderr as returned from bsub stderr
+    run_bjobs : True | False
+        Whether bjobs should be run actually. It can be set to true only on systems with bsub enabled( viz. Farm itself)
+
+    """
     if run_bjobs:
         if not job_id:
             return "NO JOB ID"

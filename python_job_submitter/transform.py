@@ -5,7 +5,7 @@ from fabric.context_managers import settings
 from fabric.context_managers import hide
 from fabfile import run_matching
 from fabfile import submit_bsub
-
+from config import username, host, password
 import argparse
 import sys
 import re
@@ -14,12 +14,12 @@ __job_submitted_re__ = re.compile("Job [^]+ is submitted to queue [^]+")
 
 def main(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument("--uuid", type=str, required=True)
-    parser.add_argument("--directory", type=str, required=True)
-    parser.add_argument("--q", type=str, required=True)
-    parser.add_argument("--Q", type=str, required=True)
-    parser.add_argument("--c", type=str, required=True)
-    parser.add_argument("--type", type=str, required=True)
+    parser.add_argument("--uuid", help="Unique ID", type=str, required=True)
+    parser.add_argument("--directory", help="Absolute path to user uploaded stuff", type=str, required=True)
+    parser.add_argument("--q", help="Smiles query or reaction file path as on tomcat", type=str, required=True)
+    parser.add_argument("--Q", help="Query format[SMI/RXN]", type=str, required=True)
+    parser.add_argument("--c", help="No. of hits", type=str, required=True)
+    parser.add_argument("--type", help="Type", type=str, required=True)
 
     args = parser.parse_args(argv)
     queryfile = args.q
@@ -28,9 +28,10 @@ def main(argv):
     c = args.c
     type = args.type
     directory = args.directory
+    login = username + "@" + host
     with settings(hide('running', 'stdout', 'stderr'),
-                  host_string="saketc@172.21.22.5",
-                  password="uzfmTjX7"):
+                  host_string=login,
+                  password=password):
         run_matching(uuid, directory, queryformat, queryfile, c, type)
         stdout = submit_bsub(uuid)
         if __job_submitted_re__.search(stdout):

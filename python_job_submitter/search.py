@@ -13,12 +13,12 @@ __job_submitted_re__ = re.compile("Job [^]+ is submitted to queue [^]+")
 
 def main(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument("--uuid", type=str, required=True)
-    parser.add_argument("--directory", type=str, required=True)
-    parser.add_argument("--q", type=str, required=True)
-    parser.add_argument("--Q", type=str, required=True)
-    parser.add_argument("--c", type=str, required=True)
-    parser.add_argument("--s", type=str, required=True)
+    parser.add_argument("--uuid", help="Unique ID", type=str, required=True)
+    parser.add_argument("--directory", help="User directory as on farm", type=str, required=True)
+    parser.add_argument("--q", help="Smiles query or absolute path to RXN file", type=str, required=True)
+    parser.add_argument("--Q", help="Query format, SMI/RXN", type=str, required=True)
+    parser.add_argument("--c", help="No of hits", type=str, required=True)
+    parser.add_argument("--s", help="Searhc type bond/centre/structure", type=str, required=True)
 
     args = parser.parse_args(argv)
     queryfile = args.q
