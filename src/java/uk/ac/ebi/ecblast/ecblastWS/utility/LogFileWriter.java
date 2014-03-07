@@ -32,6 +32,7 @@ public class LogFileWriter {
         if (!file.exists()) {
             file.createNewFile();
         }
+        System.out.println(data);
         FileWriter fileWritter = new FileWriter(file.getName(), true);
         BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
         bufferWritter.write(data);

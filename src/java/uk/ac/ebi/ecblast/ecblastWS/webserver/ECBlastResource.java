@@ -337,7 +337,7 @@ public class ECBlastResource {
         String userFilePathTarget = null;
         FileUploadUtility uploadFileTarget = null;
         FileUploadUtility uploadFileQuery = null;
-        
+
         /*If Query is RXN file, upload it to the tomcat*/
         if ("RXN".equals(queryFormat)) {
             logWriter.WriteToFile("INFO Uploading user QUERY RXN file " + fileDetailQuery.getFileName());
@@ -397,7 +397,7 @@ public class ECBlastResource {
          */
         SubmitCompareReactionsJob compareJob = new SubmitCompareReactionsJob();
         compareJob.createCommand(uniqueID, userDirectory, queryFormat, query, targetFormat, target);
-        logWriter.WriteToFile("INFO: Command submitted to farm: "+compareJob.getCommand());
+        logWriter.WriteToFile("INFO: Command submitted to farm: " + compareJob.getCommand());
         String jID = compareJob.executeCommand();
         jID = jID.trim();
         jID = jID.replace("\"\'", "");
@@ -429,7 +429,7 @@ public class ECBlastResource {
                         dbconfig.getDBPassword());
 
             } catch (ClassNotFoundException ex) {
-                  logWriter.WriteToFile("DB ERROR " + ex.toString());
+                logWriter.WriteToFile("DB ERROR " + ex.toString());
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
@@ -444,14 +444,14 @@ public class ECBlastResource {
 
                 }
             } catch (SQLException ex) {
-                 logWriter.WriteToFile("SQL Exception " + ex.toString());
+                logWriter.WriteToFile("SQL Exception " + ex.toString());
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
                 response.setMessage(
                         "Error in submitting job");
                 return response;
             } catch (ClassNotFoundException ex) {
-                 logWriter.WriteToFile("DB ERROR " + ex.toString());
+                logWriter.WriteToFile("DB ERROR " + ex.toString());
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
                 response.setMessage(
@@ -465,17 +465,16 @@ public class ECBlastResource {
 
     }
 
-    
-     /*
+    /*
      Submit Transform Job
      @param 'q' : String | FiileuploadInputStream
-         -- Fileupload stream or string Smiles based query
+     -- Fileupload stream or string Smiles based query
      @param 'Q' : String
-        -- Query format 
+     -- Query format 
      @param 'type' String 
-        -- Transform Type : generic/strict
+     -- Transform Type : generic/strict
      @param 'c' String/Int
-        -- Number of hits, defaults to 10
+     -- Number of hits, defaults to 10
      
      @returns 'response' : Response object
      -- Error Response with error message OR Success response with job_ID
@@ -540,14 +539,13 @@ public class ECBlastResource {
             if (!uploadedSucessfulQuery) {
                 logWriter.WriteToFile("ERROR: Uploading  to farm failed : " + fileDetailQuery.getFileName());
                 throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error uploading file");
-            }
-            else{
+            } else {
                 logWriter.WriteToFile("SUCCESS: Uploading  to farm succeded : " + fileDetailQuery.getFileName());
             }
         }
         /*If ?SMI was submitted it should be passed to farm like that
         
-        */
+         */
         if ("SMI".equals(queryFormat)) {
             logWriter.WriteToFile("INFO: SMILES Query: " + smileQuery);
             query = smileQuery;
@@ -562,7 +560,6 @@ public class ECBlastResource {
         if ("strict".equals(transformType)) {
 
             matchingJob.createCommandStrict(uniqueID, userDirectory, queryFormat, query, c, transformType);
-           
 
             jID = matchingJob.executeCommand();
         } else if ("generic".equals(transformType)) {
@@ -637,16 +634,16 @@ public class ECBlastResource {
 
     }
 
-     /*
+    /*
      Submit Search Job
      @param 'q' : String | FiileuploadInputStream
-         -- Fileupload stream or string Smiles based query
+     -- Fileupload stream or string Smiles based query
      @param 'Q' : String
-        -- Query format 
+     -- Query format 
      @param 's' String 
-        -- Search Type : bond/
+     -- Search Type : bond/
      @param 'c' String/Int
-        -- Number of hits, defaults to 10
+     -- Number of hits, defaults to 10
      
      @returns 'response' : Response object
      -- Error Response with error message OR Success response with job_ID
@@ -680,7 +677,7 @@ public class ECBlastResource {
             @FormDataParam("s") String searchType,
             @DefaultValue("10")
             @FormDataParam("c") String c,
-            @FormDataParam("email") String emailID) throws IOException {
+            @FormDataParam("email") String emailID) throws IOException, SQLException {
 
         if (fileDetailRXN == null && uploadedInputStreamRXN == null && smileQuery == null) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Inputs");
@@ -702,7 +699,7 @@ public class ECBlastResource {
         String query = null;
         FileUploadUtility uploadFile = null;
         if ("RXN".equals(fileFormat)) {
-            logWriter.WriteToFile("INFO: Uploading RXN: "+ fileDetailRXN.getFileName());
+            logWriter.WriteToFile("INFO: Uploading RXN: " + fileDetailRXN.getFileName());
             uploadFile = new FileUploadUtility(fileDetailRXN.getFileName(), uniqueID);
             boolean uploadedSucessful = uploadFile.writeToFile(uploadedInputStreamRXN);
 
@@ -760,6 +757,8 @@ public class ECBlastResource {
                         dbconfig.getDBPassword());
 
             } catch (ClassNotFoundException ex) {
+                addJob.disconnect();
+
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
@@ -771,16 +770,19 @@ public class ECBlastResource {
 
                 b = addJob.insertJob(uniqueID, jobID, fileDetailRXN.getFileName(), targetFileName, emailID, jobType);
                 if (b >= 1) {
-                    addJob.disconnect();
+
                     response.setMessage(searchJob.getResponse());
                     response.setJobID(uniqueID);
                 } else {
-                    addJob.disconnect();
                     response.setMessage("error");
                     response.setResponse("erro submitting to database");
 
                 }
+                addJob.disconnect();
+
             } catch (SQLException ex) {
+                addJob.disconnect();
+
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
                 response.setMessage(
@@ -800,13 +802,13 @@ public class ECBlastResource {
 
     }
 
-   /*
-    Get Status of job
-    @param jobID:
-        -- job ID(unique ID)
-    @returns:
-        XML response status: done/failed/pending/running
-    */
+    /*
+     Get Status of job
+     @param jobID:
+     -- job ID(unique ID)
+     @returns:
+     XML response status: done/failed/pending/running
+     */
     @Path("/status/{jobID}")
     @GET
     @Produces({MediaType.APPLICATION_XML})
@@ -910,10 +912,10 @@ public class ECBlastResource {
     }
 
     /*Send text response back for the result
-    @param jobID:
-        jobID
-    @returns:
-        Xml response: Text output of job
+     @param jobID:
+     jobID
+     @returns:
+     Xml response: Text output of job
      */
     @Path("/result/{jobID}/text")
     @GET
@@ -971,9 +973,9 @@ public class ECBlastResource {
     }
 
     /*Send back mapped reaction file
-    @param jobID
-    @return XMLS response containing the Mapped reaction file
-    */
+     @param jobID
+     @return XMLS response containing the Mapped reaction file
+     */
     @Path("/result/{jobID}/mapped")
     @GET
     @Produces({MediaType.APPLICATION_XML})
@@ -1080,7 +1082,6 @@ public class ECBlastResource {
 
         return response;
     }
-
 
     @Path("/result/{jobID}/xml")
     @GET
@@ -1202,8 +1203,9 @@ public class ECBlastResource {
         return null;
     }
     /*Returns a JSON formatted list of pending jobs
-    Ideally should not be publically accessible and can be changed to something complicated
-    */
+     Ideally should not be publically accessible and can be changed to something complicated
+     */
+
     @GET
     @Path("/pending_jobs")
     @Produces({MediaType.APPLICATION_JSON})
@@ -1244,12 +1246,12 @@ public class ECBlastResource {
     }
 
     /* Updates the status of given jobId
-    @param uniqueID:
-        --uniqueId of job
-    @param status:
-        -- update the status to running/failed/done
-    @return null
-    */
+     @param uniqueID:
+     --uniqueId of job
+     @param status:
+     -- update the status to running/failed/done
+     @return null
+     */
     @Produces({MediaType.APPLICATION_XML})
     @Path("/updateJobStatus/{uniqueID}/{status}")
     public String updateStatus(@PathParam("uniqueID") String uniqueID, @PathParam("status") String status) {
@@ -1316,8 +1318,6 @@ public class ECBlastResource {
         }
         return null;
     }
-
-   
 
     @POST
     @Produces({MediaType.APPLICATION_XML})
