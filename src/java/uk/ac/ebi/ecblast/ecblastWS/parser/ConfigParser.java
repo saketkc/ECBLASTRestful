@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
-import uk.ac.ebi.ecblast.ecblastWS.webserver.ECBlastResource;
 
 /**
  *
