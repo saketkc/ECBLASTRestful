@@ -36,7 +36,7 @@ public class LogFileWriter {
         bufferWriter.close();*/
     
     PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file.getName(), true)));
-    out.println("TEST"+data);
+    out.println(data);
     out.close();
 
     }
