@@ -1,0 +1,6 @@
+Required Python Libraries:
+requests
+fabric
+
+$easy_install requests
+$easy_install fabric
