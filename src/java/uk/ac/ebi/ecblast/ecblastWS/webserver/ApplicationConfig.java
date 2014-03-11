@@ -36,7 +36,7 @@ public class ApplicationConfig extends Application {
         instances.add(new LoggingFilter());
         return instances;
     }
-
+  
     /**
      * Do not modify addRestResourceClasses() method. It is automatically
      * populated with all resources defined in the project. If required, comment

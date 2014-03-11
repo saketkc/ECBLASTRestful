@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ecblast.ecblastWS.jobshandler;
 
 import java.util.Properties;
+import uk.ac.ebi.ecblast.ecblastWS.config.Configuration;
 import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 
 /**
@@ -14,16 +14,17 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
  * @author saket
  */
 public class SubmitSearchJob extends SubmitJob {
-        public String createCommand(String uuid, String directory, String fileFormat, String query,  String searchType, String c) {
+
+    public String createCommand(String uuid, String directory, String fileFormat, String query, String searchType, String c) {
         ConfigParser config = new ConfigParser();
+        //config.setFilePath(Configuration.getInstance().getPath().getRealPath("WEB-INF/config.ini"));
+
         Properties prop = config.getConfig();
 
         this.command = (String) prop.getProperty("search_cmd");
-        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory +  " --Q=" + fileFormat + " --s=" + searchType + " --q=\"" +query + "\" --c="+c;
+        this.command = this.command + " --uuid=" + uuid + " --directory=" + directory + " --Q=" + fileFormat + " --s=" + searchType + " --q=\"" + query + "\" --c=" + c;
         return this.command;
 
     }
 
-   
-    
 }

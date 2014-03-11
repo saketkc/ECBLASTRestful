@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ecblast.ecblastWS.webserver;
 
-import com.mysql.jdbc.log.Log;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,11 +26,14 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import uk.ac.ebi.ecblast.ecblastWS.config.Configuration;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitAtomAtomMappingJob;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitCompareReactionsJob;
 import uk.ac.ebi.ecblast.ecblastWS.jobshandler.SubmitTransformationJob;
@@ -61,9 +58,13 @@ import uk.ac.ebi.ecblast.ecblastWS.utility.LogFileWriter;
 
 public class ECBlastResource {
 
-    /*
-     No Functiopn to call here, hence returne forbidden
-     */
+    @Context
+    public ServletContext servletContext;
+
+    public void setECBlastResource(ServletContext servletContext) {
+        Configuration.getInstance().setPath(servletContext);
+    }
+
     @GET
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -125,6 +126,7 @@ public class ECBlastResource {
             @DefaultValue("") @FormDataParam("q") String smileQuery,
             @DefaultValue("") @FormDataParam("Q") String fileFormat,
             @FormDataParam("email") String emailID) throws IOException, SQLException {
+        setECBlastResource(servletContext);
 
         /* Check for File Formats being SMI or RXN */
         if (!"RXN".equals(fileFormat) && !"SMI".equals(fileFormat)) {
@@ -140,7 +142,7 @@ public class ECBlastResource {
 
         /* Return error if empty file inputs */
         if ("SMI".equals(fileFormat)) {
-            if (smileQuery == null || smileQuery == "") {
+            if (smileQuery == null || "".equals(smileQuery)) {
                 throw new ErrorResponse(Response.Status.BAD_REQUEST, "Empty Inputs");
             }
 
@@ -224,12 +226,12 @@ public class ECBlastResource {
                         dbconfig.getDBUserName(),
                         dbconfig.getDBPassword());
             } catch (ClassNotFoundException ex) {
-                addJob.disconnect();
 
                 Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
             }
+            Connection connect = null;
             try {
-                Connection connect = addJob.connect();
+                connect = addJob.connect();
                 int b;
                 String targetFileName = null;
                 String jobType = "atom_atom_mapping" + "_" + fileFormat.toLowerCase();
@@ -237,10 +239,10 @@ public class ECBlastResource {
                 if (b >= 1) {
                     response.setMessage(rxnMappingJob.getResponse());
                     response.setJobID(uniqueID);
-                    addJob.disconnect();
+                    //addJob.disconnect();
 
                 } else {
-                    addJob.disconnect();
+                    //addJob.disconnect();
 
                     logWriter.WriteToFile("Error writing to database");
                     response.setMessage("error");
@@ -257,6 +259,14 @@ public class ECBlastResource {
                 Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
                 response.setMessage("Error in submitting job");
                 return response;
+            } finally {
+                try {
+                    if (connect != null || !connect.isClosed()) {
+                        connect.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }
@@ -433,8 +443,9 @@ public class ECBlastResource {
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
+            Connection connect = null;
             try {
-                Connection connect = addJob.connect();
+                connect = addJob.connect();
                 int b;
                 b = addJob.insertJob(uniqueID, jobID, fileDetailQuery.getFileName(), null,
                         emailID, "compare_reactions");
@@ -443,6 +454,8 @@ public class ECBlastResource {
                     response.setJobID(uniqueID);
 
                 }
+                return response;
+
             } catch (SQLException ex) {
                 logWriter.WriteToFile("SQL Exception " + ex.toString());
                 Logger.getLogger(ECBlastResource.class
@@ -457,11 +470,18 @@ public class ECBlastResource {
                 response.setMessage(
                         "Error in submitting job");
                 return response;
+            } finally {
+                try {
+                    if (connect != null || !connect.isClosed()) {
+                        connect.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }
-
-        return response;
+        return null;
 
     }
 
@@ -516,7 +536,7 @@ public class ECBlastResource {
         if (!"RXN".equals(queryFormat) && !"SMI".equals(queryFormat)) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "Only RXN,SMI are allowed");
         }
-        if (c == null || c == "") {
+        if (c == null || "".equals(c)) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, "c required");
         }
         Integer hits;
@@ -571,7 +591,7 @@ public class ECBlastResource {
         logWriter.WriteToFile("INFO: Python command line:  " + matchingJob.getCommand());
         jID = jID.trim();
         jID = jID.replace("\"\'", "");
-        if (jID == null || jID == "") {
+        if (jID == null || ("").equals(jID)) {
             logWriter.WriteToFile("EMPTY Response from Farm");
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node" + matchingJob.getCommand());
 
@@ -598,22 +618,27 @@ public class ECBlastResource {
                         dbconfig.getDBPassword());
 
             } catch (ClassNotFoundException ex) {
+                logWriter.WriteToFile("DB ERROR " + ex.toString());
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
+
+            Connection connect = null;
             try {
-                Connection connect = addJob.connect();
+                connect = addJob.connect();
+                System.out.println("Connected " + connect.isClosed());
                 int b;
-                String transform = "transform" + "_" + transformType;
                 b = addJob.insertJob(uniqueID, jobID, fileDetailQuery.getFileName(), null, emailID, transformType);
+                System.out.println("Connected " + connect.isClosed());
                 if (b >= 1) {
-                    addJob.disconnect();
+
                     response.setMessage(matchingJob.getResponse());
                     response.setJobID(uniqueID);
 
                 }
+                System.out.println("Connected " + connect.isClosed());
             } catch (SQLException ex) {
-                addJob.disconnect();
+
                 logWriter.WriteToFile("ERROR: SQLEXception" + ex.toString());
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
@@ -626,10 +651,17 @@ public class ECBlastResource {
                 response.setMessage(
                         "Error in submitting job");
                 return response;
+            } finally {
+                try {
+                    if (connect != null || !connect.isClosed()) {
+                        connect.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }
-
         return response;
 
     }
@@ -757,13 +789,13 @@ public class ECBlastResource {
                         dbconfig.getDBPassword());
 
             } catch (ClassNotFoundException ex) {
-                addJob.disconnect();
 
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
+            Connection connect = null;
             try {
-                Connection connect = addJob.connect();
+                connect = addJob.connect();
                 int b;
                 String targetFileName = null;
                 String jobType = "search";
@@ -778,10 +810,8 @@ public class ECBlastResource {
                     response.setResponse("erro submitting to database");
 
                 }
-                addJob.disconnect();
 
             } catch (SQLException ex) {
-                addJob.disconnect();
 
                 Logger.getLogger(ECBlastResource.class
                         .getName()).log(Level.SEVERE, null, ex);
@@ -794,6 +824,14 @@ public class ECBlastResource {
                 response.setMessage(
                         "Error in submitting job");
                 return response;
+            } finally {
+                try {
+                    if (connect != null || !connect.isClosed()) {
+                        connect.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         }
@@ -829,9 +867,9 @@ public class ECBlastResource {
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,
                     "Error connecting to the databse");
         }
-
+        Connection connect = null;
         try {
-            Connection connect = job.connect();
+            connect = job.connect();
 
         } catch (SQLException ex) {
             Logger.getLogger(ECBlastResource.class
@@ -841,7 +879,16 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
             return response;
+        } finally {
+            try {
+                if (connect != null || !connect.isClosed()) {
+                    connect.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+
         String status = job.getJobStatus(uniqueID);
         if (status == null) {
             throw new ErrorResponse(Response.Status.BAD_REQUEST, uniqueID + " not found");
@@ -875,9 +922,9 @@ public class ECBlastResource {
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,
                     "Error connecting to the databse");
         }
-
+        Connection connect = null;
         try {
-            Connection connect = job.connect();
+            connect = job.connect();
 
         } catch (SQLException ex) {
             Logger.getLogger(ECBlastResource.class
@@ -939,9 +986,30 @@ public class ECBlastResource {
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,
                     "Error connecting to the databse");
         }
-
+        Connection connect = null;
         try {
-            Connection connect = job.connect();
+            connect = job.connect();
+            String jobStatus = job.getJobStatus(uniqueID);
+                    
+            if (jobStatus == null){
+                throw new ErrorResponse(Status.BAD_REQUEST,"No Job found");
+            }
+            jobStatus = jobStatus.trim().toLowerCase().toString();
+            if ("failed".equals(jobStatus)) {
+
+                throw new ErrorResponse(Status.BAD_REQUEST, "Job Failed!" + jobStatus);
+            } else if ("running".equals(jobStatus)) {
+                throw new ErrorResponse(Status.BAD_REQUEST, "Job Running!");
+            } else if ("pending".equals(jobStatus)) {
+                throw new ErrorResponse(Status.BAD_REQUEST, "Job Pending!");
+            }
+            String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.txt";
+            //String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + uniqueID + "__text.log";
+            AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
+            String contents = parser.readFileInString();
+            response.setAtomatomMappingResultText(contents + filepath);
+
+            return response;
 
         } catch (SQLException ex) {
             Logger.getLogger(ECBlastResource.class
@@ -951,25 +1019,16 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
             return response;
+        } finally {
+            try {
+                if (connect != null || !connect.isClosed()) {
+                    connect.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
-        String jobStatus = job.getJobStatus(uniqueID).trim().toLowerCase().toString();
-
-        if ("failed".equals(jobStatus)) {
-
-            throw new ErrorResponse(Status.BAD_REQUEST, "Job Failed!" + jobStatus);
-        } else if ("running".equals(jobStatus)) {
-            throw new ErrorResponse(Status.BAD_REQUEST, "Job Running!");
-        } else if ("pending".equals(jobStatus)) {
-            throw new ErrorResponse(Status.BAD_REQUEST, "Job Pending!");
-        }
-        String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.txt";
-        //String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + uniqueID + "__text.log";
-        AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
-        String contents = parser.readFileInString();
-        response.setAtomatomMappingResultText(contents + filepath);
-
-        return response;
     }
 
     /*Send back mapped reaction file
@@ -998,9 +1057,78 @@ public class ECBlastResource {
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,
                     "Error connecting to the databse");
         }
+        Connection connect = null;
 
         try {
-            Connection connect = job.connect();
+            connect = job.connect();
+            String jobStatus = job.getJobStatus(uniqueID);
+            if ("failed".equals(jobStatus)) {
+                throw new ErrorResponse(Status.BAD_REQUEST, "Job Failed!" + jobStatus);
+            } else if ("running".equals(jobStatus)) {
+                throw new ErrorResponse(Status.BAD_REQUEST, "Job Running!");
+            } else if ("pending".equals(jobStatus)) {
+                throw new ErrorResponse(Status.BAD_REQUEST, "Job Pending!");
+            }
+            String jobType = job.getJobType(uniqueID);
+            String filepath = null;
+            AtomAtomMappingParser parser;
+            String contents;
+            if ("atom_atom_mapping_rxn".equals(jobType)) {
+                String fileName = job.getQueryFileName(uniqueID);
+                String[] splitT = fileName.split("\\.");
+                fileName = "ECBLAST_" + uniqueID + "__" + splitT[0];
+                filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/"
+                        + fileName + "_Query" + ".rxn";
+                parser = new AtomAtomMappingParser(filepath);
+                contents = parser.readFileInString();
+                response.setAtomatomMappingResultText(contents);
+
+            } else if ("atom_atom_mapping_smi".equals(jobType)) {
+                String fileName = job.getQueryFileName(uniqueID);
+                filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
+                        + "smiles" + "_Query" + ".rxn";
+                System.out.println("********" + filepath);
+                parser = new AtomAtomMappingParser(filepath);
+                contents = parser.readFileInString();
+                response.setAtomatomMappingResultText(contents);
+            } else if ("compare_reactions".equals(jobType)) {
+                String fileNameQuery = job.getQueryFileName(uniqueID);
+                String fileNameTarget = job.getTargetFileName(uniqueID);
+                /* If null was returned there was no file submitted
+                 and most probably ythe format was smiles
+                 */
+                if (fileNameQuery == null) {
+                    fileNameQuery = "ECBLAST" + "_smiles";
+                } else {
+                    String[] splitQ = fileNameQuery.split("\\.");
+                    fileNameQuery = "ECBLAST_" + uniqueID + "__" + splitQ[0];
+                }
+
+                if (fileNameTarget == null) {
+                    fileNameTarget = "ECBLAST" + "_smiles";
+                } else {
+                    String[] splitT = fileNameTarget.split("\\.");
+                    fileNameTarget = "ECBLAST_" + uniqueID + "__" + splitT[0];
+                }
+                String filepathQuery = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + fileNameQuery + "_Query" + ".rxn";
+                parser = new AtomAtomMappingParser(filepathQuery);
+                String queryContents = parser.readFileInString();
+
+                String filepathTarget = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + fileNameTarget + "_Target" + ".rxn";
+                parser = new AtomAtomMappingParser(filepathTarget);
+                String targetContents = parser.readFileInString();
+                response.setQueryMappedText(queryContents);
+                response.setTargetMappedText(targetContents);
+            } else if ("search".equals(jobType)) {
+                String filepathQuery = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
+                        + "smiles" + "_Query" + ".rxn";
+                parser = new AtomAtomMappingParser(filepathQuery);
+                String queryContents = parser.readFileInString();
+                queryContents.replaceAll("Xml File saved!s", "");
+                response.setSearchMappedText(queryContents);
+            }
+
+            return response;
 
         } catch (SQLException ex) {
             Logger.getLogger(ECBlastResource.class
@@ -1010,77 +1138,16 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
             return response;
-        }
-
-        String jobStatus = job.getJobStatus(uniqueID);
-        if ("failed".equals(jobStatus)) {
-
-            throw new ErrorResponse(Status.BAD_REQUEST, "Job Failed!" + jobStatus);
-        } else if ("running".equals(jobStatus)) {
-            throw new ErrorResponse(Status.BAD_REQUEST, "Job Running!");
-        } else if ("pending".equals(jobStatus)) {
-            throw new ErrorResponse(Status.BAD_REQUEST, "Job Pending!");
-        }
-        String jobType = job.getJobType(uniqueID);
-        String filepath = null;
-        AtomAtomMappingParser parser;
-        String contents;
-        if ("atom_atom_mapping_rxn".equals(jobType)) {
-            String fileName = job.getQueryFileName(uniqueID);
-            String[] splitT = fileName.split("\\.");
-            fileName = "ECBLAST_" + uniqueID + "__" + splitT[0];
-            filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/"
-                    + fileName + "_Query" + ".rxn";
-            parser = new AtomAtomMappingParser(filepath);
-            contents = parser.readFileInString();
-            response.setAtomatomMappingResultText(contents);
-
-        } else if ("atom_atom_mapping_smi".equals(jobType)) {
-            String fileName = job.getQueryFileName(uniqueID);
-            filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
-                    + "smiles" + "_Query" + ".rxn";
-            System.out.println("********" + filepath);
-            parser = new AtomAtomMappingParser(filepath);
-            contents = parser.readFileInString();
-            response.setAtomatomMappingResultText(contents);
-        } else if ("compare_reactions".equals(jobType)) {
-            String fileNameQuery = job.getQueryFileName(uniqueID);
-            String fileNameTarget = job.getTargetFileName(uniqueID);
-            /* If null was returned there was no file submitted
-             and most probably ythe format was smiles
-             */
-            if (fileNameQuery == null) {
-                fileNameQuery = "ECBLAST" + "_smiles";
-            } else {
-                String[] splitQ = fileNameQuery.split("\\.");
-                fileNameQuery = "ECBLAST_" + uniqueID + "__" + splitQ[0];
+        } finally {
+            try {
+                if (connect != null || !connect.isClosed()) {
+                    connect.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            if (fileNameTarget == null) {
-                fileNameTarget = "ECBLAST" + "_smiles";
-            } else {
-                String[] splitT = fileNameTarget.split("\\.");
-                fileNameTarget = "ECBLAST_" + uniqueID + "__" + splitT[0];
-            }
-            String filepathQuery = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + fileNameQuery + "_Query" + ".rxn";
-            parser = new AtomAtomMappingParser(filepathQuery);
-            String queryContents = parser.readFileInString();
-
-            String filepathTarget = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + fileNameTarget + "_Target" + ".rxn";
-            parser = new AtomAtomMappingParser(filepathTarget);
-            String targetContents = parser.readFileInString();
-            response.setQueryMappedText(queryContents);
-            response.setTargetMappedText(targetContents);
-        } else if ("search".equals(jobType)) {
-            String filepathQuery = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/" + "ECBLAST" + "_"
-                    + "smiles" + "_Query" + ".rxn";
-            parser = new AtomAtomMappingParser(filepathQuery);
-            String queryContents = parser.readFileInString();
-            queryContents.replaceAll("Xml File saved!s", "");
-            response.setSearchMappedText(queryContents);
         }
 
-        return response;
     }
 
     @Path("/result/{jobID}/xml")
@@ -1103,10 +1170,26 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+        Connection connect = null;
 
         try {
-            Connection connect = job.connect();
+            connect = job.connect();
+            String jobStatus = job.getJobStatus(uniqueID);
+            if ("failed".equals(jobStatus)) {
 
+                throw new ErrorResponse(Status.BAD_REQUEST, "Job Failed!" + jobStatus);
+            } else if ("running".equals(jobStatus)) {
+                throw new ErrorResponse(Status.BAD_REQUEST, "Job Running!");
+            } else if ("pending".equals(jobStatus)) {
+                throw new ErrorResponse(Status.BAD_REQUEST, "Job Pending!");
+            }
+
+            String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.xml";
+            //+ "/" + uniqueID + "__xml.log";
+            AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
+            String contents = parser.readFileInString();
+
+            return Response.ok(contents).build();
         } catch (SQLException ex) {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -1115,23 +1198,17 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
 
+        } finally {
+            try {
+                if (connect != null || !connect.isClosed()) {
+                    connect.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        String jobStatus = job.getJobStatus(uniqueID);
-        if ("failed".equals(jobStatus)) {
+        return null;
 
-            throw new ErrorResponse(Status.BAD_REQUEST, "Job Failed!" + jobStatus);
-        } else if ("running".equals(jobStatus)) {
-            throw new ErrorResponse(Status.BAD_REQUEST, "Job Running!");
-        } else if ("pending".equals(jobStatus)) {
-            throw new ErrorResponse(Status.BAD_REQUEST, "Job Pending!");
-        }
-
-        String filepath = prop.getProperty("results_upload_directory") + "/" + uniqueID + "/Result.xml";
-        //+ "/" + uniqueID + "__xml.log";
-        AtomAtomMappingParser parser = new AtomAtomMappingParser(filepath);
-        String contents = parser.readFileInString();
-
-        return Response.ok(contents).build();
     }
 
     @Path("/result/{jobID}/image")
@@ -1154,10 +1231,44 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+        Connection connect = null;
 
         try {
-            Connection connect = job.connect();
+            connect = job.connect();
+            String jobType = job.getJobType(uniqueID);
+            String filePrefix;
+            String imgFileName = null;
+            if ("atom_atom_mapping_rxn".equals(jobType)) {
 
+                filePrefix = job.getQueryFileName(uniqueID);
+                imgFileName = userFolder + "ECBLAST" + "_" + filePrefix + "_rxn.png";
+            } else if ("atom_atom_mapping_smi".equals(jobType)) {
+
+                imgFileName = userFolder + "ECBLAST" + "_" + "smiles_Query" + "_rxn.png";
+            } else if ("compare_reactions".equals(jobType)) {
+
+                imgFileName = userFolder + "Target_Query_combined.png";
+
+            }
+
+            try {
+                BufferedImage img = null;
+
+                try {
+                    img = ImageIO.read(new File(imgFileName));
+                } catch (IOException e) {
+                    return null;
+                }
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(img, "png", baos);
+                byte[] imageData = baos.toByteArray();
+                return Response.ok(new ByteArrayInputStream(imageData)).build();
+
+            } catch (IOException ex) {
+                Logger.getLogger(ECBlastResource.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+            return null;
         } catch (SQLException ex) {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -1166,41 +1277,17 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
 
-        }
-        String jobType = job.getJobType(uniqueID);
-        String filePrefix;
-        String imgFileName = null;
-        if ("atom_atom_mapping_rxn".equals(jobType)) {
-
-            filePrefix = job.getQueryFileName(uniqueID);
-            imgFileName = userFolder + "ECBLAST" + "_" + filePrefix + "_rxn.png";
-        } else if ("atom_atom_mapping_smi".equals(jobType)) {
-
-            imgFileName = userFolder + "ECBLAST" + "_" + "smiles_Query" + "_rxn.png";
-        } else if ("compare_reactions".equals(jobType)) {
-
-            imgFileName = userFolder + "Target_Query_combined.png";
-
-        }
-
-        try {
-            BufferedImage img = null;
-
+        } finally {
             try {
-                img = ImageIO.read(new File(imgFileName));
-            } catch (IOException e) {
-                return null;
+                if (connect != null || !connect.isClosed()) {
+                    connect.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
             }
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(img, "png", baos);
-            byte[] imageData = baos.toByteArray();
-            return Response.ok(new ByteArrayInputStream(imageData)).build();
-
-        } catch (IOException ex) {
-            Logger.getLogger(ECBlastResource.class
-                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+
     }
     /*Returns a JSON formatted list of pending jobs
      Ideally should not be publically accessible and can be changed to something complicated
@@ -1227,9 +1314,13 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+        Connection connect = null;
         try {
-            Connection connect = jobWrapper.connect();
-
+            connect = jobWrapper.connect();
+            String pendingJobs = jobWrapper.getPendingJobIDs();
+            response.setMessage("success");
+            response.setResponse(pendingJobs);
+            return response;
         } catch (SQLException ex) {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -1238,11 +1329,16 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
             return response;
+        } finally {
+            try {
+                if (connect != null || !connect.isClosed()) {
+                    connect.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        String pendingJobs = jobWrapper.getPendingJobIDs();
-        response.setMessage("success");
-        response.setResponse(pendingJobs);
-        return response;
+
     }
 
     /* Updates the status of given jobId
@@ -1269,10 +1365,37 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
+        Connection connect = null;
         try {
-            Connection connect = job.connect();
+            connect = job.connect();
+            status = status.trim();
+            if ("done".equals(status)) {
+                /* Send email to user with the file            
+                 TODO: Make the email method generic
+                 */
+                String email = job.getEmailFromUUID(uniqueID);
+                if (email != null) {
 
+                    EmailText emailText = new EmailText();
+
+                    ConfigParser configparser = new ConfigParser();
+                    Properties prop = configparser.getConfig();
+                    String directory = prop.getProperty("results_upload_directory") + "/";
+                    String files[] = {directory + uniqueID + ".zip"};
+                    EmailResults results = new EmailResults(uniqueID, email, emailText.getAtomAtomMappingSubject(), emailText.getAtomAtomMappingEmail(), true);
+                    results.setFilepaths(files);
+
+                    String result = results.sendMail();
+                    System.out.println(results.zipFilePath);
+
+                } else {
+                    System.out.println("No email Supplied, No action required");
+                }
+
+            }
+            boolean b = job.updateJob(uniqueID, status);
+
+            return null;
         } catch (SQLException ex) {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -1281,42 +1404,23 @@ public class ECBlastResource {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
 
-        }
-
-        status = status.trim();
-        if ("done".equals(status)) {
-            /* Send email to user with the file            
-             TODO: Make the email method generic
-             */
-            String email = job.getEmailFromUUID(uniqueID);
-            if (email != null) {
-
-                EmailText emailText = new EmailText();
-
-                ConfigParser configparser = new ConfigParser();
-                Properties prop = configparser.getConfig();
-                String directory = prop.getProperty("results_upload_directory") + "/";
-                String files[] = {directory + uniqueID + ".zip"};
-                EmailResults results = new EmailResults(uniqueID, email, emailText.getAtomAtomMappingSubject(), emailText.getAtomAtomMappingEmail(), true);
-                results.setFilepaths(files);
-
-                String result = results.sendMail();
-                System.out.println(results.zipFilePath);
-
-            } else {
-                System.out.println("No email Supplied, No action required");
+        } finally {
+            try {
+                if (connect != null || !connect.isClosed()) {
+                    connect.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        }
-        boolean b = job.updateJob(uniqueID, status);
-        try {
-            job.disconnect();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ECBlastResource.class
-                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+
+    }
+
+    @GET
+    @Path("/test")
+    public String getConfigLocation() {
+        return servletContext.getRealPath("WEB-INF/config.ini");
     }
 
     @POST
@@ -1343,10 +1447,12 @@ public class ECBlastResource {
             throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR,
                     "Error connecting to the databse");
         }
+        Connection connect = null;
 
         try {
-            Connection connect = job.connect();
-
+            connect = job.connect();
+            String status = job.getJobStatus(uniqueID);
+            return status;
         } catch (SQLException ex) {
             Logger.getLogger(ECBlastResource.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -1357,9 +1463,16 @@ public class ECBlastResource {
                     .getName()).log(Level.SEVERE, null, ex);
 
             return null;
+        } finally {
+            try {
+                if (connect != null || !connect.isClosed()) {
+                    connect.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        String status = job.getJobStatus(uniqueID);
-        return status;
+
     }
 
 }

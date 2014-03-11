@@ -6,7 +6,10 @@
 package uk.ac.ebi.ecblast.ecblastWS.jobshandler;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import uk.ac.ebi.ecblast.ecblastWS.config.Configuration;
+import uk.ac.ebi.ecblast.ecblastWS.webserver.ECBlastResource;
 
 /**
  *
@@ -16,15 +19,19 @@ public class SubmitJob {
 
     protected String command;
     private String response;
-
+//    public String configFile;
+            
     public SubmitJob() {
         this.command = "";
         this.response = "error";
+        //ECBlastResource eb = new ECBlastResource();
+//        this.configFile = eb.getConfigLocation();
+        
     }
 
     public String executeCommand() {
 
-        StringBuffer output = new StringBuffer();
+        StringBuilder output = new StringBuilder();
 
         Process p;
         try {
@@ -35,11 +42,13 @@ public class SubmitJob {
 
             String line = "";
             while ((line = reader.readLine()) != null) {
-                output.append(line + "\n");
+                output.append(line).append("\n");
             }
             this.response = "success";
 
-        } catch (Exception e) {
+        } catch (IOException e) {
+            this.response = "error";
+        } catch (InterruptedException e) {
             this.response = "error";
         }
 

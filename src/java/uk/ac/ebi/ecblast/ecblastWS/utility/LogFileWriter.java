@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ecblast.ecblastWS.utility;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Properties;
 import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 
@@ -33,10 +29,15 @@ public class LogFileWriter {
             file.createNewFile();
         }
         System.out.println(data);
-        FileWriter fileWritter = new FileWriter(file.getName(), true);
-        BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-        bufferWritter.write(data);
-        bufferWritter.write("\n");
-        bufferWritter.close();
+        /*FileWriter fileWriter = new FileWriter(file.getName(), true);
+        BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
+        bufferWriter.write(data);
+        bufferWriter.write("\n");
+        bufferWriter.close();*/
+    
+    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file.getName(), true)));
+    out.println("TEST"+data);
+    out.close();
+
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ecblast.ecblastWS.parser;
 
 import java.io.FileInputStream;
@@ -13,6 +8,9 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletContext;
+import javax.ws.rs.core.Context;
+import uk.ac.ebi.ecblast.ecblastWS.webserver.ECBlastResource;
 
 /**
  *
@@ -22,10 +20,22 @@ public class ConfigParser {
 
     Properties prop = new Properties();
     InputStream input = null;
-    String filePath = null;
+    public String filePath = null;
+    @Context
+    public ServletContext servletContext;
 
     public ConfigParser() {
-        this.filePath = "/home/saket/ECBLAST/ECBLASTRESTful/src/java/uk/ac/ebi/ecblast/ecblastWS/parser/config.ini";
+        //ECBlastResource et = new ECBlastResource();
+        //this.filePath = servletContext.getRealPath("WEB-INF/config.ini");
+        this.filePath = "/home/saket/ECBLAST/ECBLASTRESTful/web/WEB-INF/config.ini";
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public HashMap getDatabaseConfig() {

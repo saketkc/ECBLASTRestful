@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/ecblast-rest"/>
+<Context antiJARLocking="true" path="/ecblast-rest">
+<context-param>
+  <description>Config File location</description>
+  <param-name>configFilePath</param-name>
+  <param-value>/WEB-INF/config.ini</param-value>
+</context-param>
+</Context>

@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.catalina.tribes.transport.RxTaskPool;
 
 /**
  *
@@ -195,11 +196,15 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             stm.setString(1, uniqueID);
             ResultSet rs = stm.executeQuery();
             String returnMessage = null;
-
+               try{
             while (rs.next()) {
                 returnMessage = rs.getString(1);
                 // ...
             }
+               }
+               catch (Exception e){
+                   return null;
+               }
             return returnMessage;
         } catch (SQLException ex) {
             return null;
@@ -256,9 +261,13 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             ResultSet rs = stm.executeQuery();
             String returnMessage = null;
 
-            while (rs.next()) {
+            try{ while (rs.next()) {
                 returnMessage = rs.getString(1);
                 // ...
+            }
+            }
+            catch(Exception e) {
+                return null;
             }
             return returnMessage;
         } catch (SQLException ex) {

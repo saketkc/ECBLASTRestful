@@ -6,6 +6,7 @@
 package uk.ac.ebi.ecblast.ecblastWS.jobshandler;
 
 import java.util.Properties;
+import uk.ac.ebi.ecblast.ecblastWS.config.Configuration;
 import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 
 /**
@@ -15,7 +16,9 @@ import uk.ac.ebi.ecblast.ecblastWS.parser.ConfigParser;
 public class SubmitCompareReactionsJob extends SubmitJob {
 
     public String createCommand(String uuid, String userDirectory, String queryFileType, String queryFilePath, String targetFileType, String targetFilePath) {
-        ConfigParser config = new ConfigParser();
+        ConfigParser config = new ConfigParser();  
+        //config.setFilePath(Configuration.getInstance().getPath().getRealPath("WEB-INF/config.ini"));
+        
         Properties prop = config.getConfig();
 
         this.command = (String) prop.getProperty("compare_reactions_cmd");
