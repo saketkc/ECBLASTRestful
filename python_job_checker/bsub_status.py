@@ -10,14 +10,16 @@ from fabric.context_managers import settings
 from fabric.context_managers import hide
 from fabfile import copy_to_server
 import json
+__upload_path__ = '/nfs/nobackup2/research/thornton/ecblast/webservices/UPLOADS/'
 __pending__ = re.compile("PEND|PSUSP|USUSP|SSUSP|WAIT")
 __running__ = re.compile("RUN")
 __done__ = re.compile("DONE")
 __failed__ = re.compile("EXIT|ZOMBI")
 __unknown__ = re.compile("UNKWN")
 __notfound__ = re.compile("Job [^ ]+ is not found")
-
-
+__pending_url__ = 'http://172.22.68.115:8080/ecblast-rest/pending_jobs'
+__queued_url__ = 'http://172.22.68.115:8080/ecblast-rest/queued_jobs'
+__update_url__ = 'http://172.22.68.115:8080/ecblast-rest/updateJobStatus/'
 def bjobs_status(job_name=None, stdout=None, stderr=None, run_bjobs=False):
     if run_bjobs:
         if not job_name:
@@ -70,37 +72,45 @@ class BjobsStatusTests(unittest.TestCase):
         status = bjobs_status(stdout=failed_status, run_bjobs=False)
         self.assertTrue(status=="FAILED")
 
-def update_status(uuid):
+def update_status(uuid, job_type):
     status = bjobs_status(job_name=uuid, run_bjobs=True) 
-    url = 'http://172.22.68.115:8080/ecblast-rest/updateJobStatus/'+ uuid +'/'+status
+    url = __update_url__ + uuid +'/'+status
     req = requests.get(url)
-    print url
-    with open("/homes/saketc/ecblastrun/output.txt","a") as f:
-	f.write(uuid + ": " + status +"\n")
-    with settings(hide('running', 'stdout', 'stderr'),host_string="saket@172.22.68.115",password="uzfmTjX9839"):
-        rxn_filepath = copy_to_server(uuid)
+    if status == "done":
+        with settings(hide('running', 'stdout', 'stderr'),host_string="saket@172.22.68.115",password="uzfmTjX9839"):
+            rxn_filepath = copy_to_server(uuid, job_type)
 	
-
+def run_job(uuid):
+    cmd = "bash "+ __upload_path__ + uuid + "/" + uuid + "__run.sh" 
+    p = subprocess.Popen(cmd, shell=True)
+    stdout,stderr = p.communicate()
+    return 1
+    
 if __name__ == "__main__":
-    #argv = sys.argv[1:]
-    #parser = argparse.ArgumentParser()
-    #parser.add_argument("--uuid", required=True, type=str)
-    #args = parser.parse_args(argv)
-    #uuid = args.uuid
-    content = requests.get('http://172.22.68.115:8080/ecblast-rest/pending_jobs').content
+    content = requests.get(__pending_url__).content
     content = json.loads(content)
-    response = content["response"]
-
+    response = content['response']
     pending_jobs = response.split(";")
-    print pending_jobs
     if len(pending_jobs)==0:
-	print "no jobs"
-  
+	print "no jobs" 
         
-    for id in pending_jobs:
+    for job in pending_jobs:
+        if job=="":
+            break;
+
+        split_job = job.split("::")
+        id = split_job[0]
+        job_type = split_job[1]
         if id!="":
-	    status = update_status(id) 
-
-    #suite = unittest.TestLoader().loadTestsFromTestCase(BjobsStatusTests)
-    #unittest.TextTestRunner(verbosity=2).run(suite)
-
+	    status = update_status(id, job_type) 
+    
+   
+    content = requests.get(__queued_url__).content
+    content = json.loads(content)
+    response = content['response']
+    queued_jobs = response.split(';')
+    for job in queued_jobs:
+        if job!="":
+	    run_job(job)
+            url = __update_url__ + job + '/' + 'pending'
+            req = requests.get(url)
