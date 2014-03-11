@@ -10,11 +10,19 @@
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <web-module-libraries>
                 <library dirs="200">
-                    <file>${file.reference.jaxb1-impl-2.2.jar}</file>
+                    <file>${libs.restapi.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${libs.restapi.classpath}</file>
+                    <file>${libs.jaxb.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jersey-media-multipart-2.0.1.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${libs.MySQLDriver.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -23,14 +31,6 @@
                 </library>
                 <library dirs="200">
                     <file>${libs.restlib.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.mysql-connector-java-5.1.29-bin.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.jersey-media-multipart-2.0.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
