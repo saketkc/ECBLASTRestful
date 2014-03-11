@@ -71,7 +71,7 @@ public class JobsQueryWrapper extends DatabaseWrapper {
 
         }
         try {
-            stmt.setString(5, "pending");
+            stmt.setString(5, "queued");
         } catch (SQLException ex) {
             Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
             return execute;
@@ -173,6 +173,26 @@ public class JobsQueryWrapper extends DatabaseWrapper {
             stm.setString(1, "pending");
             stm.setString(2, "running");
             
+            ResultSet rs = stm.executeQuery();
+            String returnMessage = "";
+
+            while (rs.next()) {
+                returnMessage = returnMessage + rs.getString(1) + "::" + rs.getString(2) + ";" ;
+ 
+            }
+            return returnMessage;
+        } catch (SQLException ex) {
+            return null;
+            //Logger.getLogger(JobsQueryWrapper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+     public String getQueuedJobIDs() {
+        try {
+            String query = "SELECT uniqueID, jobType FROM jobs WHERE status=?";
+            PreparedStatement stm = (PreparedStatement) connection.prepareStatement(query);
+            stm.setString(1, "queued");
             ResultSet rs = stm.executeQuery();
             String returnMessage = "";
 

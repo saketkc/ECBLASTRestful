@@ -212,7 +212,7 @@ public class ECBlastResource {
         } catch (NumberFormatException ex) { // handle your exception
             logWriter.WriteToFile("***ERROR from FARM: " + jID);
             System.out.println(rxnMappingJob.getCommand());
-            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node");
+            throw new ErrorResponse(Response.Status.INTERNAL_SERVER_ERROR, "Error submitting job to node" + jID);
         }
 
         if (jobID > 0) {
@@ -1318,6 +1318,54 @@ public class ECBlastResource {
         try {
             connect = jobWrapper.connect();
             String pendingJobs = jobWrapper.getPendingJobIDs();
+            response.setMessage("success");
+            response.setResponse(pendingJobs);
+            return response;
+        } catch (SQLException ex) {
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            return response;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            return response;
+        } finally {
+            try {
+                if (connect != null || !connect.isClosed()) {
+                    connect.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ECBlastResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+    
+    @GET
+    @Path("/queued_jobs")
+    @Produces({MediaType.APPLICATION_JSON})
+    public APIResponse getQueued() {
+        DatabaseConfiguration dbconfig = new DatabaseConfiguration();
+        JobsQueryWrapper jobWrapper = null;
+        APIResponse response = new APIResponse();
+        response.setResponse("error");
+        response.setMessage("error");
+
+        try {
+            jobWrapper = new JobsQueryWrapper(dbconfig.getDriver(),
+                    dbconfig.getConnectionString(),
+                    dbconfig.getDBName(),
+                    dbconfig.getDBUserName(),
+                    dbconfig.getDBPassword());
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ECBlastResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        Connection connect = null;
+        try {
+            connect = jobWrapper.connect();
+            String pendingJobs = jobWrapper.getQueuedJobIDs();
             response.setMessage("success");
             response.setResponse(pendingJobs);
             return response;
