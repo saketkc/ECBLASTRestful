@@ -1,0 +1,28 @@
+Mar 12, 2014 11:50:31 AM org.apache.catalina.core.AprLifecycleListener init
+INFO: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Applications/NetBeans/NetBeans 7.4.app/Contents/Resources/NetBeans/webcommon/bin::/Users/Asad/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+Mar 12, 2014 11:50:31 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-bio-8080"]
+Mar 12, 2014 11:50:31 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
+Mar 12, 2014 11:50:31 AM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 491 ms
+Mar 12, 2014 11:50:31 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service Catalina
+Mar 12, 2014 11:50:31 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet Engine: Apache Tomcat/7.0.52
+Mar 12, 2014 11:50:31 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/docs
+Mar 12, 2014 11:50:32 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/examples
+Mar 12, 2014 11:50:32 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/host-manager
+Mar 12, 2014 11:50:32 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/manager
+Mar 12, 2014 11:50:32 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/ROOT
+Mar 12, 2014 11:50:32 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-bio-8080"]
+Mar 12, 2014 11:50:32 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["ajp-bio-8009"]
+Mar 12, 2014 11:50:32 AM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 1016 ms
