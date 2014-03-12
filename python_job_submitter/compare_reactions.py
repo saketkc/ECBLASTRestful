@@ -7,11 +7,11 @@ import logging
 
 __job_submitted_re__ = re.compile("Job [^]+ is submitted to queue [^]+")
 
-__tomcat_jobs_log_directory__ = "/home/saket/LOGS/"
+__tomcat_jobs_log_directory__ = "/nfs/research2/thornton/www/databases/cgi-bin/ecblast/logs"
 
-__farm_upload_directory__ = "/home/saket/UPLOADS/"
+__farm_upload_directory__ = "/nfs/nobackup2/research/thornton/ecblast/webservices/UPLOADS"
 
-__compare_reactions_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j compare -f BOTH"
+__compare_reactions_cmd_line__ = "/nfs/research2/thornton/www/databases/cgi-bin/ecblast/jdk/jre/bin/java -Xmx10G  -jar /nfs/research2/thornton/www/databases/cgi-bin/ecblast/jar/RXNDecoder.jar -g -j compare -f BOTH"
 
 
 def get_base_filename(path):

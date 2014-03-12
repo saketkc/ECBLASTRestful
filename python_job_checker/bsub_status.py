@@ -10,16 +10,35 @@ from fabric.context_managers import settings
 from fabric.context_managers import hide
 from fabfile import copy_to_server
 import json
-__upload_path__ = '/nfs/nobackup2/research/thornton/ecblast/webservices/UPLOADS/'
+
+#UPLOADS stores user uploads and bash files for the user job
+
+__upload_path__ = '/nfs/nobackup2/research/thornton/ecblast/webservices/UPLOADS'
+
 __pending__ = re.compile("PEND|PSUSP|USUSP|SSUSP|WAIT")
 __running__ = re.compile("RUN")
 __done__ = re.compile("DONE")
 __failed__ = re.compile("EXIT|ZOMBI")
 __unknown__ = re.compile("UNKWN")
 __notfound__ = re.compile("Job [^ ]+ is not found")
+
+"""
+
+Local paths
 __pending_url__ = 'http://172.22.68.115:8080/ecblast-rest/pending_jobs'
 __queued_url__ = 'http://172.22.68.115:8080/ecblast-rest/queued_jobs'
 __update_url__ = 'http://172.22.68.115:8080/ecblast-rest/updateJobStatus/'
+
+
+"""
+
+#ServerPaths
+
+__pending_url__ = 'http://172.22.68.115:8080/ecblast-rest/pending_jobs'
+__queued_url__ = 'http://172.22.68.115:8080/ecblast-rest/queued_jobs'
+__update_url__ = 'http://172.22.68.115:8080/ecblast-rest/updateJobStatus/'
+
+
 def bjobs_status(job_name=None, stdout=None, stderr=None, run_bjobs=False):
     if run_bjobs:
         if not job_name:

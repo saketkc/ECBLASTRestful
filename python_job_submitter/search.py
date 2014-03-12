@@ -10,8 +10,8 @@ import ntpath
 # Directoru on Farm node where all files get uploaded
 # Each job gets uploaded as a folder with its folder name as it jobID
 __farm_upload_directory__ = '/nfs/nobackup2/research/thornton/ecblast/webservices/UPLOADS'
-__search_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar  -j search"
-__tomcat_jobs_log_directory__ = "/home/saket/LOGS/"
+__search_cmd_line__ = "/nfs/research2/thornton/www/databases/cgi-bin/ecblast/jdk/jre/bin/java -Xmx10G  -jar /nfs/research2/thornton/www/databases/cgi-bin/ecblast/jar/RXNDecoder.jar  -j search"
+__tomcat_jobs_log_directory__ = "/nfs/research2/thornton/www/databases/cgi-bin/ecblast/logs"
 
 __job_submitted_re__ = re.compile("Job [^]+ is submitted to queue [^]+")
 

@@ -11,9 +11,9 @@ import ntpath
 # Each job gets uploaded as a folder with its folder name as it jobID
 __farm_upload_directory__ = '/nfs/nobackup2/research/thornton/ecblast/webservices/UPLOADS'
 # Command Line static to run atom atom mapping
-__generic_matching_cmd_line__ = "/nfs/research2/thornton/saket/RXNDecoder/jre/bin/java -Xmx10G -jar /nfs/research2/thornton/saket/RXNDecoder/RXNDecoder.jar -g -j transform -f BOTH"
+__generic_matching_cmd_line__ = "/nfs/research2/thornton/www/databases/cgi-bin/ecblast/jdk/jre/bin/java -Xmx10G  -jar /nfs/research2/thornton/www/databases/cgi-bin/ecblast/jar/RXNDecoder.jar -g -j transform -f BOTH"
 # Folder location on which tomcat logs are uploaded
-__tomcat_jobs_log_directory__ = "/home/saket/LOGS/"
+__tomcat_jobs_log_directory__ = "/nfs/research2/thornton/www/databases/cgi-bin/ecblast/logs"
 
 
 def get_base_filename(path):
