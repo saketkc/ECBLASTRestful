@@ -8,6 +8,22 @@
         <res-auth>Application</res-auth>
     </resource-ref>
     
+    <resource-ref>
+        <description>The database connection resource</description>
+        <res-ref-name>jdbc/keggDB</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Application</res-auth>
+    </resource-ref>
+    
+    <servlet>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
