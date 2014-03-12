@@ -24,9 +24,8 @@ public class ConfigParser {
     public ServletContext servletContext;
 
     public ConfigParser() {
-        //ECBlastResource et = new ECBlastResource();
-        //this.filePath = servletContext.getRealPath("WEB-INF/config.ini");
-        this.filePath = "/home/saket/ECBLAST/ECBLASTRESTful/web/WEB-INF/config.ini";
+        //Path of the configuration File
+        this.filePath = "/nfs/research/thornton/www/databases/cgi-bin/ecblast/webservice/config/config.ini";
     }
 
     public String getFilePath() {
