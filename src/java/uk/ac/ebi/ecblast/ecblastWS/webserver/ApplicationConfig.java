@@ -11,7 +11,6 @@ import javax.ws.rs.core.Application;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-//import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 /**
  *
@@ -36,7 +35,7 @@ public class ApplicationConfig extends Application {
         instances.add(new LoggingFilter());
         return instances;
     }
-  
+
     /**
      * Do not modify addRestResourceClasses() method. It is automatically
      * populated with all resources defined in the project. If required, comment
