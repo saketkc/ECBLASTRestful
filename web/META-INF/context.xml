@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/ecblastws">
+    
+</Context>
+<!--
 <Context docBase="/ebi/www/jlive/deploy/tc-thornton/ecblastws.war" antiJARLocking="true" crossContext="true" path="/ecblastws">
     <Resource auth="Container" description="MySQL Datasource"
               driverClassName="com.mysql.jdbc.Driver" 
@@ -15,3 +19,4 @@
               url="jdbc:mysql://mysql-reaction-internal.ebi.ac.uk:4376/KEGGDB" 
               username="ERISExplorer"/>
 </Context>
+-->
