@@ -4,3 +4,50 @@ fabric
 
 $easy_install requests
 $easy_install fabric
+
+Configuration files:
+
+/ebi/www/jlive/servers/tc-thornton/tomcat-7/conf/Catalina/localhost
+/ebi/www/jlive/servers/tc-thornton/tomcat-8/conf/Catalina/localhost
+with the name 
+
+thornton-srv#software#ecblastws.xml
+
+
+Follow these command for deploying this application on the server.
+
+The Commands are :
+
+scp ecblastws.war tomcat-7:
+ssh tomcat-7
+become tc_user
+cd /ebi/www/jlive/servers/tc-thornton
+./controller stop
+ssh tomcat-8
+become tc_user
+cd /ebi/www/jlive/servers/tc-thornton
+./controller stop
+rm -rf tomcat-{7,8}/webapps/thornton-srv/software/ecblastws
+cp ~asad/ecblastws.war /ebi/www/jlive/deploy/tc-thornton/
+./controller start
+
+these steps are:
+
+1) create the jarfile
+2) copy to (one of) the servers
+3) go to the server
+4) become the tc user
+5) move to the directory where the controller script is
+6) stop the controller
+7) remove the current directories of code
+8) copy the new war file to the 'deploy' dir
+9) restart
+
+The tricky part is that steps 3-6 are repeated on both machines.
+
+test:
+http://tc-test-3.ebi.ac.uk:9950/thornton-srv/software/ecblastws/
+
+production:
+http://tomcat-7.ebi.ac.uk:9950/thornton-srv/software/ecblastws/
+http://tomcat-8.ebi.ac.uk:9950/thornton-srv/software/ecblastws/
