@@ -65,16 +65,17 @@ public class ECBlastResource {
         Configuration.getInstance().setPath(servletContext);
     }
 
+    // This method is called if HTML is request
     @GET
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public ErrorResponse getHtml() {
-        throw new ErrorResponse(Status.FORBIDDEN, "Forbidden");
+    @Produces(MediaType.TEXT_HTML)
+    public String sayHtmlHello() {
+        return "<html> " + "<title>" + "Hello Jersey" + "</title>"
+                + "<body><h1>" + "Hello Jersey" + "</body></h1>" + "</html> ";
     }
-
     /*
      No Functiopn to call here, hence returne forbidden
      */
+
     @PUT
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -990,9 +991,9 @@ public class ECBlastResource {
         try {
             connect = job.connect();
             String jobStatus = job.getJobStatus(uniqueID);
-                    
-            if (jobStatus == null){
-                throw new ErrorResponse(Status.BAD_REQUEST,"No Job found");
+
+            if (jobStatus == null) {
+                throw new ErrorResponse(Status.BAD_REQUEST, "No Job found");
             }
             jobStatus = jobStatus.trim().toLowerCase().toString();
             if ("failed".equals(jobStatus)) {
@@ -1340,7 +1341,7 @@ public class ECBlastResource {
         }
 
     }
-    
+
     @GET
     @Path("/queued_jobs")
     @Produces({MediaType.APPLICATION_JSON})

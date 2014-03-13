@@ -5,3 +5,5 @@
 :wq
 /hello-world/dist/
 /hello-world/build/
+/build/
+/dist/

@@ -14,3 +14,1179 @@ Mar 13, 2014 12:50:44 PM org.apache.coyote.AbstractProtocol destroy
 INFO: Destroying ProtocolHandler ["http-bio-8080"]
 Mar 13, 2014 12:50:44 PM org.apache.coyote.AbstractProtocol destroy
 INFO: Destroying ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 12:57:38 PM org.apache.catalina.core.AprLifecycleListener init
+INFO: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Applications/NetBeans/NetBeans 7.4.app/Contents/Resources/NetBeans/webcommon/bin::/Users/Asad/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+Mar 13, 2014 12:57:38 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 12:57:38 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 12:57:38 PM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 523 ms
+Mar 13, 2014 12:57:38 PM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service Catalina
+Mar 13, 2014 12:57:38 PM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet Engine: Apache Tomcat/7.0.52
+Mar 13, 2014 12:57:38 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/docs
+Mar 13, 2014 12:57:38 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/examples
+Mar 13, 2014 12:57:39 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/host-manager
+Mar 13, 2014 12:57:39 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/manager
+Mar 13, 2014 12:57:40 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/ROOT
+Mar 13, 2014 12:57:40 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 12:57:40 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 12:57:40 PM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 1971 ms
+Mar 13, 2014 12:57:40 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 12:57:40 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 12:57:41 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:01:44 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:01:45 PM com.sun.jersey.api.core.PackagesResourceConfig init
+INFO: Scanning for root resource and provider classes in the packages:
+  de.vogella.jersey.first
+Mar 13, 2014 1:01:45 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:01:45 PM com.sun.jersey.api.core.ScanningResourceConfig init
+INFO: No provider classes found.
+Mar 13, 2014 1:01:45 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:01:46 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:01:46 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:01:47 PM com.sun.jersey.api.core.PackagesResourceConfig init
+INFO: Scanning for root resource and provider classes in the packages:
+  de.vogella.jersey.first
+Mar 13, 2014 1:01:47 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:01:47 PM com.sun.jersey.api.core.ScanningResourceConfig init
+INFO: No provider classes found.
+Mar 13, 2014 1:01:47 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:01:47 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:01:52 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:01:52 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:01:52 PM com.sun.jersey.api.core.PackagesResourceConfig init
+INFO: Scanning for root resource and provider classes in the packages:
+  de.vogella.jersey.first
+Mar 13, 2014 1:01:53 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:01:53 PM com.sun.jersey.api.core.ScanningResourceConfig init
+INFO: No provider classes found.
+Mar 13, 2014 1:01:53 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:01:53 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:02:03 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:04:23 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:04:23 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:04:24 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:04:24 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+Mar 13, 2014 1:04:24 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:04:24 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:05:51 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:05:52 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:05:52 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:05:53 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:05:53 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+Mar 13, 2014 1:05:53 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:05:53 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:05:53 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:05:54 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:05:54 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:05:54 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:05:54 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+Mar 13, 2014 1:05:54 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:05:55 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:05:58 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:05:58 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:05:58 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:05:58 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:05:58 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+Mar 13, 2014 1:05:58 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:05:58 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:05:58 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:09:08 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:09:08 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:09:08 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:09:09 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+Mar 13, 2014 1:09:09 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:09:09 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:09:09 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:09:09 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:09:09 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:09:10 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:09:10 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:09:10 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+Mar 13, 2014 1:09:10 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:09:10 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:09:15 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:09:15 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:09:15 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:09:15 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:09:15 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:09:15 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+Mar 13, 2014 1:09:15 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:09:16 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:09:47 PM org.apache.catalina.core.StandardServer await
+INFO: A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+Mar 13, 2014 1:09:47 PM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:09:48 PM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:09:48 PM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service Catalina
+Mar 13, 2014 1:09:48 PM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:09:48 PM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:09:48 PM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:09:48 PM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:10:12 PM org.apache.catalina.core.AprLifecycleListener init
+INFO: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Applications/NetBeans/NetBeans 7.4.app/Contents/Resources/NetBeans/webcommon/bin::/Users/Asad/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+Mar 13, 2014 1:10:12 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:10:12 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:10:12 PM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 653 ms
+Mar 13, 2014 1:10:12 PM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service Catalina
+Mar 13, 2014 1:10:12 PM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet Engine: Apache Tomcat/7.0.52
+Mar 13, 2014 1:10:12 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:10:12 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:10:14 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:10:14 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:10:14 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:10:14 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:10:15 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/docs
+Mar 13, 2014 1:10:15 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/examples
+Mar 13, 2014 1:10:16 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/host-manager
+Mar 13, 2014 1:10:16 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/manager
+Mar 13, 2014 1:10:16 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/ROOT
+Mar 13, 2014 1:10:16 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:10:16 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:10:16 PM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 3998 ms
+Mar 13, 2014 1:10:18 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:10:18 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:10:18 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:10:19 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:10:19 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+Mar 13, 2014 1:10:19 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:10:19 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:10:19 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:11:37 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:11:37 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:11:38 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:11:38 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:11:38 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:11:38 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:11:38 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:11:55 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:12:14 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:12:14 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:12:15 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:12:15 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:12:15 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:12:15 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:12:15 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:15:18 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:15:19 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:15:19 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:15:19 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+Mar 13, 2014 1:15:19 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:15:19 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:15:20 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:16:11 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:16:12 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:16:12 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:16:12 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:16:12 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:16:12 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:16:13 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:16:13 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:16:13 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:16:14 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:16:14 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:16:14 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:16:14 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:16:14 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:16:18 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:16:18 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:16:18 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:16:18 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:16:18 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+Mar 13, 2014 1:16:18 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:16:19 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:16:19 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:16:46 PM org.apache.catalina.startup.HostConfig reload
+INFO: Reloading context [/ecblastws]
+Mar 13, 2014 1:16:46 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:16:47 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:16:47 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:16:47 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+Mar 13, 2014 1:16:47 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:16:47 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:16:47 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:16:48 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:16:48 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:16:48 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+Mar 13, 2014 1:16:48 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:16:48 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:16:51 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:16:55 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:16:55 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:16:55 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:16:55 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:17:31 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:17:31 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:17:31 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:17:31 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:17:31 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:17:37 PM org.apache.catalina.startup.HostConfig reload
+INFO: Reloading context [/ecblastws]
+Mar 13, 2014 1:17:37 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] has started
+Mar 13, 2014 1:17:38 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:17:38 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:17:38 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:17:38 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:17:38 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:17:39 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/ecblastws] is completed
+Mar 13, 2014 1:17:47 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:17:47 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:17:47 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:17:48 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:17:48 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:17:48 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:17:48 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:17:55 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:18:00 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rblws.xml
+Mar 13, 2014 1:18:00 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:18:00 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:18:00 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:18:00 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:18:00 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:18:01 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rblws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:18:53 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rblws]
+Mar 13, 2014 1:18:53 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rblws.xml
+Mar 13, 2014 1:18:53 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.4.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:18:53 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:18:53 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:18:53 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:18:53 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.18 11/22/2013 01:21 AM'
+Mar 13, 2014 1:22:55 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:22:55 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.5.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:22:56 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:22:56 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+Mar 13, 2014 1:22:56 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+Mar 13, 2014 1:22:56 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:22:56 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:22:57 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:22:57 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.5.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:22:57 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:22:58 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:22:58 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+Mar 13, 2014 1:22:58 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:22:58 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:23:00 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:23:00 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.5.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:23:00 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:23:01 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:23:01 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+Mar 13, 2014 1:23:01 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:23:01 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:24:10 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rblws]
+Mar 13, 2014 1:25:14 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rblws.xml
+Mar 13, 2014 1:25:14 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.5.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:25:15 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:25:15 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:25:15 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+Mar 13, 2014 1:25:15 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:25:15 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rblws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:25:41 PM org.apache.catalina.core.StandardServer await
+INFO: A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+Mar 13, 2014 1:25:41 PM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:25:41 PM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:25:41 PM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service Catalina
+Mar 13, 2014 1:25:41 PM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:25:41 PM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:25:41 PM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:25:41 PM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:25:49 PM org.apache.catalina.core.AprLifecycleListener init
+INFO: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Applications/NetBeans/NetBeans 7.4.app/Contents/Resources/NetBeans/webcommon/bin::/Users/Asad/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+Mar 13, 2014 1:25:49 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:25:49 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:25:49 PM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 508 ms
+Mar 13, 2014 1:25:49 PM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service Catalina
+Mar 13, 2014 1:25:49 PM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet Engine: Apache Tomcat/7.0.52
+Mar 13, 2014 1:25:49 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rblws.xml
+Mar 13, 2014 1:25:49 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.5.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:25:50 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:25:51 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:25:51 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+Mar 13, 2014 1:25:51 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:25:51 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/docs
+Mar 13, 2014 1:25:52 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/examples
+Mar 13, 2014 1:25:52 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/host-manager
+Mar 13, 2014 1:25:52 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/manager
+Mar 13, 2014 1:25:52 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/ROOT
+Mar 13, 2014 1:25:52 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:25:52 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:25:52 PM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 3227 ms
+Mar 13, 2014 1:26:56 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:26:57 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.5.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:26:57 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:26:57 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:26:57 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:26:57 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:26:58 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:26:59 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:27:00 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/hello-world/build/web/WEB-INF/lib/servlet-api-2.5.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 1:27:00 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:27:00 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:27:00 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:27:00 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:27:01 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:27:48 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rblws]
+Mar 13, 2014 1:28:11 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rblws.xml
+Mar 13, 2014 1:28:12 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:28:12 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+Mar 13, 2014 1:28:12 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class org.codehaus.jackson.jaxrs.JsonParseExceptionMapper
+  class org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider
+  class org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+  class org.codehaus.jackson.jaxrs.JacksonJsonProvider
+Mar 13, 2014 1:28:12 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:28:12 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rblws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:29:13 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:29:14 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:29:14 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:29:16 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:29:17 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:29:17 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:29:17 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:29:43 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:29:43 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:29:43 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:29:43 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:29:44 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:29:44 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:29:44 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:29:45 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:29:45 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+  class de.vogella.jersey.first.Hello
+Mar 13, 2014 1:29:45 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:29:45 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:29:45 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:29:47 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:29:47 PM com.sun.jersey.api.core.servlet.WebAppResourceConfig init
+INFO: Scanning for root resource and provider classes in the Web app resource paths:
+  /WEB-INF/lib
+  /WEB-INF/classes
+Mar 13, 2014 1:29:47 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Root resource classes found:
+  class de.vogella.jersey.first.Hello
+  class com.sun.jersey.oauth.server.api.resources.RequestTokenRequest
+  class com.sun.jersey.oauth.server.api.resources.AccessTokenRequest
+Mar 13, 2014 1:29:47 PM com.sun.jersey.api.core.ScanningResourceConfig logClasses
+INFO: Provider classes found:
+  class com.sun.jersey.oauth.server.api.providers.DefaultOAuthProvider
+Mar 13, 2014 1:29:48 PM com.sun.jersey.server.impl.application.WebApplicationImpl _initiate
+INFO: Initiating Jersey application, version 'Jersey: 1.17 01/17/2013 03:31 PM'
+Mar 13, 2014 1:29:48 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:30:35 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:30:36 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:31:00 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:31:01 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:31:01 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:31:03 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:31:06 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rblws]
+Mar 13, 2014 1:31:56 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rblws.xml
+Mar 13, 2014 1:31:57 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rblws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:32:22 PM org.apache.catalina.startup.HostConfig reload
+INFO: Reloading context [/rblws]
+Mar 13, 2014 1:32:22 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] has started
+Mar 13, 2014 1:32:24 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rblws] is completed
+Mar 13, 2014 1:32:34 PM org.apache.catalina.startup.HostConfig reload
+INFO: Reloading context [/rblws]
+Mar 13, 2014 1:32:35 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rblws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:32:47 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rblws]
+Mar 13, 2014 1:36:57 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:36:58 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:48:21 PM org.apache.catalina.core.AprLifecycleListener init
+INFO: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Applications/NetBeans/NetBeans 7.4.app/Contents/Resources/NetBeans/webcommon/bin::/Users/Asad/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+Mar 13, 2014 1:48:21 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:48:21 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:48:21 PM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 526 ms
+Mar 13, 2014 1:48:21 PM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service Catalina
+Mar 13, 2014 1:48:21 PM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet Engine: Apache Tomcat/7.0.52
+Mar 13, 2014 1:48:21 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:48:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/docs
+Mar 13, 2014 1:48:23 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/examples
+Mar 13, 2014 1:48:24 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/host-manager
+Mar 13, 2014 1:48:24 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/manager
+Mar 13, 2014 1:48:24 PM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/webapps/ROOT
+Mar 13, 2014 1:48:24 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-bio-8080"]
+Mar 13, 2014 1:48:24 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["ajp-bio-8009"]
+Mar 13, 2014 1:48:24 PM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 3494 ms
+Mar 13, 2014 1:48:26 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:48:26 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/ecblastws.xml
+Mar 13, 2014 1:48:27 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/ecblastws]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 1:56:08 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/ecblastws]
+Mar 13, 2014 1:57:25 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rbl3.xml
+Mar 13, 2014 1:57:25 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rbl3]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 2:13:19 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rbl3]
+Mar 13, 2014 2:13:19 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rbl3.xml
+Mar 13, 2014 2:13:19 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 2:13:21 PM org.glassfish.jersey.servlet.init.JerseyServletContainerInitializer addServletWithApplication
+INFO: Registering the Jersey servlet application, named uk.ac.ebi.ecblast.ecblastWS.webserver.ApplicationConfig, at the servlet mapping /*, with the Application class of the same name.
+Mar 13, 2014 2:13:21 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rbl3]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 2:13:22 PM org.glassfish.jersey.server.ApplicationHandler initialize
+INFO: Initiating Jersey application, version Jersey: 2.0 2013-05-14 20:07:34...
+Mar 13, 2014 2:13:22 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 1 * LoggingFilter - Request received on thread http-bio-8080-exec-21
+1 > GET http://localhost:8080/rbl3
+1 > host: localhost:8080
+1 > accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+1 > accept-language: en-us
+1 > connection: keep-alive
+1 > accept-encoding: gzip, deflate
+1 > user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.74.9 (KHTML, like Gecko) Version/7.0.2 Safari/537.74.9
+
+Mar 13, 2014 2:13:23 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 2 * LoggingFilter - Response received on thread http-bio-8080-exec-21
+2 < 403
+2 < Content-Type: application/xml
+
+Mar 13, 2014 2:13:46 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rbl3]
+Mar 13, 2014 2:13:46 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rbl3.xml
+Mar 13, 2014 2:13:46 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 2:13:47 PM org.glassfish.jersey.servlet.init.JerseyServletContainerInitializer addServletWithApplication
+INFO: Registering the Jersey servlet application, named uk.ac.ebi.ecblast.ecblastWS.webserver.ApplicationConfig, at the servlet mapping /*, with the Application class of the same name.
+Mar 13, 2014 2:13:48 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rbl3]
+Mar 13, 2014 2:13:52 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rbl3.xml
+Mar 13, 2014 2:13:52 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 2:13:54 PM org.glassfish.jersey.servlet.init.JerseyServletContainerInitializer addServletWithApplication
+INFO: Registering the Jersey servlet application, named uk.ac.ebi.ecblast.ecblastWS.webserver.ApplicationConfig, at the servlet mapping /*, with the Application class of the same name.
+Mar 13, 2014 2:13:54 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rbl3]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 2:13:54 PM org.glassfish.jersey.server.ApplicationHandler initialize
+INFO: Initiating Jersey application, version Jersey: 2.0 2013-05-14 20:07:34...
+Mar 13, 2014 2:13:55 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 1 * LoggingFilter - Request received on thread http-bio-8080-exec-31
+1 > GET http://localhost:8080/rbl3
+1 > host: localhost:8080
+1 > accept-encoding: gzip, deflate
+1 > accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+1 > user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.74.9 (KHTML, like Gecko) Version/7.0.2 Safari/537.74.9
+1 > accept-language: en-us
+1 > cache-control: max-age=0
+1 > connection: keep-alive
+
+Mar 13, 2014 2:13:55 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 2 * LoggingFilter - Response received on thread http-bio-8080-exec-31
+2 < 403
+2 < Content-Type: application/xml
+
+Mar 13, 2014 2:17:27 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 2:17:29 PM org.glassfish.jersey.servlet.init.JerseyServletContainerInitializer addServletWithApplication
+INFO: Registering the Jersey servlet application, named uk.ac.ebi.ecblast.ecblastWS.webserver.ApplicationConfig, at the servlet mapping /*, with the Application class of the same name.
+Mar 13, 2014 2:17:35 PM org.apache.catalina.startup.HostConfig reload
+INFO: Reloading context [/rbl3]
+Mar 13, 2014 2:17:35 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rbl3] has started
+Mar 13, 2014 2:17:35 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 2:17:36 PM org.glassfish.jersey.servlet.init.JerseyServletContainerInitializer addServletWithApplication
+INFO: Registering the Jersey servlet application, named uk.ac.ebi.ecblast.ecblastWS.webserver.ApplicationConfig, at the servlet mapping /*, with the Application class of the same name.
+Mar 13, 2014 2:17:36 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rbl3] is completed
+Mar 13, 2014 2:18:04 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rbl3]
+Mar 13, 2014 2:18:04 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rbl3.xml
+Mar 13, 2014 2:18:05 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rbl3]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 2:18:51 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rbl3]
+Mar 13, 2014 2:23:42 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rbl3.xml
+Mar 13, 2014 2:23:42 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 2:23:44 PM org.glassfish.jersey.servlet.init.JerseyServletContainerInitializer addServletWithApplication
+INFO: Registering the Jersey servlet application, named uk.ac.ebi.ecblast.ecblastWS.webserver.ApplicationConfig, at the servlet mapping /*, with the Application class of the same name.
+Mar 13, 2014 2:23:44 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rbl3]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 2:23:44 PM org.glassfish.jersey.server.ApplicationHandler initialize
+INFO: Initiating Jersey application, version Jersey: 2.0 2013-05-14 20:07:34...
+Mar 13, 2014 2:23:45 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 1 * LoggingFilter - Request received on thread http-bio-8080-exec-64
+1 > GET http://localhost:8080/rbl3
+1 > host: localhost:8080
+1 > accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+1 > accept-language: en-us
+1 > connection: keep-alive
+1 > accept-encoding: gzip, deflate
+1 > user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.74.9 (KHTML, like Gecko) Version/7.0.2 Safari/537.74.9
+
+Mar 13, 2014 2:23:45 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 2 * LoggingFilter - Response received on thread http-bio-8080-exec-64
+2 < 403
+2 < Content-Type: application/xml
+
+Mar 13, 2014 2:26:56 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rbl3]
+Mar 13, 2014 2:27:02 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rbl3.xml
+Mar 13, 2014 2:27:02 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 2:27:04 PM org.glassfish.jersey.servlet.init.JerseyServletContainerInitializer addServletWithApplication
+INFO: Registering the Jersey servlet application, named uk.ac.ebi.ecblast.ecblastWS.webserver.ApplicationConfig, at the servlet mapping /*, with the Application class of the same name.
+Mar 13, 2014 2:27:04 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rbl3]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 2:27:04 PM org.glassfish.jersey.server.ApplicationHandler initialize
+INFO: Initiating Jersey application, version Jersey: 2.0 2013-05-14 20:07:34...
+Mar 13, 2014 2:27:05 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 1 * LoggingFilter - Request received on thread http-bio-8080-exec-63
+1 > GET http://localhost:8080/rbl3
+1 > host: localhost:8080
+1 > accept-encoding: gzip, deflate
+1 > accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+1 > user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.74.9 (KHTML, like Gecko) Version/7.0.2 Safari/537.74.9
+1 > accept-language: en-us
+1 > cache-control: max-age=0
+1 > connection: keep-alive
+
+Mar 13, 2014 2:27:05 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 2 * LoggingFilter - Response received on thread http-bio-8080-exec-63
+2 < 403
+2 < Content-Type: application/xml
+
+Mar 13, 2014 2:28:09 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rbl3] has started
+Mar 13, 2014 2:28:09 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 2:28:11 PM org.glassfish.jersey.servlet.init.JerseyServletContainerInitializer addServletWithApplication
+INFO: Registering the Jersey servlet application, named uk.ac.ebi.ecblast.ecblastWS.webserver.ApplicationConfig, at the servlet mapping /*, with the Application class of the same name.
+Mar 13, 2014 2:28:11 PM org.apache.catalina.core.StandardContext reload
+INFO: Reloading Context with name [/rbl3] is completed
+Mar 13, 2014 2:28:14 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rbl3]
+Mar 13, 2014 2:28:22 PM org.apache.catalina.startup.HostConfig deployDescriptor
+INFO: Deploying configuration descriptor /Users/Asad/Software/GITROOT/asad/ECBLASTRestful/apache-tomcat-7.0.52/conf/Catalina/localhost/rbl3.xml
+Mar 13, 2014 2:28:22 PM org.apache.catalina.loader.WebappClassLoader validateJarFile
+INFO: validateJarFile(/Users/Asad/Software/GITROOT/asad/ECBLASTRestful/build/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar) - jar not loaded. See Servlet Spec 3.0, section 10.7.2. Offending class: javax/servlet/Servlet.class
+Mar 13, 2014 2:28:23 PM org.glassfish.jersey.servlet.init.JerseyServletContainerInitializer addServletWithApplication
+INFO: Registering the Jersey servlet application, named uk.ac.ebi.ecblast.ecblastWS.webserver.ApplicationConfig, at the servlet mapping /*, with the Application class of the same name.
+Mar 13, 2014 2:28:24 PM org.apache.catalina.util.LifecycleBase start
+INFO: The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/rbl3]] after start() had already been called. The second call will be ignored.
+Mar 13, 2014 2:28:24 PM org.glassfish.jersey.server.ApplicationHandler initialize
+INFO: Initiating Jersey application, version Jersey: 2.0 2013-05-14 20:07:34...
+Mar 13, 2014 2:28:24 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 1 * LoggingFilter - Request received on thread http-bio-8080-exec-75
+1 > GET http://localhost:8080/rbl3
+1 > host: localhost:8080
+1 > accept-encoding: gzip, deflate
+1 > accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+1 > user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.74.9 (KHTML, like Gecko) Version/7.0.2 Safari/537.74.9
+1 > accept-language: en-us
+1 > cache-control: max-age=0
+1 > connection: keep-alive
+
+Mar 13, 2014 2:28:24 PM org.glassfish.jersey.filter.LoggingFilter log
+INFO: 2 * LoggingFilter - Response received on thread http-bio-8080-exec-75
+2 < 200
+2 < Content-Type: text/html
+
+Mar 13, 2014 2:28:52 PM org.apache.catalina.startup.HostConfig undeploy
+INFO: Undeploying context [/rbl3]
