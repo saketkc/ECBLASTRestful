@@ -1,29 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
-<Context docBase="/ebi/www/jlive/deploy/tc-thornton/ecblastws.war" antiJARLocking="true" crossContext="true" path="/ecblastws">
-    <Resource auth="Container" description="MySQL Datasource"
+<!--<Context docBase="/ebi/www/jlive/deploy/tc-thornton/rblws.war" antiJARLocking="true" crossContext="true" path="/rblws">
+  -->
+<Context docBase="rbl3.war" antiJARLocking="true" crossContext="true" path="/rbl3">
+<Resource auth="Container" description="MySQL Datasource"
               driverClassName="com.mysql.jdbc.Driver" 
               name="jdbc/webservice" 
               password="web@ebi$" 
               type="javax.sql.DataSource" 
               url="jdbc:mysql://mysql-reaction-internal.ebi.ac.uk:4376/webservices" 
               username="webservice"/>
-    <Resource auth="Container" description="MySQL Datasource" 
-              driverClassName="com.mysql.jdbc.Driver" 
-              name="jdbc/keggDB" 
-              password="ERISExplorer@EBI" 
-              type="javax.sql.DataSource" 
-              url="jdbc:mysql://mysql-reaction-internal.ebi.ac.uk:4376/KEGGDB" 
-              username="ERISExplorer"/>
 </Context>
-
-<!--
-
-
-<Context antiJARLocking="true" path="/ecblastws">
-    
-</Context>
-
--->
-
