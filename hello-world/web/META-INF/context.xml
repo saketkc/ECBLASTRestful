@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--<Context antiJARLocking="true" path="/hello-world"/>-->
-
-<Context docBase="/ebi/www/jlive/deploy/tc-thornton/ecblastws.war" antiJARLocking="true" crossContext="true" path="/ecblastws">
-    <Resource auth="Container" description="MySQL Datasource"
+<!--<Context docBase="/ebi/www/jlive/deploy/tc-thornton/rblws.war" antiJARLocking="true" crossContext="true" path="/rblws">
+  -->
+<Context docBase="rblws.war" antiJARLocking="true" crossContext="true" path="/rblws">
+<Resource auth="Container" description="MySQL Datasource"
               driverClassName="com.mysql.jdbc.Driver" 
               name="jdbc/webservice" 
               password="web@ebi$" 
@@ -16,5 +16,12 @@
               type="javax.sql.DataSource" 
               url="jdbc:mysql://mysql-reaction-internal.ebi.ac.uk:4376/KEGGDB" 
               username="ERISExplorer"/>
+    <Parameter description="Flag to turn static images on and off" name="useStaticImages" value="true"/>
+    <Parameter description="The Base URL for the static subgraph-mapped images" name="staticSubgraphImageBaseURL" value="http://www.ebi.ac.uk/thornton-srv/software/ecBLAST/KEGG/images/reaction/bc/"/>
+    <Parameter description="The Base URL for the static reaction center images" name="staticReactionCenterImageBaseURL" value="http://www.ebi.ac.uk/thornton-srv/software/ecBLAST/KEGG/images/reaction/rc/"/>
+    <Parameter description="The Base URL for the small static subgraph-mapped images" name="staticSubgraphImageSmallBaseURL" value="http://www.ebi.ac.uk/thornton-srv/software/ecBLAST/KEGG/images/reaction/bc/small/"/>
+    <Parameter description="The Base URL for the small static reaction center images" name="staticReactionCenterImageSmallBaseURL" value="http://www.ebi.ac.uk/thornton-srv/software/ecBLAST/KEGG/images/reaction/rc/small/"/>
+    <Parameter description="The base path for session-specific directories" name="scratchPath" value=""/>
+    <Parameter description="Flag for setting up in a test environment" name="useRootAsScratch" value="true"/>
+    <Parameter description="Chemaxon license file name" name="chemaxon_license_url" value="chemaxon_license_ebi.cxl"/>
 </Context>
-
