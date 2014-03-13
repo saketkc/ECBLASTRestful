@@ -3,3 +3,5 @@
 *.swo
 *.swp
 :wq
+/hello-world/dist/
+/hello-world/build/
